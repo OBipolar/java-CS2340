@@ -28,7 +28,6 @@ public class ConfigurePageController implements Initializable, ControlledScreen 
     ScreensController myController;
     private String userName;
     private int pilotP, fighterP, traderP, engineerP;
-    private boolean edited = false;
     
     @FXML
     private TextField userNameInput;
@@ -62,19 +61,27 @@ public class ConfigurePageController implements Initializable, ControlledScreen 
         myController = screenParent;
     }
     
+    private void clear() {
+        userNameInput.setText("");
+        pilotPt.setText("0");
+        fighterPt.setText("0");
+        traderPt.setText("0");
+        engineerPt.setText("0");
+    }
+    
     @FXML
     private void okButtonFired(ActionEvent event) {
         System.out.println("ok fired");
         CharacterShip ship = new CharacterShip();
         ship.record(userName, pilotP, fighterP, traderP, engineerP);
         messageLabel.setText("Profile Successfully Created!");
-        edited = true;
     }
     
     @FXML
     private void cancelButtonFired(ActionEvent event) {
         System.out.println("cancel fired");
         myController.setScreen(JavaFXApplication6.screen1ID);
+        clear();
     }
     
     @Override
