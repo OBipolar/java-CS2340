@@ -1,0 +1,28 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import javafx.scene.shape.*?>
+<?import javafx.scene.text.*?>
+<?import java.lang.*?>
+<?import java.util.*?>
+<?import javafx.scene.*?>
+<?import javafx.scene.control.*?>
+<?import javafx.scene.layout.*?>
+
+<Pane fx:id="myP" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="400.0" prefWidth="600.0" xmlns="http://javafx.com/javafx/8" xmlns:fx="http://javafx.com/fxml/1" fx:controller="javafxapplication6.FXMLDocumentController">
+   <children>
+      <Rectangle arcHeight="5.0" arcWidth="5.0" height="400.0" stroke="BLACK" strokeType="INSIDE" width="600.0" />
+      <Button fx:id="loadGame" layoutX="341.0" layoutY="265.0" mnemonicParsing="false" onAction="#loadGameFired" text="Load Saved Game" />
+      <Button fx:id="newGame" layoutX="151.0" layoutY="265.0" mnemonicParsing="false" onAction="#newGameFired" text="Start a New Game" />
+      <Text fill="#fcf9f9" layoutX="303.0" layoutY="283.0" strokeType="OUTSIDE" strokeWidth="0.0" text="or" />
+      <Text fill="#257de1" layoutX="271.0" layoutY="205.0" strokeType="OUTSIDE" strokeWidth="0.0" text="Welcome">
+         <font>
+            <Font size="18.0" />
+         </font>
+      </Text>
+      <Text fill="#fcf8f8" layoutX="203.0" layoutY="131.0" strokeMiterLimit="20.0" strokeType="OUTSIDE" strokeWidth="0.0" text="SPACE TRADER" textAlignment="CENTER" wrappingWidth="213.310546875">
+         <font>
+            <Font size="24.0" />
+         </font>
+      </Text>
+   </children>
+</Pane>
