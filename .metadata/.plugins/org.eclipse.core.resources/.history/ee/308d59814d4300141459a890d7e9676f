@@ -74,7 +74,7 @@ public class ConfigurePageController implements Initializable, ControlledScreen 
     @FXML
     private void okButtonFired(ActionEvent event) {
         System.out.println("ok fired");
-        Character player = new Character(userName, pilotP, fighterP, traderP, engineerP);
+        CharacterShip ship = new CharacterShip(userName, pilotP, fighterP, traderP, engineerP);
         messageLabel.setText("Profile Successfully Created!");
     }
     
