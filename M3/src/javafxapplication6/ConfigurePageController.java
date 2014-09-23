@@ -67,6 +67,7 @@ public class ConfigurePageController implements Initializable, ControlledScreen 
         fighterPt.setText("0");
         traderPt.setText("0");
         engineerPt.setText("0");
+        messageLabel.setText("");
     }
     
     @FXML
