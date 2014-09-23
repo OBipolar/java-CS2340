@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
-<jnlp spec="1.0" xmlns:jfx="http://javafx.com" href="Game.jnlp">
+<jnlp spec="1.0" xmlns:jfx="http://javafx.com" href="JavaFXApplication6.jnlp">
   <information>
-    <title>Game</title>
+    <title>JavaFXApplication6</title>
     <vendor>zixiangzhu</vendor>
     <description>null</description>
     <offline-allowed/>
@@ -11,14 +11,14 @@
   </resources>
   <resources>
     <j2se version="1.6+" href="http://java.sun.com/products/autodl/j2se"/>
-    <jar href="Game.jar" size="13466" download="eager" />
+    <jar href="JavaFXApplication6.jar" size="13464" download="eager" />
   </resources>
 <security>
   <all-permissions/>
 </security>
-  <applet-desc  width="800" height="600" main-class="com.javafx.main.NoJavaFXFallback"  name="Game" >
+  <applet-desc  width="800" height="600" main-class="com.javafx.main.NoJavaFXFallback"  name="JavaFXApplication6" >
     <param name="requiredFXVersion" value="8.0+"/>
   </applet-desc>
-  <jfx:javafx-desc  width="800" height="600" main-class="javafxapplication6.JavaFXApplication6"  name="Game" />
+  <jfx:javafx-desc  width="800" height="600" main-class="javafxapplication6.JavaFXApplication6"  name="JavaFXApplication6" />
   <update check="always"/>
 </jnlp>
