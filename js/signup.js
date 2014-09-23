@@ -120,7 +120,7 @@ $(document).ready(function(){
         id: "tile13",
         tile: newTile});
 
-    newPic = new Picture({tagName:'img', url:'./window/images/next.jpg'});
+    newPic = new Picture({tagName:'img', url:'./images/next.jpg'});
     newSlide = new Slide(newPic, null);
     newTile = new Tile([newSlide]);
     tileList[2][4] = new TileView({container: contentContainer,
