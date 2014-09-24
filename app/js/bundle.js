@@ -6,6 +6,7 @@ bundle.config = 'app/js/config.js';
 bundle.globalController = 'app/js/controllers/globalController.js';
 bundle.homeController = 'app/js/controllers/homeController.js';
 bundle.headerController = 'app/js/controllers/headerController.js';
+bundle.footerController = 'app/js/controllers/footerController.js';
 bundle.signupController = 'app/js/controllers/signupController.js';
 bundle.signinController = 'app/js/controllers/signinController.js';
 
@@ -14,6 +15,7 @@ bundle.dataService = 'app/js/services/dataService.js';
 
 //Directives
 bundle.header = 'app/js/directives/headerDirective.js';
+bundle.footer = 'app/js/directives/footerDirective.js';
 
 for(var i in bundle){
 	var obj = bundle[i];

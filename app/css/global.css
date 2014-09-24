@@ -184,6 +184,19 @@ input {
     bottom: 0px;
 }
 
+#footer_wrapper {
+    height: auto;
+    background-color: #ecc12b;
+}
+
+#footer {
+    width: 860px;
+    height: 100%;
+    margin: 0 auto;
+    position: relative;
+    text-align: center;
+}
+
 /**
     Flip css
 **/

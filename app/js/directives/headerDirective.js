@@ -1,4 +1,4 @@
-stp.directive('header', function($document){
+stp.directive('stpHeader', function($document){
 
 	return {
 				restrict: 'E',
@@ -6,6 +6,6 @@ stp.directive('header', function($document){
 				templateUrl: 'app/partials/header.tpl.html',
 				controller: 'headerController',
 				link: function( scope, element){
-			   									}
+			   	}
 			};
 });
