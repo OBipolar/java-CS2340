@@ -3,7 +3,7 @@ function homeController($scope, $location){
 		$location.path(route);
 	}
     
-     $scope.submit = function(){
+    $scope.submit = function(){
     	$scope.loginAttempted = true;
     	console.log($scope.data);
     	//login($scope.data);
