@@ -10,6 +10,7 @@ body, p, div, input {
     padding: 0px;
     margin: 0px;
     border: none;
+    position:relative;
 }
 
 html {
