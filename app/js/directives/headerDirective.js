@@ -8,5 +8,4 @@ stp.directive('header', function($document){
 				link: function( scope, element){
 			   									}
 			};
-	
 });

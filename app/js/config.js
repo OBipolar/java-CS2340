@@ -1,4 +1,4 @@
-﻿var stp = angular.module('stp',['ngRoute', 'ui.bootstrap']).
+﻿var stp = angular.module('stp',['ngRoute', 'ngAnimate', 'ui.bootstrap']).
 	config(function($routeProvider){
 		$routeProvider.
 			when('/signup', {

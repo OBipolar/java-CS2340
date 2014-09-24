@@ -17,4 +17,4 @@ function headerController($scope, $location){
 	$scope.signup = function(){
 		$scope.route('signup');
 	};
-};
+}

@@ -2,11 +2,12 @@ var bundle = {};
 
 bundle.config = 'app/js/config.js';
 
-//Controllerss
-bundle.global = 'app/js/controllers/globalController.js';
-bundle.home = 'app/js/controllers/homeController.js';
-bundle.signup = 'app/js/controllers/signupController.js';
-bundle.signin = 'app/js/controllers/signinController.js';
+//Controllers
+bundle.globalController = 'app/js/controllers/globalController.js';
+bundle.homeController = 'app/js/controllers/homeController.js';
+bundle.headerController = 'app/js/controllers/headerController.js';
+bundle.signupController = 'app/js/controllers/signupController.js';
+bundle.signinController = 'app/js/controllers/signinController.js';
 
 //Services
 bundle.dataService = 'app/js/services/dataService.js';
