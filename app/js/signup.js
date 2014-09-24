@@ -124,6 +124,7 @@ $(document).ready(function(){
     newSlide = new Slide(newPic, null);
     newTile = new Tile([newSlide]);
     tileList[2][4] = new TileView({container: contentContainer,
-        id: "tile14",
+        id: "next",
         tile: newTile});
 })
+
