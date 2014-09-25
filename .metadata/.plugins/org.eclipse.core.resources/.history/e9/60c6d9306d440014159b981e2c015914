@@ -10,5 +10,8 @@ public enum Pirates {
 	Pirates(int num) {
 		this.num = num;
 	}
-
+	
+	public int getNum() {
+		return num;
+	}
 }

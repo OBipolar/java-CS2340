@@ -212,13 +212,13 @@ public class Universe {
 	}
 	
 	/**
-	 * Returns an random integer between 0 and limit (exclusive)
+	 * Returns an random integer between 0 and limit (inclusive)
 	 * 
 	 * @param limit an integer
 	 * @return  Returns an random integer between 0 and limit (inclusive)
 	 */
 	private int getRandomNum(int limit) {
-		return (new Random()).nextInt(limit);
+		return (new Random()).nextInt(limit + 1);
 	}
 
 	public List<SolarSystem> getUniverse() {
