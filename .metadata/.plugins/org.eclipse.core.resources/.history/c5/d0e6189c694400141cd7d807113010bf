@@ -46,7 +46,7 @@ public class SolarSystem {
 	public String toString() {
 		return String.format("\n This system is called %s, "
 				+ "its x coordinate is %s, its y coordinate is %s, "
-				+ "it has the following planet:\n", name, x, y) + planet.toString();
+				+ "it has the following planet", name, x, y) + planet.toString();
 	}
 	
 

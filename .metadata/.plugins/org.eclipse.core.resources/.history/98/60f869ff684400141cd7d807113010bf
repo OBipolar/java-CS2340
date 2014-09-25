@@ -7,11 +7,11 @@ public class Capital {
 	private String solarSystem;
 	private TechLevels techLevel;
 	private Pirates pirate;
-	private Polices police;
 	private String name;
 	
-	public Capital (int politicalSystem, int resourcesLevel, int techLevel, 
-			int pirate, int police, String name){
+	public Capital (int politicalSystem, 
+			int resourcesLevel, int techLevel, 
+			int pirate, String name){
 		
 		setName(name);
 		setPoliticalSystem(politicalSystem);
@@ -19,7 +19,6 @@ public class Capital {
 		setSolarSystem(name);
 		setTechLevel(techLevel);
 		setPirate(pirate);
-		setPolice(police);
 		
 	}
 	
@@ -27,9 +26,9 @@ public class Capital {
 	public String toString() {
 		return String.format("Planet name: %s, political system: %s, "
 				+ "resources level: %s, pirate type: %s, "
-				+ "police type: %s, belongs to solar system: %s, "
+				+ "belongs to solar system: %s, "
 				+ "techLevel: %s \n", name, politicalSystem.toString(),
-				resourcesLevel.toString(), pirate.toString(), police.toString(), 
+				resourcesLevel.toString(), pirate.toString(), 
 				solarSystem.toString(), techLevel.toString());
 	}
 	
@@ -226,31 +225,6 @@ public class Capital {
 				
 		};
 		
-	}
-
-	public Polices getPolice() {
-		return police;
-	}
-
-	public void setPolice(int police) {
-		switch (police) {
-		case 0:
-			this.police = Polices.ASKALOTMONEY;
-			break;
-		case 1:
-			this.police = Polices.ASKSOMEMONEY;
-			break;
-		case 2:
-			this.police = Polices.LEAVEYOURSHIP;
-			break;
-		case 3:
-			this.police = Polices.KILLONSIGHT;
-			break;
-		default:
-			this.police = Polices.ASKALOTMONEY;
-			break;
-			
-	};
 	}
 	
 }

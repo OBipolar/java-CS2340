@@ -162,7 +162,7 @@ public class Universe {
 		
 		int[] xPos = getRandomNumArr(XPOSMAX, numOfSystems);
 		int[] yPos = getRandomNumArr(YPOSMAX, numOfSystems);
-		int pirate, politicalSystem, resourcesLevel, techLevel, police;
+		int pirate, politicalSystem, resourcesLevel, techLevel;
 		
 		
 		Capital cap;
@@ -177,10 +177,9 @@ public class Universe {
 					ResourcesLevel.NUM_OF_RESOURCES_LEVEL);
 			techLevel = getRandomNum(TechLevels.NUM_OF_TECHLEVELS);
 			pirate = getRandomNum(Pirates.KINDS_OF_PIRATES);
-			police = getRandomNum(Polices.TYPES_OF_POLICE);
 			
 			cap = new Capital(politicalSystem, resourcesLevel, techLevel,
-					pirate, police, systemName);
+					pirate, systemName);
 			system = new SolarSystem(xPos[i], yPos[i], systemName, cap);
 			universe.add(system);
 			
