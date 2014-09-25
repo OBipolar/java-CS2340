@@ -1,0 +1,13 @@
+package spaceTrader.Model;
+
+public enum TechLevels {
+	PREARGICULCURE(0), MEDIEVAL(1), RENAISSANCE(2), EARLYINDUSTRIAL(3), 
+	INDUSTRIAL(4), POSTINDUSTRIAL(5), HITECH(6);
+	
+	private int num;
+	
+	TechLevels(int num) {
+		this.num = num;
+	}
+	
+}

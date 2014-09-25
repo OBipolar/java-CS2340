@@ -1,0 +1,88 @@
+package spaceTrader.Model;
+
+public class Capital {
+	
+	private PoliticalSystem politicalSystem;
+	private ResourcesLevel resourcesLevel;
+	private SolarSystem solarSystem;
+	private TechLevels techLevel;
+	private Pirates pirate;
+	private String name;
+	
+	public Capital (PoliticalSystem politicalSystem, 
+			ResourcesLevel resourcesLevel, SolarSystem solarSystem,
+			TechLevels techLevel, Pirates pirate, String name){
+		
+		setName(name);
+		setPoliticalSystem(politicalSystem);
+		setResourcesLevel(resourcesLevel);
+		setSolarSystem(solarSystem);
+		setTechLevel(techLevel);
+		setPirate(pirate);
+		
+	}
+	
+	@Override 
+	public String toString() {
+		return String.format("Planet name: %s, political system: %s, "
+				+ "resources level: %s, belongs to solar system: %s, "
+				+ "techLevel: %s", name, politicalSystem.toString(),
+				resourcesLevel.toString(), solarSystem.toString(),
+				techLevel.toString());
+	}
+	
+	
+	
+	
+	public PoliticalSystem getPoliticalSystem() {
+		return politicalSystem;
+	}
+	public void setPoliticalSystem(PoliticalSystem politicalSystem) {
+		this.politicalSystem = politicalSystem;
+	}
+	public ResourcesLevel getResourcesLevel() {
+		return resourcesLevel;
+	}
+	public void setResourcesLevel(ResourcesLevel resourcesLevel) {
+		this.resourcesLevel = resourcesLevel;
+	}
+	public SolarSystem getSolarSystem() {
+		return solarSystem;
+	}
+	public void setSolarSystem(SolarSystem solarSystem) {
+		this.solarSystem = solarSystem;
+	}
+	public TechLevels getTechLevel() {
+		return techLevel;
+	}
+	public void setTechLevel(TechLevels techLevel) {
+		this.techLevel = techLevel;
+	}
+
+
+
+
+
+
+	public String getName() {
+		return name;
+	}
+
+
+
+
+
+
+	public void setName(String name) {
+		this.name = name;
+	}
+
+	public Pirates getPirate() {
+		return pirate;
+	}
+
+	public void setPirate(Pirates pirate) {
+		this.pirate = pirate;
+	}
+	
+}

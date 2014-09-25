@@ -1,0 +1,22 @@
+package spaceTrader.Model;
+
+public enum TechLevels {
+	TEST1(0), TEST2(1);
+	
+	private int num;
+	
+	TechLevels(int num) {
+		this.num = num;
+	}
+	
+	TechLevels() {
+		
+	}
+	
+
+	
+	public static void main (String[] args) {
+		System.out.println(TechLevels.TEST2);
+	}
+	
+}
