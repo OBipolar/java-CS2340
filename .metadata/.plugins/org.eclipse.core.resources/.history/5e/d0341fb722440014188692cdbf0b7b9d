@@ -1,0 +1,28 @@
+package spaceTrader.Model;
+
+public enum TechLevels {
+	TEST1, TEST2;
+	
+	private TechLevels level;
+	
+	TechLevels(TechLevels level) {
+		this.level = level;
+	}
+	
+	TechLevels() {
+		
+	}
+	
+	public void toString() {
+		switch (level) {
+		case TEST1:
+			System.out.println("test1");
+			break;
+
+		default:
+			System.out.println("test2");
+			break;
+		}
+	}
+	
+}

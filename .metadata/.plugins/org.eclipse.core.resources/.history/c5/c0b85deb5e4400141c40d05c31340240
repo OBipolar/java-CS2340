@@ -1,0 +1,16 @@
+package spaceTrader.Model;
+
+public class Test {
+	private Pirates pirate;
+	private Object object = Pirates.KILLONSIGHT;
+	public Test() {
+
+		
+	}
+	
+	
+	
+	public static void main (String[] args) {
+		
+	}
+}

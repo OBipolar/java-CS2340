@@ -1,0 +1,10 @@
+package spaceTrader.Model;
+
+public class Capital {
+	
+	private PoliticalSystem politicalSystem;
+	private ResourcesLevel resourcesLevel;
+	private SolarSystem solarSystem;
+	private TechLevels techLevel;
+	
+}

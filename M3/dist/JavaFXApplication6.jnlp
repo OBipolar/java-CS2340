@@ -11,7 +11,11 @@
   </resources>
   <resources>
     <j2se version="1.6+" href="http://java.sun.com/products/autodl/j2se"/>
+<<<<<<< HEAD
     <jar href="JavaFXApplication6.jar" size="13462" download="eager" />
+=======
+    <jar href="JavaFXApplication6.jar" size="15003" download="eager" />
+>>>>>>> FETCH_HEAD
   </resources>
 <security>
   <all-permissions/>

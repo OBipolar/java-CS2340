@@ -1,0 +1,9 @@
+package spaceTrader.Model;
+
+public enum TechLevels {
+	TEST1, TEST2;
+	
+	TechLevels(TechLevels levle) {
+		
+	}
+}

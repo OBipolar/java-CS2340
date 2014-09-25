@@ -1,0 +1,5 @@
+package spaceTrader.Model;
+
+public enum Pirates {
+
+}
