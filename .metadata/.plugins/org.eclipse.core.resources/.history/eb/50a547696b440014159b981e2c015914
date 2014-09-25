@@ -11,7 +11,5 @@ public enum Pirates {
 		this.num = num;
 	}
 	
-	public int getNum() {
-		return num;
-	}
+	
 }

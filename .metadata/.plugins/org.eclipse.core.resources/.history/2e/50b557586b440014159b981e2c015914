@@ -7,11 +7,9 @@ public enum Pirates {
 	
 	private int num;
 	
-	Pirates(int num) {
+	public Pirates(int num) {
 		this.num = num;
 	}
 	
-	public int getNum() {
-		return num;
-	}
+	
 }

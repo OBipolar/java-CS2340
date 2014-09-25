@@ -65,9 +65,17 @@ public class Capital {
 	}
 
 
+
+
+
+
 	public String getName() {
 		return name;
 	}
+
+
+
+
 
 
 	public void setName(String name) {
@@ -78,9 +86,25 @@ public class Capital {
 		return pirate;
 	}
 
-	public void setPirate(int index) {
-		
-		this.pirate = Pirates.values()[index];
+	public void setPirate(int pirate) {
+		switch (pirate) {
+			case 0:
+				this.pirate = Pirates.ASKFORMONEY;
+				break;
+			case 1:
+				this.pirate = Pirates.FIREONSIGHT;
+				break;
+			case 2:
+				this.pirate = Pirates.KILLONSIGHT;
+				break;
+			case 3:
+				this.pirate = Pirates.RECRUTER;
+				break;
+			default:
+				this.pirate = Pirates.ASKFORMONEY;
+				break;
+				
+		};
 		
 	}
 
@@ -88,10 +112,25 @@ public class Capital {
 		return police;
 	}
 
-	public void setPolice(int index) {
-		this.police = Polices.values()[index];
-	}
+	public void setPolice(int police) {
+		switch (police) {
+		case 0:
+			this.police = Polices.ASKALOTMONEY;
+			break;
+		case 1:
+			this.police = Polices.ASKSOMEMONEY;
+			break;
+		case 2:
+			this.police = Polices.LEAVEYOURSHIP;
+			break;
+		case 3:
+			this.police = Polices.KILLONSIGHT;
+			break;
+		default:
+			this.police = Polices.ASKALOTMONEY;
+			break;
 			
-
+	};
+	}
 	
 }
