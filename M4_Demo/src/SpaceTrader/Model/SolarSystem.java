@@ -1,5 +1,8 @@
 package spaceTrader.Model;
 
+/*
+* This enumerator represents a solar system in the universe.
+*/
 public class SolarSystem {
 	
 	

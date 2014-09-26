@@ -4,7 +4,9 @@ package spaceTrader.Model;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Random;
-
+/*
+* This class represents the universe
+*/
 public class Universe {
 
 	public static final String[] SYSTEMSNAMES = {

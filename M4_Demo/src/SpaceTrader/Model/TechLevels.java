@@ -1,5 +1,7 @@
 package spaceTrader.Model;
-
+/*
+* This enumerator represents technology levels of solar systems in the universe.
+*/
 public enum TechLevels {
 	PREARGICULCURE(0), MEDIEVAL(1), RENAISSANCE(2), EARLYINDUSTRIAL(3), 
 	INDUSTRIAL(4), POSTINDUSTRIAL(5), HITECH(6);

@@ -1,5 +1,8 @@
 package spaceTrader.Model;
 
+/*
+* This class represents the capital of a solar system
+*/
 public class Capital {
 	
 	private PoliticalSystem politicalSystem;

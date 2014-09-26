@@ -1,5 +1,9 @@
 package spaceTrader.Model;
 
+/*
+* This enumerator represents pirates in the universe.
+*/
+
 public enum Pirates {
 	ASKFORMONEY(0), FIREONSIGHT(1), RECRUTER(2), KILLONSIGHT(3);
 	

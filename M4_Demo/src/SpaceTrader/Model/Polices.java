@@ -1,5 +1,8 @@
 package spaceTrader.Model;
 
+/*
+* This enumerator represents polices in the universe.
+*/
 public enum Polices {
 	ASKSOMEMONEY(0), ASKALOTMONEY(1), LEAVEYOURSHIP(2), KILLONSIGHT(3);
 	

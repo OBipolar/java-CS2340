@@ -1,5 +1,8 @@
 package spaceTrader.Model;
 
+/*
+* This enumerator represents political system of a solar system.
+*/
 public enum PoliticalSystem {
 	ANARCHY(0), CAPITALIST(1), COMMUNIST(2), CONFEDERACY(3), CORPORATE(4),
 	CYBERNETIC(5), DEMOCRACY(6), DICTATORSHIP(7), FASCIST(8), FEUDAL(9),
