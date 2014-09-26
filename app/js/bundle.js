@@ -16,6 +16,7 @@ bundle.dataService = 'app/js/services/dataService.js';
 //Directives
 bundle.header = 'app/js/directives/headerDirective.js';
 bundle.footer = 'app/js/directives/footerDirective.js';
+bundle.tile   = 'app/js/directives/tileDirective.js';
 
 for(var i in bundle){
 	var obj = bundle[i];
