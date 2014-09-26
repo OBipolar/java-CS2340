@@ -19,6 +19,7 @@ bundle.header = 'app/js/directives/headerDirective.js';
 bundle.footer = 'app/js/directives/footerDirective.js';
 bundle.tile = 'app/js/directives/tileDirective.js';
 
+
 for(var i in bundle){
 	var obj = bundle[i];
    	document.write('<script type="text/javascript" src="' + obj + '"></script>');
