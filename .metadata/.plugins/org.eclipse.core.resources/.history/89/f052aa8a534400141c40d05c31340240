@@ -1,0 +1,28 @@
+package spaceTrader.Model;
+
+public class Capital {
+	
+	private PoliticalSystem politicalSystem;
+	private ResourcesLevel resourcesLevel;
+	private SolarSystem solarSystem;
+	private TechLevels techLevel;
+	public PoliticalSystem getPoliticalSystem() {
+		return politicalSystem;
+	}
+	public void setPoliticalSystem(PoliticalSystem politicalSystem) {
+		this.politicalSystem = politicalSystem;
+	}
+	public ResourcesLevel getResourcesLevel() {
+		return resourcesLevel;
+	}
+	public void setResourcesLevel(ResourcesLevel resourcesLevel) {
+		this.resourcesLevel = resourcesLevel;
+	}
+	public SolarSystem getSolarSystem() {
+		return solarSystem;
+	}
+	public void setSolarSystem(SolarSystem solarSystem) {
+		this.solarSystem = solarSystem;
+	}
+	
+}
