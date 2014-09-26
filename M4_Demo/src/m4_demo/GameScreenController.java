@@ -4,10 +4,12 @@
  * and open the template in the editor.
  */
 
-package javafxapplication6;
+package m4_demo;
 
 import java.net.URL;
 import java.util.ResourceBundle;
+
+
 import javafx.scene.control.Label;
 import javafx.scene.control.TextField;
 import javafx.scene.control.Button;
@@ -23,6 +25,8 @@ import javafx.util.converter.IntegerStringConverter;
  * @author Shaohui Xu
  */
 public class GameScreenController implements Initializable, ControlledScreen {
+    
+    ScreensController myController;
 
     @FXML
     private TitledPane galaChart;
@@ -46,7 +50,9 @@ public class GameScreenController implements Initializable, ControlledScreen {
     private AnchorPane cargoChart;
     
     @Override
-    public void setScreenParent(ScreensController screenParent) {}
+    public void setScreenParent(ScreensController screenParent) {
+        myController = screenParent;
+    }
     
     @Override
     public void initialize(URL url, ResourceBundle rb) {}
