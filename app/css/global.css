@@ -33,6 +33,11 @@ input {
     border-style: none;
 }
 
+.tile-background {
+    z-index: -1;
+    position: absolute;
+}
+
 .wrapper {
     width: 100%;
     min-width: 900px;
