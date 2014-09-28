@@ -846,47 +846,6 @@ end
  $_$
     language 'plpgsql';
 
-
-
-CREATE OR REPLACE FUNCTION fn_new_destination
-(
-    in_event                int4,
-    in_tourist_attraction   int4,
-    in_city                 int4,
-    in_country              int4
-)
-returns integer as
- $_$
-declare
-    my_destination integer;
-begin
-    my_destination := nextval('sq_pk_destination');
-
-    insert into tb_destination
-                (
-                    destination,
-                    event,
-                    tourist_attraction,
-                    city,
-                    country
-                )
-                values
-                (
-                    my_destination,
-                    in_event,
-                    in_tourist_attraction,
-                    in_city,
-                    in_country
-                );
-
-    return my_destination;
-end
- $_$
-    language 'plpgsql';
-
-
-
-
 CREATE OR REPLACE FUNCTION fn_new_entity_personality
 (
     in_entity        int4,
@@ -2723,12 +2682,175 @@ end
  $_$
     language 'plpgsql';
 
+CREATE OR REPLACE FUNCTION fn_new_district
+(
+    in_label   varchar,
+    in_city    int4
+)
+returns integer as
+ $_$
+declare
+    my_district integer;
+begin
+    my_district := nextval('sq_pk_district');
+
+    insert into tb_district
+                (
+                    district,
+                    label,
+                    city
+                )
+                values
+                (
+                    my_district,
+                    in_label,
+                    in_city
+                );
+    
+    return my_district;
+end
+ $_$
+    language 'plpgsql';
+
+
+
+CREATE OR REPLACE FUNCTION fn_get_district
+(
+    in_label   varchar
+)
+returns integer as
+ $_$
+declare
+    my_district integer;
+begin
+    select district
+      into my_district
+      from tb_district
+     where label = in_label;
+
+    return my_district;
+end
+ $_$
+    language 'plpgsql';
+
+
+CREATE OR REPLACE FUNCTION fn_get_or_create_district
+(
+    in_label   varchar,
+    in_city    int4
+)
+returns integer as
+ $_$
+declare
+    my_district integer;
+begin
+    select fn_get_district
+           (
+               in_label
+           )
+      into my_district;
+
+    if my_district is null then
+        select fn_new_district
+               (
+                    in_label,
+                    in_city
+               )
+          into my_district;
+    end if;
+
+    return my_district;
+end
+ $_$
+    language 'plpgsql';
+
+
+CREATE OR REPLACE FUNCTION fn_get_create_or_update_district
+(
+    in_label   varchar,
+    in_city    int4,
+    in_do_update    boolean default false
+)
+returns integer as
+ $_$
+declare
+    my_district integer;
+begin
+    select fn_get_district
+           (
+               in_label
+           )
+      into my_district;
+
+    if my_district is not null then
+        if in_do_update then
+            update tb_district
+               set label = in_label,
+                   city = in_city
+             where district = my_district;
+             
+        end if;
+    else
+        select fn_new_district
+               (
+                    in_label,
+                    in_city
+               )
+          into my_district;
+    end if;
+
+    return my_district;
+end
+ $_$
+    language 'plpgsql';
+
+
+CREATE OR REPLACE FUNCTION fn_new_destination
+(
+    in_event                int4,
+    in_tourist_attraction   int4,
+    in_city                 int4,
+    in_country              int4,
+    in_district             int4
+)
+returns integer as
+ $_$
+declare
+    my_destination integer;
+begin
+    my_destination := nextval('sq_pk_destination');
+
+    insert into tb_destination
+                (
+                    destination,
+                    event,
+                    tourist_attraction,
+                    city,
+                    country,
+                    district
+                )
+                values
+                (
+                    my_destination,
+                    in_event,
+                    in_tourist_attraction,
+                    in_city,
+                    in_country,
+                    in_district
+                );
+    
+    return my_destination;
+end
+ $_$
+    language 'plpgsql';
+
 
 
 CREATE OR REPLACE FUNCTION fn_new_wishlist
 (
     in_entity               int4,
     in_tourist_attraction   int4,
+    in_district             int4,
     in_city                 int4,
     in_country              int4
 )
@@ -2744,6 +2866,7 @@ begin
                     wishlist,
                     entity,
                     tourist_attraction,
+                    district,
                     city,
                     country
                 )
@@ -2752,10 +2875,10 @@ begin
                     my_wishlist,
                     in_entity,
                     in_tourist_attraction,
+                    in_district,
                     in_city,
                     in_country
                 );
-
     
     return my_wishlist;
 end
