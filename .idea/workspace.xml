@@ -1,14 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <project version="4">
   <component name="ChangeListManager">
-    <list default="true" id="a9d94715-f702-4df8-8f51-2598b9022316" name="Default" comment="">
-      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/app/js/directives/tileDirective.js" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/app/js/bundle.js" afterPath="$PROJECT_DIR$/app/js/bundle.js" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/app/css/global.css" afterPath="$PROJECT_DIR$/app/css/global.css" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/app/partials/home.tpl.html" afterPath="$PROJECT_DIR$/app/partials/home.tpl.html" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/index.html" afterPath="$PROJECT_DIR$/index.html" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/.idea/workspace.xml" afterPath="$PROJECT_DIR$/.idea/workspace.xml" />
-    </list>
+    <list default="true" id="a9d94715-f702-4df8-8f51-2598b9022316" name="Default" comment="" />
     <ignored path="STP.iws" />
     <ignored path=".idea/workspace.xml" />
     <file path="/Dummy.txt" changelist="a9d94715-f702-4df8-8f51-2598b9022316" time="1411706193591" ignored="false" />
