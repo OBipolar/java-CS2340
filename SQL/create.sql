@@ -22,6 +22,14 @@ create table tb_city
 	region 	integer not null references tb_region
 );
 
+create sequence sq_pk_district;
+create table tb_district
+(
+	district integer primary key default nextval('sq_pk_district'),
+	label 	varchar(32) not null unique,
+	city 	integer not null references tb_city
+);
+
 create sequence sq_pk_tourist_attraction;
 create table tb_tourist_attraction
 ( 
@@ -63,9 +71,10 @@ create table tb_wishlist
 	wishlist 			integer primary key default nextval('sq_pk_wishlist'),
 	entity 				integer not null references tb_entity,
 	tourist_attraction 	integer references tb_tourist_attraction,
+	district            integer references tb_district,
 	city 				integer references tb_city,
 	country 		 	integer references tb_country,
-	check ( tourist_attraction is not null or city is not null or country is not null )
+    check ( tourist_attraction is not null or district is not null or city is not null or country is not null )
 );
 
 create sequence sq_pk_event;
@@ -88,9 +97,10 @@ create table tb_destination
 	destination 			integer primary key default nextval('sq_pk_destination'),
 	event 					integer not null references tb_event,
 	tourist_attraction		integer references tb_tourist_attraction,
+	district                integer references tb_district,
 	city 					integer references tb_city,
 	country					integer references tb_country,
-	check ( tourist_attraction is not null or city is not null or country is not null )
+	check ( tourist_attraction is not null or district is not null or city is not null or country is not null )
 );
 
 create sequence sq_pk_event_entity;
