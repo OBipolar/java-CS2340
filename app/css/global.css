@@ -208,7 +208,8 @@ input {
 **/
 .flip {
     float: left;
-    overflow: hidden
+    overflow: hidden;
+    margin-right: 5px;
 }
 
 .flipBasic {

@@ -54,15 +54,22 @@ stp.directive("stpTile", function(){
 
 });
 
-stp.directive("flipPanel", function(){
+stp.directive("stpTileFront", function(){
     return {
         restrict : "E",
         require : "^stpTile",
         link: function(scope, element, attrs, flipCtr){
-            if(!flipCtr.front)
-                {flipCtr.front = element;}
-            else if (!flipCtr.back)
-                {flipCtr.back = element;}
+            flipCtr.front = element;
+        }
+    }
+});
+
+stp.directive("stpTileBack", function(){
+    return {
+        restrict : "E",
+        require : "^stpTile",
+        link: function(scope, element, attrs, flipCtr){
+            flipCtr.back = element;
         }
     }
 });
