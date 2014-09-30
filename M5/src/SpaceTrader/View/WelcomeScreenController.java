@@ -8,11 +8,10 @@ package SpaceTrader.View;
 
 import java.net.URL;
 import java.util.ResourceBundle;
+
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.fxml.Initializable;
-import javafx.scene.control.Label;
-import javafx.scene.input.MouseEvent;
 import javafx.scene.control.Button;
 
 /**
@@ -20,29 +19,31 @@ import javafx.scene.control.Button;
  * @author zixiangzhu
  */
 public class WelcomeScreenController implements Initializable, ControlledScreen {
-    
+
     ScreensController myController;
-    
+
     @FXML
     private Button newGame;
     @FXML
     private Button loadGame;
-    
+
     @Override
     public void setScreenParent(ScreensController screenParent) {
         myController = screenParent;
     }
-    
+
     @FXML
     private void newGameFired(ActionEvent event) {
-        myController.setScreen(M4_Demo.screen2ID);
+        myController.setScreen(Main.screen2ID);
     }
+
     @FXML
-    private void loadGameFired(ActionEvent event) {}
-    
+    private void loadGameFired(ActionEvent event) {
+    }
+
     @Override
     public void initialize(URL url, ResourceBundle rb) {
         // TODO
-    }    
-    
+    }
+
 }
