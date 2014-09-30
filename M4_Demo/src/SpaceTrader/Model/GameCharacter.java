@@ -4,7 +4,7 @@
  * and open the template in the editor.
  */
 
-package m4_demo;
+package SpaceTrader.GameCharacter;
 
 /**
  *Model for character ship

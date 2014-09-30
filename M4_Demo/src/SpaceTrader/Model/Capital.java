@@ -1,4 +1,4 @@
-package spaceTrader.Model;
+package SpaceTrader.Model;
 
 /*
 * This class represents the capital of a solar system

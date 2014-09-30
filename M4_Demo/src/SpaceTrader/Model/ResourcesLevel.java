@@ -1,4 +1,4 @@
-package spaceTrader.Model;
+package SpaceTrader.Model;
 
 /*
 * This enumerator represents the resource level of a solar system.

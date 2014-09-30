@@ -1,4 +1,4 @@
-package spaceTrader.Model;
+package SpaceTrader.Model;
 
 
 import java.util.ArrayList;

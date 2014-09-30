@@ -1,4 +1,4 @@
-package spaceTrader.Model;
+package SpaceTrader.Model;
 
 /*
 * This enumerator represents pirates in the universe.

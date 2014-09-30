@@ -4,7 +4,7 @@
  * and open the template in the editor.
  */
 
-package m4_demo;
+package SpaceTrader.View;
 
 import javafx.application.Application;
 import javafx.fxml.FXMLLoader;
@@ -16,7 +16,7 @@ import javafx.stage.Stage;
  *
  * @author zixiangzhu
  */
-public class M4_Demo extends Application {
+public class Main extends Application {
     
     public static String screen1ID = "welcome";
     public static String screen1File = "WelcomeScreen.fxml";
