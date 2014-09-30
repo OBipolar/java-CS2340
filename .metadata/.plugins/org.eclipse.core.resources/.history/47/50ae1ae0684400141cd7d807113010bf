@@ -1,5 +1,0 @@
-package spaceTrader.Model;
-
-public enum Polices {
-
-}
