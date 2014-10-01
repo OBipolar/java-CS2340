@@ -19,7 +19,7 @@ public class Test {
         PlayerShip playerShip = new PlayerShip();
         playerShip.loadShip();
         Universe universe = new Universe();
-        SqliteAPI api = new SqliteAPI(player, universe);
+        //SqliteAPI api = new SqliteAPI(player, universe);
 
         SolarSystem system = universe.getUniverse().get(0);
 
@@ -63,13 +63,13 @@ public class Test {
             System.out.println(g.getName());
         }
 
-        try {
+        /*try {
             api.openConnection();
             api.closeConnection();
         } catch (ClassNotFoundException | SQLException e) {
             // TODO Auto-generated catch block
             e.printStackTrace();
-        }
+        }*/
 
     }
 
