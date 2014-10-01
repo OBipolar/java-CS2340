@@ -1,0 +1,154 @@
+package SpaceTrader.Goods;
+
+import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.List;
+import java.util.Map;
+import java.util.Random;
+
+import SpaceTrader.Model.GameCharacter;
+import SpaceTrader.Model.PlayerShip;
+import SpaceTrader.Model.SolarSystem;
+
+public class Trade {
+    
+    private GameCharacter player;
+    private PlayerShip playerShip;    
+    private SolarSystem system;
+    private List<String> goodsToSell;
+    private List<String> goodsToBuy;
+    private Map<String, Integer> pricesToSell; 
+    private Map<String, Integer> pricesToBuy; 
+    
+    
+    public Trade (GameCharacter player, PlayerShip playerShip, SolarSystem system) {
+        
+        this.player = player;
+        this.playerShip = playerShip;
+        this.system = system;
+        setGoodsToSell(new ArrayList<String>());
+        setGoodsToBuy(new ArrayList<String>());
+        pricesToSell = new HashMap<String, Integer>();
+        pricesToBuy = new HashMap<String, Integer>();
+        setGoodsToSell();
+        setGoodsToBuy();
+    }
+    
+    
+    public boolean buy (Good good) { 
+        
+        int amount = pricesToBuy.get(good.getName());
+        int money = player.getMoney();
+        if (amount > money || playerShip.isFull()) {
+            return false;
+        }
+        money -= amount;
+        player.setMoney(money);
+        playerShip.add(good);
+        goodsToSell.add(good.getName());
+        pricesToSell.put(good.getName(), amount);
+        return true;
+    }
+    
+    
+    public void sell (Good good) {
+        int amount = pricesToSell.get(good.getName());
+        int money = player.getMoney();
+        money += amount;
+        player.setMoney(money);
+        playerShip.remove(good);   
+        goodsToSell.remove(good.getName());
+        pricesToSell.remove(good.getName());
+    }
+    
+    
+    
+    
+    public void setGoodsToSell() {
+        
+        int techLevel = system.getPlanet().getTechLevel().ordinal();
+        //System.out.println("techlevel: " + techLevel);
+        List<Good> cargo = playerShip.getCargo();
+        //System.out.println("cargo is empty: " + cargo.isEmpty());
+        for (Good good : cargo) {
+            //System.out.println("MTLU " + good.getMTLU());
+            if (good.getMTLU() <= techLevel) {
+                goodsToSell.add(good.getName());
+                pricesToSell.put(good.getName(), calcPrice(good, techLevel));
+                //System.out.println(good.getName() + calcPrice(good, techLevel));
+            }
+        }
+               
+    }
+    
+    
+    public void setGoodsToBuy() {
+        
+        int techLevel = system.getPlanet().getTechLevel().ordinal();
+        List<Good> goods = new ArrayList<Good>();
+        goods.add(new Water());
+        goods.add(new Furs());
+        goods.add(new Food());
+        goods.add(new Ore());
+        goods.add(new Games());
+        goods.add(new Firearms());
+        goods.add(new Medicine());
+        goods.add(new Machines());
+        goods.add(new Narcotics());
+        goods.add(new Robots());
+        
+        for (Good good : goods) {
+            if (good.getMTLP() <= techLevel) {
+                goodsToBuy.add(good.getName());
+                pricesToBuy.put(good.getName(), calcPrice(good, techLevel));
+            }
+        }
+        
+    }
+
+    private int calcPrice(Good good, int techLevel) {
+        return good.getBasePrice() * (1 + getRandomNum(good.getVar() / 10)) 
+                + good.getIPL() * (techLevel - good.getMTLP());
+    }
+  
+    /**
+     * Returns an random integer between 0 and limit (inclusive)
+     * 
+     * @param limit an integer
+     * @return  Returns an random integer between 0 and limit (inclusive)
+     */
+    private int getRandomNum(int limit) {
+        return (new Random()).nextInt(limit + 1);
+    }
+
+    
+
+    public Map<String, Integer> getPricesToSell() {
+        return pricesToSell;
+    }
+
+    public Map<String, Integer> getPricesToBuy() {
+        return pricesToBuy;
+    }
+
+    public List<String> getGoodsToSell() {
+        return goodsToSell;
+    }
+
+    public void setGoodsToSell(List<String> goodsToSell) {
+        this.goodsToSell = goodsToSell;
+    }
+
+    public List<String> getGoodsToBuy() {
+        return goodsToBuy;
+    }
+
+    public void setGoodsToBuy(List<String> goodsToBuy) {
+        this.goodsToBuy = goodsToBuy;
+    }
+
+
+    
+    
+    
+}
