@@ -1,9 +1,4 @@
 <<<<<<< HEAD
-STP
-===
-
-Project STP
-=======
 # CS-2340 Team Project Repository
 ## Team A-Dobee
 
