@@ -8,7 +8,7 @@
 <?import javafx.scene.control.*?>
 <?import javafx.scene.layout.*?>
 
-<AnchorPane maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="400.0" prefWidth="600.0" xmlns="http://javafx.com/javafx/8" xmlns:fx="http://javafx.com/fxml/1" fx:controller="m4_demo.ConfigurePageController">
+<AnchorPane maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="400.0" prefWidth="600.0" xmlns="http://javafx.com/javafx/8" xmlns:fx="http://javafx.com/fxml/1" fx:controller="spaceTrader.View.ConfigurePageController">
    <children>
       <Rectangle arcHeight="5.0" arcWidth="5.0" fill="#070707" height="400.0" stroke="BLACK" strokeType="INSIDE" width="600.0" />
       <Text fill="#fcf8f8" layoutX="248.0" layoutY="70.0" strokeType="OUTSIDE" strokeWidth="0.0" text="Enter User Name" />

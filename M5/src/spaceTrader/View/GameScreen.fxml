@@ -1,5 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
 
+<?import javafx.scene.effect.*?>
+<?import javafx.scene.canvas.*?>
 <?import javafx.scene.text.*?>
 <?import javafx.scene.shape.*?>
 <?import java.lang.*?>
@@ -8,33 +10,260 @@
 <?import javafx.scene.control.*?>
 <?import javafx.scene.layout.*?>
 
-<AnchorPane maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="400.0" prefWidth="600.0" xmlns="http://javafx.com/javafx/8" xmlns:fx="http://javafx.com/fxml/1" fx:controller="m4_demo.GameScreenController">
+<AnchorPane maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="600.0" prefWidth="800.0" xmlns="http://javafx.com/javafx/8" xmlns:fx="http://javafx.com/fxml/1" fx:controller="spaceTrader.View.GameScreenController">
    <children>
-      <Rectangle arcHeight="5.0" arcWidth="5.0" fill="#070707" height="400.0" stroke="BLACK" strokeType="INSIDE" width="600.0" />
-      <TitledPane fx:id="galaChart" layoutX="0" layoutY="226.0" prefHeight="175.0" prefWidth="175.0" text="Galactic Chart" />
-      <TitledPane fx:id="srChart" layoutX="426.0" layoutY="226.0" prefHeight="175.0" prefWidth="175.0" text="Short-Range Chart" />
-      <TitledPane fx:id="systemInfo" layoutX="175.0" layoutY="226.0" prefHeight="175.0" prefWidth="125.0" text="System Info">
+      <TitledPane fx:id="galaChart" layoutY="377.0" prefHeight="185.0" prefWidth="253.0" text="Galactic Chart">
          <content>
-            <ListView prefHeight="149.0" prefWidth="63.0" />
+            <Canvas fx:id="canvas" height="154.0" width="246.0" />
          </content></TitledPane>
-      <TitledPane fx:id="targetInfo" layoutX="300.0" layoutY="226.0" prefHeight="175.0" prefWidth="125.0" text="Target System">
+      <TitledPane fx:id="srChart" layoutX="562.0" layoutY="377.0" prefHeight="223.0" prefWidth="238.0" text="Short-Range Chart">
          <content>
-            <ListView prefHeight="149.0" prefWidth="90.0" />
+            <Canvas fx:id="canvas2" height="200.0" width="200.0" />
          </content></TitledPane>
-      <SplitPane dividerPositions="0.29797979797979796" layoutX="0" layoutY="0" prefHeight="227.0" prefWidth="600">
-        <items>
-          <AnchorPane minHeight="0.0" minWidth="0.0" prefHeight="160.0" prefWidth="100.0">
+      <TitledPane fx:id="systemInfo" layoutX="250.0" layoutY="377.0" prefHeight="223.0" prefWidth="152.0" text="Shipyard">
+         <content>
+            <ListView prefHeight="183.0" prefWidth="138.0" />
+         </content></TitledPane>
+      <TitledPane fx:id="targetInfo" layoutX="402.0" layoutY="377.0" prefHeight="223.0" prefWidth="160.0" text="Target System">
+         <content>
+            <ListView fx:id="targetListView" prefHeight="196.0" prefWidth="126.0" />
+         </content></TitledPane>
+      <MenuBar prefHeight="29.0" prefWidth="800.0">
+        <menus>
+          <Menu mnemonicParsing="false" text="File">
+            <items>
+              <MenuItem mnemonicParsing="false" text="Close" />
+            </items>
+          </Menu>
+          <Menu mnemonicParsing="false" text="Edit">
+            <items>
+              <MenuItem mnemonicParsing="false" text="Delete" />
+            </items>
+          </Menu>
+          <Menu mnemonicParsing="false" text="Help">
+            <items>
+              <MenuItem mnemonicParsing="false" text="About" />
+            </items>
+          </Menu>
+        </menus>
+      </MenuBar>
+      <Button fx:id="findPlanet" layoutX="183.0" layoutY="562.0" mnemonicParsing="false" onAction="#findPlanetFired" text="Find" />
+      <TitledPane animated="false" layoutX="250.0" layoutY="29.0" prefHeight="348.0" prefWidth="304.0" text="Cargo">
+        <content>
+          <AnchorPane minHeight="0.0" minWidth="0.0" prefHeight="321.0" prefWidth="310.0">
                <children>
-                  <SplitPane dividerPositions="0.5" orientation="VERTICAL" prefHeight="227.0" prefWidth="184.0">
-                    <items>
-                      <AnchorPane fx:id="shipyard" minHeight="0.0" minWidth="0.0" prefHeight="100.0" prefWidth="160.0" />
-                      <AnchorPane fx:id="dock" minHeight="0.0" minWidth="0.0" prefHeight="100.0" prefWidth="160.0" />
-                    </items>
-                  </SplitPane>
+                  <Line endX="190.0" layoutX="106.0" layoutY="34.0" startX="-100.0" />
+                  <Line endX="210.0" layoutX="5.0" layoutY="170.0" rotate="90.0" startX="-100.0" />
+                  <Line endX="210.0" layoutX="125.0" layoutY="180.0" rotate="90.0" startX="-100.0" />
+                  <Text layoutX="6.0" layoutY="61.0" strokeType="OUTSIDE" strokeWidth="0.0" text="Water">
+                     <font>
+                        <Font size="11.0" />
+                     </font>
+                  </Text>
+                  <Text layoutX="6.0" layoutY="88.0" strokeType="OUTSIDE" strokeWidth="0.0" text="Furs">
+                     <font>
+                        <Font size="11.0" />
+                     </font>
+                  </Text>
+                  <Text layoutX="6.0" layoutY="116.0" strokeType="OUTSIDE" strokeWidth="0.0" text="Food">
+                     <font>
+                        <Font size="11.0" />
+                     </font>
+                  </Text>
+                  <Text layoutX="6.0" layoutY="146.0" strokeType="OUTSIDE" strokeWidth="0.0" text="Ore">
+                     <font>
+                        <Font size="11.0" />
+                     </font>
+                  </Text>
+                  <Text layoutX="6.0" layoutY="174.0" strokeType="OUTSIDE" strokeWidth="0.0" text="Games">
+                     <font>
+                        <Font size="11.0" />
+                     </font>
+                  </Text>
+                  <Text layoutX="6.0" layoutY="202.0" strokeType="OUTSIDE" strokeWidth="0.0" text="Firearms">
+                     <font>
+                        <Font size="11.0" />
+                     </font>
+                  </Text>
+                  <Text layoutX="6.0" layoutY="231.0" strokeType="OUTSIDE" strokeWidth="0.0" text="Medicine">
+                     <font>
+                        <Font size="11.0" />
+                     </font>
+                  </Text>
+                  <Text layoutX="6.0" layoutY="259.0" strokeType="OUTSIDE" strokeWidth="0.0" text="Machines">
+                     <font>
+                        <Font size="11.0" />
+                     </font>
+                  </Text>
+                  <Text layoutX="6.0" layoutY="287.0" strokeType="OUTSIDE" strokeWidth="0.0" text="Narcotics">
+                     <font>
+                        <Font size="11.0" />
+                     </font>
+                  </Text>
+                  <Text layoutX="6.0" layoutY="314.0" strokeType="OUTSIDE" strokeWidth="0.0" text="Robots">
+                     <font>
+                        <Font size="11.0" />
+                     </font>
+                  </Text>
+                  <Text layoutX="110.0" layoutY="28.0" strokeType="OUTSIDE" strokeWidth="0.0" text="Sell" />
+                  <Text layoutX="229.0" layoutY="28.0" strokeType="OUTSIDE" strokeWidth="0.0" text="Buy" />
+                  <Label fx:id="waterAmount" alignment="CENTER" contentDisplay="CENTER" layoutX="63.0" layoutY="50.0" prefHeight="16.0" prefWidth="25.0" style="-fx-border-style: solid;" text="0" textAlignment="CENTER" />
+                  <Label fx:id="fursAmount" alignment="CENTER" contentDisplay="CENTER" layoutX="63.0" layoutY="77.0" prefHeight="16.0" prefWidth="25.0" style="-fx-border-style: solid;" text="0" textAlignment="CENTER" />
+                  <Label fx:id="foodAmount" alignment="CENTER" contentDisplay="CENTER" layoutX="63.0" layoutY="105.0" prefHeight="16.0" prefWidth="25.0" style="-fx-border-style: solid;" text="0" textAlignment="CENTER" />
+                  <Label fx:id="oreAmount" alignment="CENTER" contentDisplay="CENTER" layoutX="63.0" layoutY="135.0" prefHeight="16.0" prefWidth="25.0" style="-fx-border-style: solid;" text="0" textAlignment="CENTER" />
+                  <Label fx:id="gamesAmount" alignment="CENTER" contentDisplay="CENTER" layoutX="63.0" layoutY="163.0" prefHeight="16.0" prefWidth="25.0" style="-fx-border-style: solid;" text="0" textAlignment="CENTER" />
+                  <Label fx:id="firearmsAmount" alignment="CENTER" contentDisplay="CENTER" layoutX="63.0" layoutY="191.0" prefHeight="16.0" prefWidth="25.0" style="-fx-border-style: solid;" text="0" textAlignment="CENTER" />
+                  <Label fx:id="medicineAmount" alignment="CENTER" contentDisplay="CENTER" layoutX="63.0" layoutY="220.0" prefHeight="16.0" prefWidth="25.0" style="-fx-border-style: solid;" text="0" textAlignment="CENTER" />
+                  <Label fx:id="machinesAmount" alignment="CENTER" contentDisplay="CENTER" layoutX="63.0" layoutY="248.0" prefHeight="16.0" prefWidth="25.0" style="-fx-border-style: solid;" text="0" textAlignment="CENTER" />
+                  <Label fx:id="narcoticsAmount" alignment="CENTER" contentDisplay="CENTER" layoutX="63.0" layoutY="276.0" prefHeight="16.0" prefWidth="25.0" style="-fx-border-style: solid;" text="0" textAlignment="CENTER" />
+                  <Label fx:id="robotsAmount" alignment="CENTER" contentDisplay="CENTER" layoutX="63.0" layoutY="303.0" prefHeight="16.0" prefWidth="25.0" style="-fx-border-style: solid;" text="0" textAlignment="CENTER" />
+                  <Label fx:id="waterAll" alignment="CENTER" layoutX="94.0" layoutY="50.0" prefHeight="18.0" prefWidth="35.0" style="-fx-border-style: solid;" text="All" />
+                  <Label fx:id="fursAll" alignment="CENTER" layoutX="94.0" layoutY="77.0" prefHeight="18.0" prefWidth="35.0" style="-fx-border-style: solid;" text="All" />
+                  <Label fx:id="foodAll" alignment="CENTER" layoutX="94.0" layoutY="105.0" prefWidth="35.0" style="-fx-border-style: solid;" text="All" />
+                  <Label fx:id="oreAll" alignment="CENTER" layoutX="94.0" layoutY="135.0" prefWidth="35.0" style="-fx-border-style: solid;" text="All" />
+                  <Label fx:id="gamesAll" alignment="CENTER" layoutX="94.0" layoutY="162.0" prefWidth="35.0" style="-fx-border-style: solid;" text="All" />
+                  <Label fx:id="firearmsAll" alignment="CENTER" layoutX="94.0" layoutY="190.0" prefWidth="35.0" style="-fx-border-style: solid;" text="All" />
+                  <Label fx:id="medicineAll" alignment="CENTER" layoutX="94.0" layoutY="219.0" prefWidth="35.0" style="-fx-border-style: solid;" text="All" />
+                  <Label fx:id="machinesAll" alignment="CENTER" layoutX="94.0" layoutY="247.0" prefWidth="35.0" style="-fx-border-style: solid;" text="All" />
+                  <Label fx:id="narcoticsAll" alignment="CENTER" layoutX="94.0" layoutY="275.0" prefWidth="35.0" style="-fx-border-style: solid;" text="All" />
+                  <Label fx:id="robotsAll" alignment="CENTER" layoutX="94.0" layoutY="302.0" prefWidth="35.0" style="-fx-border-style: solid;" text="All" />
+                  <Label contentDisplay="CENTER" layoutX="134.0" layoutY="303.0" prefWidth="45.0" text="No Trade" textAlignment="CENTER">
+                     <font>
+                        <Font size="10.0" />
+                     </font>
+                  </Label>
+                  <Label contentDisplay="CENTER" layoutX="134.0" layoutY="276.0" prefWidth="45.0" text="2,787 cr." textAlignment="CENTER">
+                     <font>
+                        <Font size="10.0" />
+                     </font>
+                  </Label>
+                  <Label contentDisplay="CENTER" layoutX="134.0" layoutY="248.0" prefWidth="45.0" text="731 cr." textAlignment="CENTER">
+                     <font>
+                        <Font size="10.0" />
+                     </font>
+                  </Label>
+                  <Label contentDisplay="CENTER" layoutX="134.0" layoutY="220.0" prefWidth="45.0" text="534 cr." textAlignment="CENTER">
+                     <font>
+                        <Font size="10.0" />
+                     </font>
+                  </Label>
+                  <Label contentDisplay="CENTER" layoutX="134.0" layoutY="191.0" prefWidth="45.0" text="855 cr." textAlignment="CENTER">
+                     <font>
+                        <Font size="10.0" />
+                     </font>
+                  </Label>
+                  <Label contentDisplay="CENTER" layoutX="134.0" layoutY="163.0" prefWidth="45.0" text="192 cr." textAlignment="CENTER">
+                     <font>
+                        <Font size="10.0" />
+                     </font>
+                  </Label>
+                  <Label contentDisplay="CENTER" layoutX="134.0" layoutY="136.0" prefWidth="45.0" text="367 cr." textAlignment="CENTER">
+                     <font>
+                        <Font size="10.0" />
+                     </font>
+                  </Label>
+                  <Label contentDisplay="CENTER" layoutX="134.0" layoutY="106.0" prefWidth="45.0" text="107 cr." textAlignment="CENTER">
+                     <font>
+                        <Font size="10.0" />
+                     </font>
+                  </Label>
+                  <Label contentDisplay="CENTER" layoutX="134.0" layoutY="78.0" prefHeight="18.0" prefWidth="45.0" text="245 cr." textAlignment="CENTER">
+                     <font>
+                        <Font size="10.0" />
+                     </font>
+                  </Label>
+                  <Label fx:id="waterPrice" layoutX="134.0" layoutY="51.0" prefHeight="18.0" prefWidth="45.0" text="36 cr.">
+                     <font>
+                        <Font size="10.0" />
+                     </font>
+                  </Label>
+                  <Label layoutX="254.0" layoutY="51.0" prefHeight="18.0" prefWidth="45.0" text="36 cr.">
+                     <font>
+                        <Font size="10.0" />
+                     </font>
+                  </Label>
+                  <Label contentDisplay="CENTER" layoutX="254.0" layoutY="78.0" prefHeight="18.0" prefWidth="45.0" text="245 cr." textAlignment="CENTER">
+                     <font>
+                        <Font size="10.0" />
+                     </font>
+                  </Label>
+                  <Label contentDisplay="CENTER" layoutX="254.0" layoutY="106.0" prefWidth="45.0" text="107 cr." textAlignment="CENTER">
+                     <font>
+                        <Font size="10.0" />
+                     </font>
+                  </Label>
+                  <Label contentDisplay="CENTER" layoutX="254.0" layoutY="136.0" prefWidth="45.0" text="367 cr." textAlignment="CENTER">
+                     <font>
+                        <Font size="10.0" />
+                     </font>
+                  </Label>
+                  <Label contentDisplay="CENTER" layoutX="254.0" layoutY="163.0" prefWidth="45.0" text="192 cr." textAlignment="CENTER">
+                     <font>
+                        <Font size="10.0" />
+                     </font>
+                  </Label>
+                  <Label contentDisplay="CENTER" layoutX="254.0" layoutY="191.0" prefWidth="45.0" text="855 cr." textAlignment="CENTER">
+                     <font>
+                        <Font size="10.0" />
+                     </font>
+                  </Label>
+                  <Label contentDisplay="CENTER" layoutX="254.0" layoutY="220.0" prefWidth="45.0" text="534 cr." textAlignment="CENTER">
+                     <font>
+                        <Font size="10.0" />
+                     </font>
+                  </Label>
+                  <Label contentDisplay="CENTER" layoutX="254.0" layoutY="248.0" prefWidth="45.0" text="731 cr." textAlignment="CENTER">
+                     <font>
+                        <Font size="10.0" />
+                     </font>
+                  </Label>
+                  <Label contentDisplay="CENTER" layoutX="254.0" layoutY="276.0" prefWidth="45.0" text="2,787 cr." textAlignment="CENTER">
+                     <font>
+                        <Font size="10.0" />
+                     </font>
+                  </Label>
+                  <Label contentDisplay="CENTER" layoutX="254.0" layoutY="303.0" prefWidth="45.0" text="No Trade" textAlignment="CENTER">
+                     <font>
+                        <Font size="10.0" />
+                     </font>
+                  </Label>
+                  <Label alignment="CENTER" layoutX="214.0" layoutY="302.0" prefWidth="35.0" style="-fx-border-style: solid;" text="All" />
+                  <Label alignment="CENTER" layoutX="214.0" layoutY="275.0" prefWidth="35.0" style="-fx-border-style: solid;" text="All" />
+                  <Label alignment="CENTER" layoutX="214.0" layoutY="247.0" prefWidth="35.0" style="-fx-border-style: solid;" text="All" />
+                  <Label alignment="CENTER" layoutX="214.0" layoutY="219.0" prefWidth="35.0" style="-fx-border-style: solid;" text="All" />
+                  <Label alignment="CENTER" layoutX="214.0" layoutY="190.0" prefWidth="35.0" style="-fx-border-style: solid;" text="All" />
+                  <Label alignment="CENTER" layoutX="214.0" layoutY="162.0" prefWidth="35.0" style="-fx-border-style: solid;" text="All" />
+                  <Label alignment="CENTER" layoutX="214.0" layoutY="135.0" prefWidth="35.0" style="-fx-border-style: solid;" text="All" />
+                  <Label alignment="CENTER" layoutX="214.0" layoutY="105.0" prefWidth="35.0" style="-fx-border-style: solid;" text="All" />
+                  <Label alignment="CENTER" layoutX="214.0" layoutY="77.0" prefHeight="18.0" prefWidth="35.0" style="-fx-border-style: solid;" text="All" />
+                  <Label alignment="CENTER" layoutX="214.0" layoutY="50.0" prefHeight="18.0" prefWidth="35.0" style="-fx-border-style: solid;" text="All" />
+                  <Label alignment="CENTER" contentDisplay="CENTER" layoutX="183.0" layoutY="303.0" prefHeight="16.0" prefWidth="25.0" style="-fx-border-style: solid;" text="0" textAlignment="CENTER" />
+                  <Label alignment="CENTER" contentDisplay="CENTER" layoutX="183.0" layoutY="276.0" prefHeight="16.0" prefWidth="25.0" style="-fx-border-style: solid;" text="0" textAlignment="CENTER" />
+                  <Label alignment="CENTER" contentDisplay="CENTER" layoutX="183.0" layoutY="248.0" prefHeight="16.0" prefWidth="25.0" style="-fx-border-style: solid;" text="0" textAlignment="CENTER" />
+                  <Label alignment="CENTER" contentDisplay="CENTER" layoutX="183.0" layoutY="220.0" prefHeight="16.0" prefWidth="25.0" style="-fx-border-style: solid;" text="0" textAlignment="CENTER" />
+                  <Label alignment="CENTER" contentDisplay="CENTER" layoutX="183.0" layoutY="191.0" prefHeight="16.0" prefWidth="25.0" style="-fx-border-style: solid;" text="0" textAlignment="CENTER" />
+                  <Label alignment="CENTER" contentDisplay="CENTER" layoutX="183.0" layoutY="163.0" prefHeight="16.0" prefWidth="25.0" style="-fx-border-style: solid;" text="0" textAlignment="CENTER" />
+                  <Label alignment="CENTER" contentDisplay="CENTER" layoutX="183.0" layoutY="135.0" prefHeight="16.0" prefWidth="25.0" style="-fx-border-style: solid;" text="0" textAlignment="CENTER" />
+                  <Label alignment="CENTER" contentDisplay="CENTER" layoutX="183.0" layoutY="105.0" prefHeight="16.0" prefWidth="25.0" style="-fx-border-style: solid;" text="0" textAlignment="CENTER" />
+                  <Label alignment="CENTER" contentDisplay="CENTER" layoutX="183.0" layoutY="77.0" prefHeight="16.0" prefWidth="25.0" style="-fx-border-style: solid;" text="0" textAlignment="CENTER" />
+                  <Label fx:id="waterBuy" alignment="CENTER" contentDisplay="CENTER" layoutX="183.0" layoutY="50.0" prefHeight="16.0" prefWidth="25.0" style="-fx-border-style: solid;" text="0" textAlignment="CENTER" />
                </children>
             </AnchorPane>
-          <AnchorPane fx:id="cargoChart" minHeight="0.0" minWidth="0.0" prefHeight="160.0" prefWidth="100.0" />
-        </items>
-      </SplitPane>
+        </content>
+      </TitledPane>
+      <TitledPane animated="false" layoutY="29.0" text="System Info">
+        <content>
+          <AnchorPane minHeight="0.0" minWidth="0.0" prefHeight="180.0" prefWidth="248.0">
+               <children>
+                  <ListView fx:id="systemListView" layoutY="-10.0" prefHeight="200.0" prefWidth="250.0" />
+               </children>
+            </AnchorPane>
+        </content>
+      </TitledPane>
+      <TitledPane animated="false" layoutY="236.0" prefHeight="141.0" prefWidth="202.0" text="Dock">
+        <content>
+          <AnchorPane minHeight="0.0" minWidth="0.0" prefHeight="114.0" prefWidth="248.0" />
+        </content>
+      </TitledPane>
    </children>
 </AnchorPane>

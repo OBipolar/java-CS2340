@@ -34,6 +34,13 @@ public class PlayerShip {
         cargo = new ArrayList<Good>();
         setNumOfGoods(cargo.size());
     }
+    
+    /**
+     * get the max range the ship can travel
+     */
+    public int getMaxRange() {
+        return base.getMaxRange();
+    }
 
     /**
      * Load the ship for testing purpose
@@ -68,7 +75,7 @@ public class PlayerShip {
     }
 
     /**
-     * Reomve a good from the cargo
+     * Remove a good from the cargo
      * 
      * @param good
      */

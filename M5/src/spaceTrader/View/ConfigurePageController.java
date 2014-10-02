@@ -83,6 +83,7 @@ public class ConfigurePageController implements Initializable, ControlledScreen 
             player = new GameCharacter(userName, pilotP, fighterP, traderP,
                     engineerP);
             messageLabel.setText("Profile Successfully Created!");
+            
         } else if (userName == "") {
             messageLabel.setText("Username Required!");
         } else {
@@ -102,8 +103,8 @@ public class ConfigurePageController implements Initializable, ControlledScreen 
     private void nextButtonFired(ActionEvent event) {
         if (player != null) {
             myController.setScreen(Main.screen3ID);
-            Universe universe = new Universe();
-            System.out.println(universe.toString());
+            //Universe universe = new Universe();
+            //System.out.println(universe.toString());
         }
     }
 

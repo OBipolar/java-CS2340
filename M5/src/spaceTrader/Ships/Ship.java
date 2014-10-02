@@ -26,6 +26,7 @@ public class Ship {
     private int trader;
     private int repairCost;
     private int size;
+    private int maxRange;
     
     public String getName() {
         return name;
@@ -134,6 +135,12 @@ public class Ship {
     }
     public void setSize(int size) {
         this.size = size;
+    }
+    public void setMaxRange(int maxRange) {
+        this.maxRange = maxRange;
+    }
+    public int getMaxRange() {
+        return maxRange;
     }
 
 }

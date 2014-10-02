@@ -31,6 +31,7 @@ public class Flea extends Ship {
        setTrader(0);
        setRepairCost(1);
        setSize(0);
+       setMaxRange(20);
     }
     
 }   

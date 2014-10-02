@@ -28,8 +28,8 @@ public class Main extends Application {
     public void start(Stage primaryStage) throws Exception {
 
         ScreensController mainContainer = new ScreensController();
-        mainContainer.loadScreen(Main.screen1ID, Main.screen1File);
-        mainContainer.loadScreen(Main.screen2ID, Main.screen2File);
+        //mainContainer.loadScreen(Main.screen1ID, Main.screen1File);
+        //mainContainer.loadScreen(Main.screen2ID, Main.screen2File);
         mainContainer.loadScreen(Main.screen3ID, Main.screen3File);
         if (mainContainer.getScreen("configure") == null) {
             System.out.println("error");
@@ -37,7 +37,7 @@ public class Main extends Application {
             System.out.println("ok");
         }
 
-        mainContainer.setScreen(Main.screen1ID);
+        mainContainer.setScreen(Main.screen3ID);
         Group root = new Group();
         root.getChildren().addAll(mainContainer);
         Scene scene = new Scene(root);
