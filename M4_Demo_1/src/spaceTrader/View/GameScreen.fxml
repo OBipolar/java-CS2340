@@ -1,0 +1,267 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import javafx.scene.effect.*?>
+<?import javafx.scene.canvas.*?>
+<?import javafx.scene.text.*?>
+<?import javafx.scene.shape.*?>
+<?import java.lang.*?>
+<?import java.util.*?>
+<?import javafx.scene.*?>
+<?import javafx.scene.control.*?>
+<?import javafx.scene.layout.*?>
+
+<AnchorPane maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="600.0" prefWidth="800.0" xmlns="http://javafx.com/javafx/8" xmlns:fx="http://javafx.com/fxml/1" fx:controller="spaceTrader.View.GameScreenController">
+   <children>
+      <TitledPane fx:id="galaChart" layoutY="377.0" prefHeight="185.0" prefWidth="253.0" text="Galactic Chart">
+         <content>
+            <Canvas fx:id="canvas" height="154.0" width="246.0" />
+         </content></TitledPane>
+      <TitledPane fx:id="srChart" layoutX="562.0" layoutY="377.0" prefHeight="223.0" prefWidth="238.0" text="Short-Range Chart">
+         <content>
+            <Canvas fx:id="canvas2" height="200.0" width="200.0" />
+         </content></TitledPane>
+      <TitledPane fx:id="systemInfo" layoutX="250.0" layoutY="377.0" prefHeight="223.0" prefWidth="152.0" text="Shipyard">
+         <content>
+            <ListView prefHeight="183.0" prefWidth="138.0" />
+         </content></TitledPane>
+      <TitledPane fx:id="targetInfo" layoutX="402.0" layoutY="377.0" prefHeight="223.0" prefWidth="160.0" text="Target System">
+         <content>
+            <ListView fx:id="targetListView" prefHeight="196.0" prefWidth="126.0" />
+         </content></TitledPane>
+      <MenuBar prefHeight="29.0" prefWidth="800.0">
+        <menus>
+          <Menu mnemonicParsing="false" text="File">
+            <items>
+              <MenuItem mnemonicParsing="false" text="Close" />
+            </items>
+          </Menu>
+          <Menu mnemonicParsing="false" text="Edit">
+            <items>
+              <MenuItem mnemonicParsing="false" text="Delete" />
+            </items>
+          </Menu>
+          <Menu mnemonicParsing="false" text="Help">
+            <items>
+              <MenuItem mnemonicParsing="false" text="About" />
+            </items>
+          </Menu>
+        </menus>
+      </MenuBar>
+      <Button fx:id="findPlanet" layoutX="183.0" layoutY="562.0" mnemonicParsing="false" onAction="#findPlanetFired" text="Find" />
+      <TitledPane animated="false" layoutX="250.0" layoutY="29.0" prefHeight="348.0" prefWidth="304.0" text="Cargo">
+        <content>
+          <AnchorPane minHeight="0.0" minWidth="0.0" prefHeight="321.0" prefWidth="310.0">
+               <children>
+                  <Line endX="190.0" layoutX="106.0" layoutY="34.0" startX="-100.0" />
+                  <Line endX="210.0" layoutX="5.0" layoutY="170.0" rotate="90.0" startX="-100.0" />
+                  <Line endX="210.0" layoutX="125.0" layoutY="180.0" rotate="90.0" startX="-100.0" />
+                  <Text layoutX="6.0" layoutY="61.0" strokeType="OUTSIDE" strokeWidth="0.0" text="Water">
+                     <font>
+                        <Font size="11.0" />
+                     </font>
+                  </Text>
+                  <Text layoutX="6.0" layoutY="88.0" strokeType="OUTSIDE" strokeWidth="0.0" text="Furs">
+                     <font>
+                        <Font size="11.0" />
+                     </font>
+                  </Text>
+                  <Text layoutX="6.0" layoutY="116.0" strokeType="OUTSIDE" strokeWidth="0.0" text="Food">
+                     <font>
+                        <Font size="11.0" />
+                     </font>
+                  </Text>
+                  <Text layoutX="6.0" layoutY="146.0" strokeType="OUTSIDE" strokeWidth="0.0" text="Ore">
+                     <font>
+                        <Font size="11.0" />
+                     </font>
+                  </Text>
+                  <Text layoutX="6.0" layoutY="174.0" strokeType="OUTSIDE" strokeWidth="0.0" text="Games">
+                     <font>
+                        <Font size="11.0" />
+                     </font>
+                  </Text>
+                  <Text layoutX="6.0" layoutY="202.0" strokeType="OUTSIDE" strokeWidth="0.0" text="Firearms">
+                     <font>
+                        <Font size="11.0" />
+                     </font>
+                  </Text>
+                  <Text layoutX="6.0" layoutY="231.0" strokeType="OUTSIDE" strokeWidth="0.0" text="Medicine">
+                     <font>
+                        <Font size="11.0" />
+                     </font>
+                  </Text>
+                  <Text layoutX="6.0" layoutY="259.0" strokeType="OUTSIDE" strokeWidth="0.0" text="Machines">
+                     <font>
+                        <Font size="11.0" />
+                     </font>
+                  </Text>
+                  <Text layoutX="6.0" layoutY="287.0" strokeType="OUTSIDE" strokeWidth="0.0" text="Narcotics">
+                     <font>
+                        <Font size="11.0" />
+                     </font>
+                  </Text>
+                  <Text layoutX="6.0" layoutY="314.0" strokeType="OUTSIDE" strokeWidth="0.0" text="Robots">
+                     <font>
+                        <Font size="11.0" />
+                     </font>
+                  </Text>
+                  <Text layoutX="110.0" layoutY="28.0" strokeType="OUTSIDE" strokeWidth="0.0" text="Sell" />
+                  <Text layoutX="229.0" layoutY="28.0" strokeType="OUTSIDE" strokeWidth="0.0" text="Buy" />
+                  <Label contentDisplay="CENTER" layoutX="134.0" layoutY="303.0" prefWidth="45.0" text="No Trade" textAlignment="CENTER">
+                     <font>
+                        <Font size="10.0" />
+                     </font>
+                  </Label>
+                  <Label fx:id="narcoticsPrice" contentDisplay="CENTER" layoutX="134.0" layoutY="276.0" prefWidth="45.0" textAlignment="CENTER">
+                     <font>
+                        <Font size="10.0" />
+                     </font>
+                  </Label>
+                  <Label fx:id="machinesPrice" contentDisplay="CENTER" layoutX="134.0" layoutY="248.0" prefWidth="45.0" textAlignment="CENTER">
+                     <font>
+                        <Font size="10.0" />
+                     </font>
+                  </Label>
+                  <Label fx:id="medicinePrice" contentDisplay="CENTER" layoutX="134.0" layoutY="220.0" prefWidth="45.0" textAlignment="CENTER">
+                     <font>
+                        <Font size="10.0" />
+                     </font>
+                  </Label>
+                  <Label fx:id="firearmsPrice" contentDisplay="CENTER" layoutX="134.0" layoutY="191.0" prefWidth="45.0" textAlignment="CENTER">
+                     <font>
+                        <Font size="10.0" />
+                     </font>
+                  </Label>
+                  <Label fx:id="gamesPrice" contentDisplay="CENTER" layoutX="134.0" layoutY="163.0" prefWidth="45.0" textAlignment="CENTER">
+                     <font>
+                        <Font size="10.0" />
+                     </font>
+                  </Label>
+                  <Label fx:id="orePrice" contentDisplay="CENTER" layoutX="134.0" layoutY="136.0" prefWidth="45.0" textAlignment="CENTER">
+                     <font>
+                        <Font size="10.0" />
+                     </font>
+                  </Label>
+                  <Label fx:id="foodPrice" contentDisplay="CENTER" layoutX="134.0" layoutY="106.0" prefWidth="45.0" textAlignment="CENTER">
+                     <font>
+                        <Font size="10.0" />
+                     </font>
+                  </Label>
+                  <Label fx:id="fursPrice" contentDisplay="CENTER" layoutX="134.0" layoutY="78.0" prefHeight="18.0" prefWidth="45.0" textAlignment="CENTER">
+                     <font>
+                        <Font size="10.0" />
+                     </font>
+                  </Label>
+                  <Label fx:id="waterPrice" layoutX="134.0" layoutY="51.0" prefHeight="18.0" prefWidth="45.0">
+                     <font>
+                        <Font size="10.0" />
+                     </font>
+                  </Label>
+                  <Label fx:id="waterPrice2" layoutX="254.0" layoutY="51.0" prefHeight="18.0" prefWidth="45.0">
+                     <font>
+                        <Font size="10.0" />
+                     </font>
+                  </Label>
+                  <Label fx:id="fursPrice2" contentDisplay="CENTER" layoutX="254.0" layoutY="78.0" prefHeight="18.0" prefWidth="45.0" textAlignment="CENTER">
+                     <font>
+                        <Font size="10.0" />
+                     </font>
+                  </Label>
+                  <Label fx:id="foodPrice2" contentDisplay="CENTER" layoutX="254.0" layoutY="106.0" prefWidth="45.0" textAlignment="CENTER">
+                     <font>
+                        <Font size="10.0" />
+                     </font>
+                  </Label>
+                  <Label fx:id="orePrice2" contentDisplay="CENTER" layoutX="254.0" layoutY="136.0" prefWidth="45.0" textAlignment="CENTER">
+                     <font>
+                        <Font size="10.0" />
+                     </font>
+                  </Label>
+                  <Label fx:id="gamesPrice2" contentDisplay="CENTER" layoutX="254.0" layoutY="163.0" prefWidth="45.0" textAlignment="CENTER">
+                     <font>
+                        <Font size="10.0" />
+                     </font>
+                  </Label>
+                  <Label fx:id="firearmsPrice2" contentDisplay="CENTER" layoutX="254.0" layoutY="191.0" prefWidth="45.0" textAlignment="CENTER">
+                     <font>
+                        <Font size="10.0" />
+                     </font>
+                  </Label>
+                  <Label fx:id="medicinePrice2" contentDisplay="CENTER" layoutX="254.0" layoutY="220.0" prefWidth="45.0" textAlignment="CENTER">
+                     <font>
+                        <Font size="10.0" />
+                     </font>
+                  </Label>
+                  <Label fx:id="machinesPrice2" contentDisplay="CENTER" layoutX="254.0" layoutY="248.0" prefWidth="45.0" textAlignment="CENTER">
+                     <font>
+                        <Font size="10.0" />
+                     </font>
+                  </Label>
+                  <Label fx:id="narcoticsPrice2" contentDisplay="CENTER" layoutX="254.0" layoutY="276.0" prefWidth="45.0" textAlignment="CENTER">
+                     <font>
+                        <Font size="10.0" />
+                     </font>
+                  </Label>
+                  <Label contentDisplay="CENTER" layoutX="254.0" layoutY="303.0" prefWidth="45.0" text="No Trade" textAlignment="CENTER">
+                     <font>
+                        <Font size="10.0" />
+                     </font>
+                  </Label>
+                  <Button fx:id="waterAmount" layoutX="63.0" layoutY="42.0" mnemonicParsing="false" onAction="#waterAmountFired" prefHeight="26.0" prefWidth="16.0" text="0" />
+                  <Button fx:id="waterSellAll" layoutX="93.0" layoutY="42.0" mnemonicParsing="false" onAction="#waterSellAllFired" prefHeight="26.0" prefWidth="35.0" text="All" />
+                  <Button layoutX="94.0" layoutY="71.0" mnemonicParsing="false" prefHeight="26.0" prefWidth="35.0" text="All" />
+                  <Button fx:id="waterAmount1" layoutX="64.0" layoutY="71.0" mnemonicParsing="false" onAction="#waterAmountFired" prefHeight="26.0" prefWidth="16.0" text="0" />
+                  <Button layoutX="95.0" layoutY="158.0" mnemonicParsing="false" prefHeight="26.0" prefWidth="35.0" text="All" />
+                  <Button fx:id="waterAmount2" layoutX="64.0" layoutY="159.0" mnemonicParsing="false" onAction="#waterAmountFired" prefHeight="26.0" prefWidth="16.0" text="0" />
+                  <Button fx:id="waterAmount21" layoutX="65.0" layoutY="187.0" mnemonicParsing="false" onAction="#waterAmountFired" prefHeight="26.0" prefWidth="16.0" text="0" />
+                  <Button layoutX="95.0" layoutY="186.0" mnemonicParsing="false" prefHeight="26.0" prefWidth="35.0" text="All" />
+                  <Button fx:id="waterAmount22" layoutX="65.0" layoutY="216.0" mnemonicParsing="false" onAction="#waterAmountFired" prefHeight="26.0" prefWidth="16.0" text="0" />
+                  <Button layoutX="95.0" layoutY="215.0" mnemonicParsing="false" prefHeight="26.0" prefWidth="35.0" text="All" />
+                  <Button fx:id="waterAmount23" layoutX="64.0" layoutY="244.0" mnemonicParsing="false" onAction="#waterAmountFired" prefHeight="26.0" prefWidth="16.0" text="0" />
+                  <Button layoutX="95.0" layoutY="244.0" mnemonicParsing="false" prefHeight="26.0" prefWidth="35.0" text="All" />
+                  <Button fx:id="waterAmount24" layoutX="65.0" layoutY="273.0" mnemonicParsing="false" onAction="#waterAmountFired" prefHeight="26.0" prefWidth="16.0" text="0" />
+                  <Button layoutX="95.0" layoutY="273.0" mnemonicParsing="false" prefHeight="26.0" prefWidth="35.0" text="All" />
+                  <Button fx:id="waterAmount11" layoutX="64.0" layoutY="131.0" mnemonicParsing="false" onAction="#waterAmountFired" prefHeight="26.0" prefWidth="16.0" text="0" />
+                  <Button layoutX="95.0" layoutY="130.0" mnemonicParsing="false" prefHeight="26.0" prefWidth="35.0" text="All" />
+                  <Button fx:id="waterAmount12" layoutX="64.0" layoutY="101.0" mnemonicParsing="false" onAction="#waterAmountFired" prefHeight="26.0" prefWidth="16.0" text="0" />
+                  <Button layoutX="94.0" layoutY="101.0" mnemonicParsing="false" prefHeight="26.0" prefWidth="35.0" text="All" />
+                  <Button layoutX="216.0" layoutY="102.0" mnemonicParsing="false" prefHeight="26.0" prefWidth="35.0" text="All" />
+                  <Button layoutX="217.0" layoutY="131.0" mnemonicParsing="false" prefHeight="26.0" prefWidth="35.0" text="All" />
+                  <Button fx:id="waterAmount111" layoutX="185.0" layoutY="131.0" mnemonicParsing="false" onAction="#waterAmountFired" prefHeight="26.0" prefWidth="16.0" text="0" />
+                  <Button layoutX="218.0" layoutY="275.0" mnemonicParsing="false" prefHeight="26.0" prefWidth="35.0" text="All" />
+                  <Button fx:id="waterAmount241" layoutX="187.0" layoutY="274.0" mnemonicParsing="false" onAction="#waterAmountFired" prefHeight="26.0" prefWidth="16.0" text="0" />
+                  <Button layoutX="218.0" layoutY="246.0" mnemonicParsing="false" prefHeight="26.0" prefWidth="35.0" text="All" />
+                  <Button layoutX="217.0" layoutY="217.0" mnemonicParsing="false" prefHeight="26.0" prefWidth="35.0" text="All" />
+                  <Button fx:id="waterAmount221" layoutX="186.0" layoutY="217.0" mnemonicParsing="false" onAction="#waterAmountFired" prefHeight="26.0" prefWidth="16.0" text="0" />
+                  <Button layoutX="217.0" layoutY="189.0" mnemonicParsing="false" prefHeight="26.0" prefWidth="35.0" text="All" />
+                  <Button fx:id="waterAmount25" layoutX="186.0" layoutY="160.0" mnemonicParsing="false" onAction="#waterAmountFired" prefHeight="26.0" prefWidth="16.0" text="0" />
+                  <Button layoutX="217.0" layoutY="159.0" mnemonicParsing="false" prefHeight="26.0" prefWidth="35.0" text="All" />
+                  <Button fx:id="waterAmount13" layoutX="186.0" layoutY="72.0" mnemonicParsing="false" onAction="#waterAmountFired" prefHeight="26.0" prefWidth="16.0" text="0" />
+                  <Button layoutX="216.0" layoutY="72.0" mnemonicParsing="false" prefHeight="26.0" prefWidth="35.0" text="All" />
+                  <Button layoutX="215.0" layoutY="43.0" mnemonicParsing="false" prefHeight="26.0" prefWidth="35.0" text="All" />
+                  <Button fx:id="waterAmount3" layoutX="185.0" layoutY="43.0" mnemonicParsing="false" onAction="#waterAmountFired" prefHeight="26.0" prefWidth="16.0" text="0" />
+                  <Button fx:id="waterAmount121" layoutX="185.0" layoutY="102.0" mnemonicParsing="false" onAction="#waterAmountFired" prefHeight="26.0" prefWidth="16.0" text="0" />
+                  <Button fx:id="waterAmount251" layoutX="186.0" layoutY="189.0" mnemonicParsing="false" onAction="#waterAmountFired" prefHeight="26.0" prefWidth="16.0" text="0" />
+                  <Button fx:id="waterAmount252" layoutX="187.0" layoutY="245.0" mnemonicParsing="false" onAction="#waterAmountFired" prefHeight="26.0" prefWidth="16.0" text="0" />
+               </children>
+            </AnchorPane>
+        </content>
+      </TitledPane>
+      <TitledPane animated="false" layoutY="236.0" prefHeight="141.0" prefWidth="250.0" text="Dock" />
+      <TitledPane animated="false" layoutY="29.0" prefHeight="207.0" prefWidth="250.0" text="System Info">
+        <content>
+          <AnchorPane minHeight="0.0" minWidth="0.0" prefHeight="180.0" prefWidth="200.0">
+               <children>
+                  <ListView fx:id="systemListView" layoutX="5.0" layoutY="5.0" prefHeight="171.0" prefWidth="238.0" />
+               </children>
+            </AnchorPane>
+        </content>
+      </TitledPane>
+      <TextField fx:id="findTextField" layoutX="24.0" layoutY="562.0" />
+      <TitledPane animated="false" layoutX="562.0" layoutY="29.0" text="Target System">
+        <content>
+          <AnchorPane minHeight="0.0" minWidth="0.0" prefHeight="321.0" prefWidth="236.0" />
+        </content>
+      </TitledPane>
+   </children>
+</AnchorPane>
