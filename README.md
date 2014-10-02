@@ -1,4 +1,3 @@
-<<<<<<< HEAD
 # CS-2340 Team Project Repository
 ## Team A-Dobee
 
@@ -21,4 +20,4 @@
 * M6
 * SpaceTrader
 * teamLog
->>>>>>> 2721961c2a52623362b3cf354696b2c5ccf7bf97
+
