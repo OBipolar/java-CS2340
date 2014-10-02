@@ -150,6 +150,7 @@ public class GameScreenController implements Initializable, ControlledScreen {
         ObservableList<String> items2 = FXCollections.observableArrayList(
         "Name: ", "Tech Level: ", "Government: ", "Resource: ", "Police: ", "Pirate: ");
         targetListView.setItems(items2);
+        
 //        Trade trade = new Trade(player, playerShip, system);
 //        List<String> goodsToSell = trade.getGoodsToSell();
 //        List<String> goodsToBuy = trade.getGoodsToBuy();
