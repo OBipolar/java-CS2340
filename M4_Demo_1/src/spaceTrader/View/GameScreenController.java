@@ -35,6 +35,7 @@ import javafx.collections.ObservableList;
 import javafx.geometry.Insets;
 import javafx.geometry.Pos;
 import javafx.scene.Scene;
+import javafx.scene.control.ChoiceBox;
 import javafx.scene.control.Dialogs;
 import javafx.scene.control.ListView;
 import javafx.scene.layout.VBox;
@@ -96,63 +97,61 @@ public class GameScreenController implements Initializable, ControlledScreen {
     PlayerShip ship;
     Trade trade;
     
-    Label label1;
-    Label label2;
-    Label label3;
-    
+    @FXML
+    private ChoiceBox waterChoose;
+    @FXML
+    private ChoiceBox fursChoose;
+    @FXML
+    private ChoiceBox foodChoose;
+    @FXML
+    private ChoiceBox oreChoose;
+    @FXML
+    private ChoiceBox gamesChoose;
+    @FXML
+    private ChoiceBox firearmsChoose;
+    @FXML
+    private ChoiceBox medicineChoose;
+    @FXML
+    private ChoiceBox machinesChoose;
+    @FXML
+    private ChoiceBox narcoticsChoose;
+
     @FXML
     private Label waterPrice2;
-    
     @FXML
-    private Label fursPrice2;
-    
+     private Label fursPrice2;
     @FXML
-    private Label foodPrice2;
-    
+     private Label foodPrice2;
     @FXML
-    private Label orePrice2;
-    
+     private Label orePrice2;
     @FXML
-    private Label gamesPrice2;
-    
+     private Label gamesPrice2;
     @FXML
-    private Label firearmsPrice2;
-    
+     private Label firearmsPrice2;
     @FXML
-    private Label medicinePrice2;
-    
+     private Label medicinePrice2;
     @FXML
-    private Label machinesPrice2;
-    
+     private Label machinesPrice2;
     @FXML
-    private Label narcoticsPrice2;
-    
+     private Label narcoticsPrice2;
     @FXML
-    private Label waterPrice;
-    
+     private Label waterPrice;
     @FXML
-    private Label fursPrice;
-    
+     private Label fursPrice;
     @FXML
-    private Label foodPrice;
-    
+     private Label foodPrice;
     @FXML
-    private Label orePrice;
-    
+     private Label orePrice;
     @FXML
-    private Label gamesPrice;
-    
+     private Label gamesPrice;
     @FXML
-    private Label firearmsPrice;
-    
+     private Label firearmsPrice;
     @FXML
-    private Label medicinePrice;
-    
+     private Label medicinePrice;
     @FXML
-    private Label machinesPrice;
-    
+     private Label machinesPrice;
     @FXML
-    private Label narcoticsPrice;
+     private Label narcoticsPrice;
     
     int maxNum;
     int sellPrice;
@@ -164,15 +163,7 @@ public class GameScreenController implements Initializable, ControlledScreen {
     private void findPlanetFired(ActionEvent event) {
         
     }
-    
-    private void setLabel(int maxNum, int sellPrice, int buyPrice, int lpu) {
-        String m1 = "You can sell up to " + maxNum + " at " + sellPrice + " cr. each.";
-        String m2 = "You paid about " + buyPrice + " cr. per unit.";
-        String m3 = "Your loss per unit is " + lpu + " cr.";
-        label1.setText(m1);
-        label2.setText(m2);
-        label3.setText(m3);
-    }
+
     
     @FXML    
     private void waterAmountFired(ActionEvent event) {
@@ -184,15 +175,6 @@ public class GameScreenController implements Initializable, ControlledScreen {
     @Override
     public void setScreenParent(ScreensController screenParent) {
         myController = screenParent;
-    }
-    
-    private void showPopUp(Label label1, Label label2, Label label3) {
-        Stage dialogStage = new Stage();
-        dialogStage.initModality(Modality.WINDOW_MODAL);
-        dialogStage.setScene(new Scene(VBoxBuilder.create().
-        children(label1, label2, label3, new TextField(), new Label(), new Button("Ok.")).
-        alignment(Pos.CENTER).padding(new Insets(20)).build()));
-        dialogStage.show();
     }
     
     @Override
@@ -312,6 +294,7 @@ public class GameScreenController implements Initializable, ControlledScreen {
         for (String s : toBuyList) {
             if (s.equals("Water")) {
                 waterPrice2.setText("" + toBuyMap.get("Water"));
+                if (ship.getCargo().)
             } else if (s.equals("Furs")) {
                 fursPrice2.setText("" + toBuyMap.get("Furs"));
             } else if (s.equals("Food")) {
