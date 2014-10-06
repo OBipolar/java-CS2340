@@ -18,6 +18,7 @@
         * Item limits enforced
     * Javadoc, Comments and Design Update
 * M6
+    * Include the sqlite library for building the project
 * SpaceTrader
 * teamLog
 
