@@ -34,6 +34,8 @@ public class MarketPlace {
      */
     public void playerBuy(Good good) {
         trade.buy(good);
+        player = trade.getPlayer();
+        ship = trade.getShip();
         update();
     }
 
@@ -44,6 +46,8 @@ public class MarketPlace {
      */
     public void playerSell(Good good) {
         trade.sell(good);
+        player = trade.getPlayer();
+        ship = trade.getShip();
         update();
     }
 
