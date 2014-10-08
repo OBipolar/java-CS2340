@@ -95,10 +95,11 @@ public class SqliteAPI {
         update = "DROP TABLE ship";
         execUpdate(update);
         createShipTable();
+        addShip();
         update = "DROP TABLE cargo";
         execUpdate(update);
         createCargoTable();
-        loadCargo(ps);
+        loadCargo();
     }
 
     /**
@@ -120,11 +121,14 @@ public class SqliteAPI {
      * Load data from database
      * 
      * @throws SQLException
+     * @throws ClassNotFoundException
      */
-    private void loadData() throws SQLException {
+    private void loadData() throws SQLException, ClassNotFoundException {
+        openConnection();
         loadPlayer();
         loadPlayerShip();
         loadUniverse();
+        closeConnection();
     }
 
     /**
@@ -194,7 +198,9 @@ public class SqliteAPI {
         query = "SELECT name FROM ship";
         execQuery(query);
         Ship base = new Flea();
-        switch (resultSet.getString(1)) {
+        if (!resultSet.next())
+            System.out.println("result set empty");
+        switch (resultSet.getString("name")) {
         case "Flea":
             base = new Flea();
             break;
@@ -282,32 +288,38 @@ public class SqliteAPI {
     }
 
     /**
-     * Returns the planet the player is on or near with the given x and y
-     * coordinates
+     * Returns the planet the player is on
      * 
-     * @param xPos
-     *            x coordinate of the planet
-     * @param yPos
-     *            y coordinate of the planet
      * @return the planet the player is on or near with the given x and y
      *         coordinates
      * @throws SQLException
+     * @throws ClassNotFoundException
      */
-    public SolarSystem getSolarSystem(int xPos, int yPos) throws SQLException {
+    public SolarSystem getSolarSystem() throws SQLException,
+            ClassNotFoundException {
+        int xPos = player.getXpos();
+        int yPos = player.getYpos();
+        openConnection();
         String query = String.format(
                 "SELECT name, PoliticalSystem, ResourcesLevel, "
                         + "TechLevel, Pirate, police from universe "
-                        + "where xPos = 'ds' and yPos = '%d'", xPos, yPos);
+                        + "where xPos = '%d' and yPos = '%d'", xPos, yPos);
         execQuery(query);
         Capital capital = new Capital();
-        capital.setName(resultSet.getString("name"));
-        capital.setSolarSystem(capital.getName());
-        capital.setPoliticalSystem(resultSet.getInt("PoliticalSystem"));
-        capital.setResourcesLevel(resultSet.getInt("ResourcesLevel"));
-        capital.setTechLevel(resultSet.getInt("TechLevel"));
-        capital.setPirate(resultSet.getInt("Pirate"));
-        capital.setPolice(resultSet.getInt("Police"));
+        if (resultSet.next()) {
 
+            capital.setName(resultSet.getString("name"));
+            capital.setSolarSystem(capital.getName());
+            capital.setPoliticalSystem(resultSet.getInt("PoliticalSystem"));
+            capital.setResourcesLevel(resultSet.getInt("ResourcesLevel"));
+            capital.setTechLevel(resultSet.getInt("TechLevel"));
+            capital.setPirate(resultSet.getInt("Pirate"));
+            capital.setPolice(resultSet.getInt("Police"));
+
+        } else {
+            System.out.println("result set empty");
+        }
+        closeConnection();
         return new SolarSystem(xPos, yPos, capital.getName(), capital);
     }
 
@@ -346,7 +358,7 @@ public class SqliteAPI {
         createShipTable();
         addShip();
         createCargoTable();
-        loadCargo(ship);
+        loadCargo();
     }
 
     /**
@@ -436,6 +448,7 @@ public class SqliteAPI {
         update = "CREATE TABLE ship (id INTEGER PRIMARY KEY, "
                 + "name TEXT not NULL)";
         execUpdate(update);
+
     }
 
     /**
@@ -477,8 +490,8 @@ public class SqliteAPI {
     private void addPlanet(SolarSystem system) throws SQLException {
         Capital planet = system.getPlanet();
         update = String.format("INSERT INTO universe (name, xPos, yPos, "
-                + "PoliticalSystem, ResourcesLevel, TechLevels, Pirates, "
-                + "Polices) VALUES ('%s', %d, %d, %d, %d, %d, %d, %d)", system
+                + "PoliticalSystem, ResourcesLevel, TechLevel, Pirate, "
+                + "Police) VALUES ('%s', %d, %d, %d, %d, %d, %d, %d)", system
                 .getName(), system.getX(), system.getY(), planet
                 .getPoliticalSystem().ordinal(), planet.getResourcesLevel()
                 .ordinal(), planet.getTechLevel().ordinal(), planet.getPirate()
@@ -493,11 +506,11 @@ public class SqliteAPI {
      *            playerShip
      * @throws SQLException
      */
-    private void loadCargo(PlayerShip ship) throws SQLException {
+    private void loadCargo() throws SQLException {
         List<Good> cargo = ship.getCargo();
         for (Good g : cargo) {
-            update = String.format("INSERT INTO cargo (name) VALUES (%s)",
-                    g.toString());
+            update = String.format("INSERT INTO cargo (name) VALUES ('%s')",
+                    g.getName());
             execUpdate(update);
         }
     }
