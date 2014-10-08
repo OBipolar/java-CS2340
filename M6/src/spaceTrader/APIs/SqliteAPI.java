@@ -322,6 +322,40 @@ public class SqliteAPI {
         closeConnection();
         return new SolarSystem(xPos, yPos, capital.getName(), capital);
     }
+       
+    /**
+     * Returns the solar system given the name
+     * 
+     * @param name the name of the solar system
+     * @return the solar system given the name
+     * @throws SQLException
+     * @throws ClassNotFoundException
+     */
+    public SolarSystem getSolarSystem(String name) throws SQLException,
+            ClassNotFoundException {
+        openConnection();
+        String query = String.format(
+                "SELECT * from universe where name = '%s'", name);
+        execQuery(query);
+        Capital capital = new Capital();
+        if (resultSet.next()) {
+
+            capital.setName(name);
+            capital.setSolarSystem(name);
+            capital.setPoliticalSystem(resultSet.getInt("PoliticalSystem"));
+            capital.setResourcesLevel(resultSet.getInt("ResourcesLevel"));
+            capital.setTechLevel(resultSet.getInt("TechLevel"));
+            capital.setPirate(resultSet.getInt("Pirate"));
+            capital.setPolice(resultSet.getInt("Police"));
+
+        } else {
+            System.out.println("result set empty");
+        }
+        int xpos = resultSet.getInt("xpos");
+        int ypos = resultSet.getInt("ypos");
+        closeConnection();
+        return new SolarSystem(xpos, ypos, name, capital);
+    }
 
     /**
      * Return the player model
