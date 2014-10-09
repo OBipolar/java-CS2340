@@ -109,7 +109,7 @@ public class SqliteAPI {
      *            GameCharacter object
      * @throws SQLException
      */
-    private void updatePlayer(GameCharacter gc) throws SQLException {
+    public void updatePlayer(GameCharacter gc) throws SQLException {
         player = gc;
         update = "DROP TABLE player";
         execUpdate(update);
@@ -302,7 +302,7 @@ public class SqliteAPI {
         openConnection();
         String query = String.format(
                 "SELECT name, PoliticalSystem, ResourcesLevel, "
-                        + "TechLevel, Pirate, police from universe "
+                        + "TechLevel, Pirate, Police from universe "
                         + "where xPos = '%d' and yPos = '%d'", xPos, yPos);
         execQuery(query);
         Capital capital = new Capital();
@@ -322,11 +322,12 @@ public class SqliteAPI {
         closeConnection();
         return new SolarSystem(xPos, yPos, capital.getName(), capital);
     }
-       
+
     /**
      * Returns the solar system given the name
      * 
-     * @param name the name of the solar system
+     * @param name
+     *            the name of the solar system
      * @return the solar system given the name
      * @throws SQLException
      * @throws ClassNotFoundException
@@ -492,13 +493,21 @@ public class SqliteAPI {
      */
     private void addPlayer() throws SQLException {
         SolarSystem start = universe.getUniverse().get(0);
+        int xPos, yPos;
+        if (player.getXpos() == 0) {
+            xPos = start.getX();
+            yPos = start.getY();
+        } else {
+            xPos = player.getXpos();
+            yPos = player.getYpos();
+        }
         update = String.format(
                 "INSERT INTO player (name, pilotP, fighterP, traderP,"
                         + " engineerP, xpos, ypos, money) "
                         + "VALUES ('%s', %d, %d, %d, %d, %d, %d, %d)",
                 player.getName(), player.getPilotP(), player.getFighterP(),
-                player.getTraderP(), player.getEngineerP(), start.getX(),
-                start.getY(), player.getMoney());
+                player.getTraderP(), player.getEngineerP(), xPos, yPos,
+                player.getMoney());
         // System.out.println(update);
         execUpdate(update);
     }

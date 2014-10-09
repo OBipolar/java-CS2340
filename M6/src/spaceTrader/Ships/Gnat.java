@@ -21,7 +21,7 @@ public class Gnat extends Ship {
         setPrice(10000);
         setBounty(50);
         setOccurrence(28);
-        setPullStrength(100);
+        setHullStrength(100);
         setPolice(0);
         setPirate(0);
         setTrader(0);

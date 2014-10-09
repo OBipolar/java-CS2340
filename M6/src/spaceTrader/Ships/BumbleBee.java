@@ -15,7 +15,7 @@ public class BumbleBee extends Ship {
         setPrice(60000);
         setBounty(125);
         setOccurrence(15);
-        setPullStrength(100);
+        setHullStrength(100);
         setPolice(0);
         setPirate(1);
         setTrader(0);

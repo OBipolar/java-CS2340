@@ -21,7 +21,7 @@ public class Flea extends Ship {
         setPrice(2000);
         setBounty(5);
         setOccurrence(2);
-        setPullStrength(25);
+        setHullStrength(25);
         setPolice(-1);
         setPirate(-1);
         setTrader(0);

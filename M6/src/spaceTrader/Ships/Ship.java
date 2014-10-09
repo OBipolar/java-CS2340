@@ -20,7 +20,7 @@ public class Ship {
     private int price;
     private int bounty;
     private int occurrence;
-    private int pullStrength;
+    private int hullStrength;
     private int police;
     private int pirate;
     private int trader;
@@ -127,14 +127,6 @@ public class Ship {
         this.occurrence = occurrence;
     }
 
-    public int getPullStrength() {
-        return pullStrength;
-    }
-
-    public void setPullStrength(int pullStrength) {
-        this.pullStrength = pullStrength;
-    }
-
     public int getPolice() {
         return police;
     }
@@ -173,6 +165,14 @@ public class Ship {
 
     public void setSize(int size) {
         this.size = size;
+    }
+
+    public int getHullStrength() {
+        return hullStrength;
+    }
+
+    public void setHullStrength(int hullStrength) {
+        this.hullStrength = hullStrength;
     }
 
 }

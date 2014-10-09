@@ -15,7 +15,7 @@ public class Firefly extends Ship {
         setPrice(25000);
         setBounty(75);
         setOccurrence(20);
-        setPullStrength(100);
+        setHullStrength(100);
         setPolice(0);
         setPirate(0);
         setTrader(0);
