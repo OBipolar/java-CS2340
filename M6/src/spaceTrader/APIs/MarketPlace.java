@@ -93,11 +93,11 @@ public class MarketPlace {
      */
     private void update() {
         try {
+        	player = trade.getPlayer();
+        	ship = trade.getShip();
             db.openConnection();
             db.update(player, ship);
             db.closeConnection();
-            player = db.getPlayer();
-            ship = db.getShip();
         } catch (SQLException | ClassNotFoundException e) {
             // TODO Auto-generated catch block
             e.printStackTrace();
