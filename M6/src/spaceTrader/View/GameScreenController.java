@@ -8,12 +8,13 @@ package spaceTrader.View;
 
 import static java.lang.Double.max;
 import static java.lang.Double.min;
+
 import java.net.URL;
 //import java.util.List;
 import java.util.ResourceBundle;
-
 import java.util.List;
 import java.util.Map;
+
 import javafx.scene.control.Label;
 import javafx.scene.control.TextField;
 import javafx.scene.control.Button;
@@ -29,7 +30,9 @@ import javafx.scene.canvas.Canvas;
 import javafx.scene.canvas.GraphicsContext;
 import spaceTrader.Planets.SolarSystem;
 import spaceTrader.Planets.Universe;
+
 import java.util.Random;
+
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 import javafx.geometry.Insets;
@@ -46,7 +49,7 @@ import javafx.stage.Stage;
 import spaceTrader.Goods.Trade;
 import spaceTrader.Planets.Capital;
 import spaceTrader.Planets.GameCharacter;
-import spaceTrader.Planets.PlayerShip;
+import spaceTrader.Ships.PlayerShip;
 import javafx.util.converter.IntegerStringConverter;
 import spaceTrader.Goods.Good;
 /**

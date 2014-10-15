@@ -23,7 +23,6 @@ import spaceTrader.Goods.Robots;
 import spaceTrader.Goods.Water;
 import spaceTrader.Planets.Capital;
 import spaceTrader.Planets.GameCharacter;
-import spaceTrader.Planets.PlayerShip;
 import spaceTrader.Planets.SolarSystem;
 import spaceTrader.Planets.Universe;
 import spaceTrader.Ships.BumbleBee;
@@ -31,6 +30,7 @@ import spaceTrader.Ships.Firefly;
 import spaceTrader.Ships.Flea;
 import spaceTrader.Ships.Gnat;
 import spaceTrader.Ships.Mosquito;
+import spaceTrader.Ships.PlayerShip;
 import spaceTrader.Ships.Ship;
 
 /**

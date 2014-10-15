@@ -7,8 +7,8 @@ import java.util.Map;
 import java.util.Random;
 
 import spaceTrader.Planets.GameCharacter;
-import spaceTrader.Planets.PlayerShip;
 import spaceTrader.Planets.SolarSystem;
+import spaceTrader.Ships.PlayerShip;
 
 /**
  * Class that does trade
@@ -84,7 +84,7 @@ public class Trade {
         money += amount;
         player.setMoney(money);
         playerShip.remove(good);
-        goodsToSell.remove(good.getName());
+        // goodsToSell.remove(good.getName());
 
     }
 
@@ -187,6 +187,16 @@ public class Trade {
 
     public void setGoodsToBuy(List<String> goodsToBuy) {
         this.goodsToBuy = goodsToBuy;
+    }
+
+    public PlayerShip getShip() {
+        // TODO Auto-generated method stub
+        return playerShip;
+    }
+
+    public GameCharacter getPlayer() {
+        // TODO Auto-generated method stub
+        return player;
     }
 
 }

@@ -6,8 +6,8 @@ import java.util.List;
 import spaceTrader.Goods.Good;
 import spaceTrader.Goods.Trade;
 import spaceTrader.Planets.GameCharacter;
-import spaceTrader.Planets.PlayerShip;
 import spaceTrader.Planets.SolarSystem;
+import spaceTrader.Ships.PlayerShip;
 
 /**
  * API for the player to buy and sell goods
