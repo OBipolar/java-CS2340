@@ -90,7 +90,7 @@ public class SqliteAPI {
      *            the ship player owns
      * @throws SQLException
      */
-    private void updateShip(PlayerShip ps) throws SQLException {
+    public void updateShip(PlayerShip ps) throws SQLException {
         ship = ps;
         update = "DROP TABLE ship";
         execUpdate(update);
