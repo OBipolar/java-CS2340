@@ -25,20 +25,13 @@ public class SqliteAPIJunit {
         if (!SqliteAPI.isDBCreated()) {
             GameCharacter player = new GameCharacter("Tester1", 6, 6, 2, 2);
 
-            try {
-                api = new SqliteAPI(player);
-            } catch (ClassNotFoundException e) {
-                // TODO Auto-generated catch block
-                e.printStackTrace();
-            } catch (SQLException e) {
-                // TODO Auto-generated catch block
-                e.printStackTrace();
-            }
+            api = new SqliteAPI(player);
 
         } else {
             // else load models from database
             try {
                 api = new SqliteAPI();
+                api.closeConnection();
                 // System.out.println(api.getSolarSystem());
             } catch (ClassNotFoundException e) {
                 // TODO Auto-generated catch block

@@ -57,12 +57,18 @@ public class SqliteAPI {
      * @param args
      *            string input
      * @throws SQLException
+     * @throws ClassNotFoundException
      */
-    private void deleteTable(String... args) throws SQLException {
+    private void deleteTable(String... args) throws SQLException,
+            ClassNotFoundException {
 
         for (String s : args) {
-            update = String.format("DROP TABLE '%s'", s);
-            execUpdate(update);
+            if (tableExist(s)) {
+                closeConnection();
+                openConnection();
+                update = String.format("DROP TABLE '%s'", s);
+                execUpdate(update);
+            }
         }
 
     }
@@ -260,7 +266,7 @@ public class SqliteAPI {
             capital.setPirate(resultSet.getInt("Pirate"));
             capital.setPolice(resultSet.getInt("Police"));
             system = new SolarSystem(resultSet.getInt("xpos"),
-                    resultSet.getInt("xpos"), capital.getName(), capital);
+                    resultSet.getInt("ypos"), capital.getName(), capital);
             systems.add(system);
         }
         this.universe = new Universe(systems);
@@ -407,10 +413,11 @@ public class SqliteAPI {
      * If the database is empty, fill in the data
      * 
      * @throws SQLException
+     * @throws ClassNotFoundException
      */
-    private void initialize() throws SQLException {
+    private void initialize() throws SQLException, ClassNotFoundException {
 
-        if (tableExist("player")) {
+        if (isDBCreated()) {
             String[] tables = { "cargo", "player", "ship", "universe" };
             deleteTable(tables);
         }
