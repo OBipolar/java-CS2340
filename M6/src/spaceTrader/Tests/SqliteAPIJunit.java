@@ -68,6 +68,26 @@ public class SqliteAPIJunit {
         assertEquals(new Ore(), list.get(0));
     }
 
+    @Test
+    public void testOverwrite() {
+        GameCharacter player = new GameCharacter("overwrite test", 3, 5, 7, 1);
+        try {
+            api = new SqliteAPI(player);
+            player = api.getPlayer();
+            assertEquals("overwrite test", player.getName());
+            assertEquals(3, player.getPilotP());
+            assertEquals(5, player.getFighterP());
+            System.out.println("test passed");
+        } catch (ClassNotFoundException e) {
+            // TODO Auto-generated catch block
+            e.printStackTrace();
+        } catch (SQLException e) {
+            // TODO Auto-generated catch block
+            e.printStackTrace();
+        }
+
+    }
+
     /*
      * @Test public void testPlayerShipRemove() { PlayerShip ship =
      * api.getShip(); List<Good> cargo = new ArrayList<>(ship.getCargo());

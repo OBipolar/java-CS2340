@@ -51,6 +51,23 @@ public class SqliteAPI {
     private Universe universe;
 
     /**
+     * Delete tables based on given string
+     * 
+     * 
+     * @param args
+     *            string input
+     * @throws SQLException
+     */
+    private void deleteTable(String... args) throws SQLException {
+
+        for (String s : args) {
+            update = String.format("DROP TABLE '%s'", s);
+            execUpdate(update);
+        }
+
+    }
+
+    /**
      * Constructor that takes in a Player and the Universe
      * 
      * @param player
@@ -383,6 +400,11 @@ public class SqliteAPI {
      * @throws SQLException
      */
     private void initialize() throws SQLException {
+
+        if (isDBCreated()) {
+            String[] tables = { "cargo", "player", "ship", "universe" };
+            deleteTable(tables);
+        }
 
         createPlayerTable();
         addPlayer();
