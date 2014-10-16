@@ -410,7 +410,7 @@ public class SqliteAPI {
      */
     private void initialize() throws SQLException {
 
-        if (isDBCreated()) {
+        if (tableExist("player")) {
             String[] tables = { "cargo", "player", "ship", "universe" };
             deleteTable(tables);
         }

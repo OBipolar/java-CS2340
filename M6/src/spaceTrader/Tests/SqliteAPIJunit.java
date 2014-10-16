@@ -14,6 +14,7 @@ import spaceTrader.Goods.Good;
 import spaceTrader.Goods.Ore;
 import spaceTrader.Goods.Water;
 import spaceTrader.Planets.GameCharacter;
+import spaceTrader.Planets.SolarSystem;
 
 public class SqliteAPIJunit {
 
@@ -78,6 +79,8 @@ public class SqliteAPIJunit {
             assertEquals(3, player.getPilotP());
             assertEquals(5, player.getFighterP());
             System.out.println("test passed");
+            SolarSystem s = api.getSolarSystem();
+            System.out.println(s.getX() + " " + s.getY());
         } catch (ClassNotFoundException e) {
             // TODO Auto-generated catch block
             e.printStackTrace();
