@@ -305,6 +305,15 @@ public class SqliteAPI {
     }
 
     /**
+     * Returns the universe
+     * 
+     * @return the universe
+     */
+    public Universe getUniverse() {
+        return universe;
+    }
+
+    /**
      * Returns the planet the player is on
      * 
      * @return the planet the player is on or near with the given x and y
