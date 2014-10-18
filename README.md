@@ -1,24 +1,39 @@
-# CS-2340 Team Project Repository
-## Team A-Dobee
+CS-2340 Team Project Repository (**Team A-Dobee**)
+---
+## M1
 
-## File Structure
-* M2
-* M3
-* M4
-* M5
-    * Configuration Screen Integrated
-    * Universe generation Integrated
-    * Marketplace generation
-        * Market Prices are generated
-        * Quantities are generated
-        * Player can buy items
-        * Player can sell items
-        * Cargo limits enforced
-        * Money limits enforced
-        * Item limits enforced
-    * Javadoc, Comments and Design Update
-* M6
-    * Include the sqlite library for building the project
-* SpaceTrader
-* teamLog
+## M2
 
+## M3
+
+## M4
+
+## M5
+
+## M6
+
+## M7
+* Test:
+    * Class Diagram: **Pass**
+    * Previous Funcionality Works:
+    * Random events happen on player turn
+    * Effects of random events are processed
+    * Game has way to load and save (ui)
+    * Game can be saved
+    * Saved game can be loaded
+    * Javadocs and code style, Design Discussion
+* TBD:
+
+---
+## Test Log Sample
+``` Markdown
+    ## M1
+    * Test:
+        * Feature 1: **Pass**
+        * Feature 2: **Pass**
+        * Feature 3: **Pass**
+    * TBD:
+        * newFeature1
+        * newFeature2
+        * newFeature3
+```
