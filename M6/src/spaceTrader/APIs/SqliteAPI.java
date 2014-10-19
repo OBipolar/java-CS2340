@@ -134,7 +134,6 @@ public class SqliteAPI {
      */
     public void updatePlayer(GameCharacter gc) throws SQLException {
         player = gc;
-        System.out.println("Player in sqlite has money  " + player.getMoney() );
         update = "DROP TABLE player";
         execUpdate(update);
         createPlayerTable();

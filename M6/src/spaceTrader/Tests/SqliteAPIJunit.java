@@ -14,6 +14,7 @@ import spaceTrader.Goods.Good;
 import spaceTrader.Goods.Ore;
 import spaceTrader.Goods.Water;
 import spaceTrader.Planets.GameCharacter;
+import spaceTrader.Planets.SolarSystem;
 
 public class SqliteAPIJunit {
 
@@ -24,20 +25,13 @@ public class SqliteAPIJunit {
         if (!SqliteAPI.isDBCreated()) {
             GameCharacter player = new GameCharacter("Tester1", 6, 6, 2, 2);
 
-            try {
-                api = new SqliteAPI(player);
-            } catch (ClassNotFoundException e) {
-                // TODO Auto-generated catch block
-                e.printStackTrace();
-            } catch (SQLException e) {
-                // TODO Auto-generated catch block
-                e.printStackTrace();
-            }
+            api = new SqliteAPI(player);
 
         } else {
             // else load models from database
             try {
                 api = new SqliteAPI();
+                api.closeConnection();
                 // System.out.println(api.getSolarSystem());
             } catch (ClassNotFoundException e) {
                 // TODO Auto-generated catch block
@@ -66,6 +60,28 @@ public class SqliteAPIJunit {
         // list.remove(new Water());
         assertEquals(1, list.size());
         assertEquals(new Ore(), list.get(0));
+    }
+
+    @Test
+    public void testOverwrite() {
+        GameCharacter player = new GameCharacter("overwrite test", 3, 5, 7, 1);
+        try {
+            api = new SqliteAPI(player);
+            player = api.getPlayer();
+            assertEquals("overwrite test", player.getName());
+            assertEquals(3, player.getPilotP());
+            assertEquals(5, player.getFighterP());
+            System.out.println("test passed");
+            SolarSystem s = api.getSolarSystem();
+            System.out.println(s.getX() + " " + s.getY());
+        } catch (ClassNotFoundException e) {
+            // TODO Auto-generated catch block
+            e.printStackTrace();
+        } catch (SQLException e) {
+            // TODO Auto-generated catch block
+            e.printStackTrace();
+        }
+
     }
 
     /*

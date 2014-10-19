@@ -25,21 +25,18 @@ public class RandomEvent {
         SqliteAPI api;
         try {
             api = new SqliteAPI();
-            String s = "";
             GameCharacter player = api.getPlayer();
-            if (isMoneyLost()) {
-            	int amount = (player.getMoney() / 5);
-                player.setMoney(player.getMoney() - amount);
-                s = "A UGA student just stole " + amount
-                        + " cr of money from you";
-            } else {
-                s = "Nothing special happens this turn";
-            }
-            System.out.println("money after stolen: " + player.getMoney());
+            int amount = (player.getMoney() / 5);
+            player.setMoney(player.getMoney() - amount);
             api.openConnection();
             api.updatePlayer(player);
             api.closeConnection();
-            return s;
+            if (isMoneyLost()) {
+                return "A UGA student just stole" + amount
+                        + "unit of money from you";
+            } else {
+                return "Nothing special happens this turn";
+            }
         } catch (ClassNotFoundException e) {
             // TODO Auto-generated catch block
             e.printStackTrace();
