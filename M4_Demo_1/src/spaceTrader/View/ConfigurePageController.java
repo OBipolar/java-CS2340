@@ -7,8 +7,10 @@
 package spaceTrader.View;
 
 import java.net.URL;
+import java.sql.SQLException;
 import java.util.ResourceBundle;
 
+import spaceTrader.APIs.SqliteAPI;
 import spaceTrader.Planets.GameCharacter;
 import spaceTrader.Planets.Universe;
 import javafx.event.ActionEvent;
@@ -34,6 +36,7 @@ public class ConfigurePageController implements Initializable, ControlledScreen 
     private String userName;
     private int pilotP, fighterP, traderP, engineerP;
     private GameCharacter player;
+    private SqliteAPI sqlite;
 
     @FXML
     private TextField userNameInput;
@@ -80,8 +83,7 @@ public class ConfigurePageController implements Initializable, ControlledScreen 
     private void okButtonFired(ActionEvent event) {
         System.out.println("ok fired");
         if (pilotP + fighterP + traderP + engineerP == 16 && userName != "") {
-            player = new GameCharacter(userName, pilotP, fighterP, traderP,
-                    engineerP);
+            
             messageLabel.setText("Profile Successfully Created!");
             
         } else if (userName == "") {
@@ -101,11 +103,22 @@ public class ConfigurePageController implements Initializable, ControlledScreen 
 
     @FXML
     private void nextButtonFired(ActionEvent event) {
-        if (player != null) {
+    		player = new GameCharacter(userName, pilotP, fighterP, traderP,
+                engineerP);
+        	//Sqlite s = new Sqlite();
+    		System.out.println(player.getName());
+        	try {
+				sqlite = new SqliteAPI(player);
+				System.out.println(SqliteAPI.isDBCreated());
+				System.out.println(player.getName());
+				myController.loadScreen("gamePage", "GameScreen.fxml");
+			} catch (Exception e) {
+				// TODO Auto-generated catch block
+				e.printStackTrace();
+			}
             myController.setScreen(Main.screen3ID);
             //Universe universe = new Universe();
             //System.out.println(universe.toString());
-        }
     }
 
     @Override

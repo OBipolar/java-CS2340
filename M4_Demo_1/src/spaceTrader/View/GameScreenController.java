@@ -6,14 +6,22 @@
 
 package spaceTrader.View;
 
+import spaceTrader.Planets.GameCharacter;
+import spaceTrader.APIs.MarketPlace;
+import spaceTrader.Ships.PlayerShip;
 import static java.lang.Double.max;
 import static java.lang.Double.min;
+import static java.lang.Math.pow;
+import static java.lang.Math.sqrt;
+
 import java.net.URL;
+import java.sql.SQLException;
+import java.util.ArrayList;
 //import java.util.List;
 import java.util.ResourceBundle;
-
 import java.util.List;
 import java.util.Map;
+
 import javafx.scene.control.Label;
 import javafx.scene.control.TextField;
 import javafx.scene.control.Button;
@@ -29,7 +37,11 @@ import javafx.scene.canvas.Canvas;
 import javafx.scene.canvas.GraphicsContext;
 import spaceTrader.Planets.SolarSystem;
 import spaceTrader.Planets.Universe;
+
 import java.util.Random;
+import java.util.logging.Level;
+import java.util.logging.Logger;
+
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 import javafx.geometry.Insets;
@@ -46,9 +58,21 @@ import javafx.stage.Stage;
 import spaceTrader.Goods.Trade;
 import spaceTrader.Planets.Capital;
 import spaceTrader.Planets.GameCharacter;
-import spaceTrader.Planets.PlayerShip;
+//import spaceTrader.Planets.PlayerShip;
 import javafx.util.converter.IntegerStringConverter;
+import spaceTrader.APIs.MarketPlace;
+import spaceTrader.APIs.RandomEvent;
+import spaceTrader.APIs.SqliteAPI;
+import spaceTrader.Goods.Firearms;
+import spaceTrader.Goods.Food;
+import spaceTrader.Goods.Furs;
+import spaceTrader.Goods.Games;
 import spaceTrader.Goods.Good;
+import spaceTrader.Goods.Machines;
+import spaceTrader.Goods.Medicine;
+import spaceTrader.Goods.Narcotics;
+import spaceTrader.Goods.Ore;
+import spaceTrader.Goods.Water;
 /**
  * FXML Controller class
  *
@@ -58,20 +82,32 @@ public class GameScreenController implements Initializable, ControlledScreen {
     
     ScreensController myController;
     private IntegerStringConverter converter;
+    private Universe uni;
+    private List<SolarSystem> solarList;
     private List<String> toBuyList;
     private List<String> toSellList;
     private Map<String, Integer> toSellMap;
     private Map<String, Integer> toBuyMap;
-    
-    private List<String> toBuyList2;
-    private List<String> toSellList2;
-    private Map<String, Integer> toSellMap2;
-    private Map<String, Integer> toBuyMap2;
+    private MarketPlace mp;
+    private SqliteAPI db;
+    private int currX;
+    private int currY;
+    private int maxFuel;
+    private int maxPull;
+    private int realFuel;
+    private int realPull;
+    private int travelDistance;
+    private GraphicsContext gc;
+    private GraphicsContext gc2;
     
     private SolarSystem solarSystem;
+    private SolarSystem targetSystem;
     private PlayerShip ship;
     private Trade trade;
     private GameCharacter player;
+    private List<String> reachablePlanets;
+    private RandomEvent re;
+    private boolean checkFindFired;
     
     private int maxNum;
     private int sellPrice;
@@ -113,6 +149,8 @@ public class GameScreenController implements Initializable, ControlledScreen {
     @FXML
     private ListView targetListView;
     @FXML
+    private ListView dockListView;
+    @FXML
     private Canvas canvas;
     @FXML
     private Canvas canvas2;
@@ -122,7 +160,10 @@ public class GameScreenController implements Initializable, ControlledScreen {
     private Button findPlanet;
     @FXML
     private ListView systemListView;
- 
+    @FXML
+    private ListView playerListView;
+    @FXML
+    private ListView travelInfoListView;
     
     @FXML
     private ChoiceBox waterChoose;
@@ -198,14 +239,172 @@ public class GameScreenController implements Initializable, ControlledScreen {
      private Label machinesPrice;
     @FXML
      private Label narcoticsPrice;
+    @FXML
+    private TextField findPlanetField;
     
     @Override
     public void setScreenParent(ScreensController screenParent) {
         myController = screenParent;
     }
     
+    private void setMarketPlace() {
+        mp = new MarketPlace();
+    }
+    
     @FXML
     private void findPlanetFired(ActionEvent event) {
+        String planetName = findPlanetField.textProperty().get().toLowerCase();
+        boolean found = false;
+        for (String s : reachablePlanets) {
+            String temp1 = s.toLowerCase();
+            if (temp1.equals(planetName)) {
+                for (SolarSystem sys : uni.getUniverse()) {
+                    if (sys.getName().equals(s)) {
+                        targetSystem = sys;
+                    }
+                }
+                found = true;
+                loadTargetInfo();
+            }
+        }
+        if (!found) {
+            findPlanetField.textProperty().set("");
+        }
+        
+    }
+    
+    private void loadTargetInfo() {
+         //target system
+        String targetName = "Name:  " + targetSystem.getPlanet().getName();
+        //String capSize = "Name  " + cap.get
+        String targetTechLevel = "Tech Level:  " + targetSystem.getPlanet().getTechLevel();
+        String targetGovernment = "Government:  " + targetSystem.getPlanet().getPoliticalSystem();
+        String targetResource = "Resource:  " + targetSystem.getPlanet().getResourcesLevel();
+        String targetPolice = "Police:  " + targetSystem.getPlanet().getPolice();
+        String targetPirate = "Pirate:  " + targetSystem.getPlanet().getPirate();
+        ObservableList<String> items =FXCollections.observableArrayList (
+        targetName, targetTechLevel, targetGovernment, targetResource, targetPolice, targetPirate);
+        targetListView.setItems(items);
+    }
+    
+    private void loadCurrentInfo() {
+         //target system
+        String currName = "Name:  " + solarSystem.getPlanet().getName();
+        //String capSize = "Name  " + cap.get
+        String currTechLevel = "Tech Level:  " + solarSystem.getPlanet().getTechLevel();
+        String currGovernment = "Government:  " + solarSystem.getPlanet().getPoliticalSystem();
+        String currResource = "Resource:  " + solarSystem.getPlanet().getResourcesLevel();
+        String currPolice = "Police:  " + solarSystem.getPlanet().getPolice();
+        String currPirate = "Pirate:  " + solarSystem.getPlanet().getPirate();
+        ObservableList<String> items =FXCollections.observableArrayList (
+        currName, currTechLevel, currGovernment, currResource, currPolice, currPirate);
+        systemListView.setItems(items);
+    }
+    
+    private void clearTargetListView() {
+        ObservableList<String> items2 = FXCollections.observableArrayList(
+        "Name: ", "Tech Level: ", "Government: ", "Resource: ", "Police: ", "Pirate: ");
+        targetListView.setItems(items2);
+    }
+    
+    private void showDockInfo(PlayerShip ship, int actFuel, int actPull) {
+        String info1 = "You have fuel to fly " + actFuel + " parsecs";
+        String info2;
+        if (actFuel == maxFuel) {
+            info2 = "Your tank is full";
+        } else {
+            info2 = "A Full Tank Costs " + ship.getBase().getFuelCost() + " cr";
+        }
+        String info3 = "Your hull strength is " + actPull;
+        String info4;
+        if (actPull == maxPull) {
+            info4 = "No repairs needed";
+        } else {
+            info4 = "Repairment Costs " + ship.getBase().getRepairCost() + " cr";
+        }
+        ObservableList<String> dockInfo = FXCollections.observableArrayList(
+        info1, info2, info3, info4);
+        dockListView.setItems(dockInfo);
+    }
+    
+    @FXML
+    private void warpFired(ActionEvent event) {
+    	try {
+			db = new SqliteAPI();
+			ship = db.getShip();
+		} catch (ClassNotFoundException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		} catch (SQLException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+        int targetX = targetSystem.getX();
+        int targetY = targetSystem.getY();
+        double travelSqr = pow(targetX - currX, 2) + pow(targetY - currY, 2);
+        int travelDist = (int)(sqrt(travelSqr));
+        System.out.println("dist: " + travelDist);
+        System.out.println("range: " + ship.getBase().getFuel());
+        solarSystem = targetSystem;
+        trade = new Trade(player, ship, solarSystem);
+        toBuyList = trade.getGoodsToBuy();
+        toBuyMap = trade.getPricesToBuy();
+        toSellList = trade.getGoodsToSell();
+        toSellMap = trade.getPricesToSell();
+        mp = new MarketPlace();
+        mess(toBuyList, toBuyMap, toSellList, toSellMap, mp);
+        realFuel = ship.getBase().getFuel() - travelDist;
+        ship.getBase().setFuel(realFuel);
+        realPull = ship.getBase().getHullStrength() - 1;
+        ship.getBase().setHullStrength(realPull);
+        try {
+			db.updateShip(ship);
+		} catch (SQLException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+        showDockInfo(ship, realFuel, realPull);
+        gc = canvas.getGraphicsContext2D();
+        drawLongRange(targetX, targetY, realFuel, gc);
+        gc2 = canvas2.getGraphicsContext2D();
+        drawShortRange(targetX, targetY, realFuel, gc2);
+        loadCurrentInfo();
+        clearTargetListView();
+        
+        String s = re.update();
+        player = db.getPlayer();
+     
+        System.out.println("random event: " + s);
+    	ObservableList<String> randomInfo = FXCollections.observableArrayList(s, "");
+        travelInfoListView.setItems(randomInfo);
+        updatePlayerInfo();
+        
+        
+    }
+    
+    private void updatePlayerInfo() {
+    	try {
+			db = new SqliteAPI();
+			String s1 = "Cash: " + db.getPlayer().getMoney() + " cr";
+	        System.out.println("money after stolen (2): " + db.getPlayer().getMoney());
+	        String s2 = "Cargo Space Remaining: " + (ship.getCargoSpace() - db.getShip().getCargo().size());
+	        ObservableList<String> playerInfo = FXCollections.observableArrayList(
+	         s1, s2);
+	        playerListView.setItems(playerInfo);
+		} catch (ClassNotFoundException | SQLException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+        
+    }
+    
+    @FXML
+    private void refuelFired(ActionEvent event) {
+        
+    }
+    
+    @FXML
+    private void repairFired(ActionEvent event) {
         
     }
     
@@ -213,160 +412,149 @@ public class GameScreenController implements Initializable, ControlledScreen {
     private void waterSellFired(ActionEvent event) {
         if (waterChoose.getValue() != null) {
             int amount = converter.fromString(waterChoose.getValue().toString());
-            ship.setNumOfGoods(ship.getNumOfGoods() - amount);
-            player.setMoney(player.getMoney() + waterSellPrice * amount);
-            System.out.println(player.getMoney());
-            System.out.println(ship.getNumOfGoods());
-            int count = 0;
-            for (Good g : ship.getCargo()) {
-                if (count < amount && g.getName().equals("Water")) {
-                    ship.remove(g);
-                    count++;
-                }
+            for (int i = 1; i <= amount; i++) {
+                mp.playerSell(new Water());
             }
-            //mess(toBuyList, toBuyMap, toSellList, toSellMap);
-        }      
+            mess(toBuyList, toBuyMap, toSellList, toSellMap, mp);
+            updatePlayerInfo();
+       }
     }
     
      @FXML    
      private void fursSellFired(ActionEvent event) {
         if (fursChoose.getValue() != null) {
             int amount = converter.fromString(fursChoose.getValue().toString());
-            ship.setNumOfGoods(ship.getNumOfGoods() - amount);
-            player.setMoney(player.getMoney() + fursSellPrice * amount);
-            System.out.println(player.getMoney());
-            System.out.println(ship.getNumOfGoods());
-            //mess(toBuyList, toBuyMap, toSellList, toSellMap);
-        } 
+            for (int i = 1; i <= amount; i++) {
+                mp.playerSell(new Furs());
+            }
+            mess(toBuyList, toBuyMap, toSellList, toSellMap, mp);
+            updatePlayerInfo();
+       } 
     }
      @FXML    
      private void foodSellFired(ActionEvent event) {  
         if (foodChoose.getValue() != null) {
             int amount = converter.fromString(foodChoose.getValue().toString());
-            ship.setNumOfGoods(ship.getNumOfGoods() - amount);
-            player.setMoney(player.getMoney() + foodSellPrice * amount);
-            System.out.println(player.getMoney());
-            System.out.println(ship.getNumOfGoods());
-            //mess(toBuyList, toBuyMap, toSellList, toSellMap);
-        }
+            for (int i = 1; i <= amount; i++) {
+                mp.playerSell(new Food());
+            }
+            mess(toBuyList, toBuyMap, toSellList, toSellMap, mp);
+            updatePlayerInfo();
+       }
     }
      @FXML    
      private void oreSellFired(ActionEvent event) {   
         if (oreChoose.getValue() != null) {
             int amount = converter.fromString(oreChoose.getValue().toString());
-            ship.setNumOfGoods(ship.getNumOfGoods() - amount);
-            player.setMoney(player.getMoney() + oreSellPrice * amount);
-            System.out.println(player.getMoney());
-            System.out.println(ship.getNumOfGoods());
-            //mess(toBuyList, toBuyMap, toSellList, toSellMap);
-        }
+            for (int i = 1; i <= amount; i++) {
+                mp.playerSell(new Ore());
+            }
+            mess(toBuyList, toBuyMap, toSellList, toSellMap, mp);
+            updatePlayerInfo();
+       }
     }
      @FXML    
      private void gamesSellFired(ActionEvent event) { 
         if (gamesChoose.getValue() != null) {
             int amount = converter.fromString(gamesChoose.getValue().toString());
-            ship.setNumOfGoods(ship.getNumOfGoods() - amount);
-            player.setMoney(player.getMoney() + gamesSellPrice * amount);
-            System.out.println(player.getMoney());
-            System.out.println(ship.getNumOfGoods());
-            //mess(toBuyList, toBuyMap, toSellList, toSellMap);
-        } 
+            for (int i = 1; i <= amount; i++) {
+                mp.playerSell(new Games());
+            }
+            mess(toBuyList, toBuyMap, toSellList, toSellMap, mp);
+            updatePlayerInfo();
+       }
     }
      @FXML    
      private void firearmsSellFired(ActionEvent event) {   
         if (firearmsChoose.getValue() != null) {
             int amount = converter.fromString(firearmsChoose.getValue().toString());
-            ship.setNumOfGoods(ship.getNumOfGoods() - amount);
-            player.setMoney(player.getMoney() + firearmsSellPrice * amount);
-            System.out.println(player.getMoney());
-            System.out.println(ship.getNumOfGoods());
-            //mess(toBuyList, toBuyMap, toSellList, toSellMap);
-        }
+            for (int i = 1; i <= amount; i++) {
+                mp.playerSell(new Firearms());
+            }
+            mess(toBuyList, toBuyMap, toSellList, toSellMap, mp);
+            updatePlayerInfo();
+       }
     }
      @FXML    
      private void medicinesSellFired(ActionEvent event) {  
        if (medicinesChoose.getValue() != null) {
             int amount = converter.fromString(medicinesChoose.getValue().toString());
-            ship.setNumOfGoods(ship.getNumOfGoods() - amount);
-            player.setMoney(player.getMoney() + medicinesSellPrice * amount);
-            System.out.println(player.getMoney());
-            System.out.println(ship.getNumOfGoods());
-            //mess(toBuyList, toBuyMap, toSellList, toSellMap);
-        }
+            for (int i = 1; i <= amount; i++) {
+                mp.playerSell(new Medicine());
+            }
+            mess(toBuyList, toBuyMap, toSellList, toSellMap, mp);
+            updatePlayerInfo();
+       }
     }
      @FXML    
      private void machinesSellFired(ActionEvent event) { 
         if (machinesChoose.getValue() != null) {
             int amount = converter.fromString(machinesChoose.getValue().toString());
-            ship.setNumOfGoods(ship.getNumOfGoods() - amount);
-            player.setMoney(player.getMoney() + machinesSellPrice * amount);
-            System.out.println(player.getMoney());
-            System.out.println(ship.getNumOfGoods());
-            //mess(toBuyList, toBuyMap, toSellList, toSellMap);
-        }
+            for (int i = 1; i <= amount; i++) {
+                mp.playerSell(new Machines());
+            }
+            mess(toBuyList, toBuyMap, toSellList, toSellMap, mp);
+            updatePlayerInfo();
+       }
     }
      @FXML    
      private void narcoticsSellFired(ActionEvent event) { 
         if (narcoticsChoose.getValue() != null) {
             int amount = converter.fromString(narcoticsChoose.getValue().toString());
-            ship.setNumOfGoods(ship.getNumOfGoods() - amount);
-            player.setMoney(player.getMoney() + narcoticsSellPrice * amount);
-            System.out.println(player.getMoney());
-            System.out.println(ship.getNumOfGoods());
-            //mess(toBuyList, toBuyMap, toSellList, toSellMap);
-        }
+            for (int i = 1; i <= amount; i++) {
+                mp.playerSell(new Narcotics());
+            }
+            mess(toBuyList, toBuyMap, toSellList, toSellMap, mp);
+            updatePlayerInfo();
+       }
     }
-//     @FXML    
-//     private void robocsSellFired(ActionEvent event) {   
-//        
-//     }
+
    
     @FXML    
     private void waterBuyFired(ActionEvent event) {
         if (waterChoose2.getValue() != null) {
             int amount = converter.fromString(waterChoose2.getValue().toString());
-            ship.setNumOfGoods(ship.getNumOfGoods() + amount);
-            player.setMoney(player.getMoney() - waterBuyPrice * amount);
-            System.out.println(player.getMoney());
-            System.out.println(ship.getNumOfGoods());
-            //mess(toBuyList, toBuyMap, toSellList, toSellMap);
+            for (int i = 1; i <= amount; i++) {
+                mp.playerBuy(new Water());
+            }       
+            mess(toBuyList, toBuyMap, toSellList, toSellMap, mp);
+            updatePlayerInfo();
        }
     }
-
 
     @FXML    
     private void fursBuyFired(ActionEvent event) {   
         if (fursChoose2.getValue() != null) {
             int amount = converter.fromString(fursChoose2.getValue().toString());
-            ship.setNumOfGoods(ship.getNumOfGoods() + amount);
-            player.setMoney(player.getMoney() - fursBuyPrice * amount);
-            System.out.println(player.getMoney());
-            System.out.println(ship.getNumOfGoods());
-            //mess(toBuyList, toBuyMap, toSellList, toSellMap);
-        }
+            for (int i = 1; i <= amount; i++) {
+                mp.playerBuy(new Furs());
+            }       
+            mess(toBuyList, toBuyMap, toSellList, toSellMap, mp);
+            updatePlayerInfo();
+       }
     }
 
     @FXML    
     private void foodBuyFired(ActionEvent event) {  
         if (foodChoose2.getValue() != null) {
             int amount = converter.fromString(foodChoose2.getValue().toString());
-            ship.setNumOfGoods(ship.getNumOfGoods() + amount);
-            player.setMoney(player.getMoney() - foodBuyPrice * amount);
-            System.out.println(player.getMoney());
-            System.out.println(ship.getNumOfGoods());
-            //mess(toBuyList, toBuyMap, toSellList, toSellMap);
-        } 
+            for (int i = 1; i <= amount; i++) {
+                mp.playerBuy(new Food());
+            }       
+            mess(toBuyList, toBuyMap, toSellList, toSellMap, mp);
+            updatePlayerInfo();
+       }
     }
 
     @FXML    
     private void oreBuyFired(ActionEvent event) {   
         if (oreChoose2.getValue() != null) {
             int amount = converter.fromString(oreChoose2.getValue().toString());
-            ship.setNumOfGoods(ship.getNumOfGoods() + amount);
-            player.setMoney(player.getMoney() - oreBuyPrice * amount);
-            System.out.println(player.getMoney());
-            System.out.println(ship.getNumOfGoods());
-            //mess(toBuyList, toBuyMap, toSellList, toSellMap);
+            for (int i = 1; i <= amount; i++) {
+                mp.playerBuy(new Ore());
+            }       
+            mess(toBuyList, toBuyMap, toSellList, toSellMap, mp);
+            updatePlayerInfo();
        }
     }
 
@@ -374,137 +562,151 @@ public class GameScreenController implements Initializable, ControlledScreen {
     private void gamesBuyFired(ActionEvent event) {   
         if (gamesChoose2.getValue() != null) {
             int amount = converter.fromString(gamesChoose2.getValue().toString());
-            ship.setNumOfGoods(ship.getNumOfGoods() + amount);
-            player.setMoney(player.getMoney() - gamesBuyPrice * amount);
-            System.out.println(player.getMoney());
-            System.out.println(ship.getNumOfGoods());
-            //mess(toBuyList, toBuyMap, toSellList, toSellMap);
-        }
+            for (int i = 1; i <= amount; i++) {
+                mp.playerBuy(new Games());
+            }       
+            mess(toBuyList, toBuyMap, toSellList, toSellMap, mp);
+            updatePlayerInfo();
+       }
     }
 
     @FXML    
     private void firearmsBuyFired(ActionEvent event) {   
         if (firearmsChoose2.getValue() != null) {
             int amount = converter.fromString(firearmsChoose2.getValue().toString());
-            ship.setNumOfGoods(ship.getNumOfGoods() + amount);
-            player.setMoney(player.getMoney() - firearmsBuyPrice * amount);
-            System.out.println(player.getMoney());
-            System.out.println(ship.getNumOfGoods());
-            //mess(toBuyList, toBuyMap, toSellList, toSellMap);
-        }
+            for (int i = 1; i <= amount; i++) {
+                mp.playerBuy(new Firearms());
+            }       
+            mess(toBuyList, toBuyMap, toSellList, toSellMap, mp);
+            updatePlayerInfo();
+       }
     }
 
     @FXML    
     private void medicinesBuyFired(ActionEvent event) {   
         if (medicinesChoose2.getValue() != null) {
             int amount = converter.fromString(medicinesChoose2.getValue().toString());
-            ship.setNumOfGoods(ship.getNumOfGoods() + amount);
-            player.setMoney(player.getMoney() - medicinesBuyPrice * amount);
-            System.out.println(player.getMoney());
-            System.out.println(ship.getNumOfGoods());
-            //mess(toBuyList, toBuyMap, toSellList, toSellMap);
-        }
+            for (int i = 1; i <= amount; i++) {
+                mp.playerBuy(new Medicine());
+            }       
+            mess(toBuyList, toBuyMap, toSellList, toSellMap, mp);
+            updatePlayerInfo();
+       }
     }
 
     @FXML    
     private void machinesBuyFired(ActionEvent event) {   
         if (machinesChoose2.getValue() != null) {
             int amount = converter.fromString(machinesChoose2.getValue().toString());
-            ship.setNumOfGoods(ship.getNumOfGoods() + amount);
-            player.setMoney(player.getMoney() - machinesBuyPrice * amount);
-            System.out.println(player.getMoney());
-            System.out.println(ship.getNumOfGoods());
-            //mess(toBuyList, toBuyMap, toSellList, toSellMap);
-        }
+            for (int i = 1; i <= amount; i++) {
+                mp.playerBuy(new Machines());
+            }       
+            mess(toBuyList, toBuyMap, toSellList, toSellMap, mp);
+            updatePlayerInfo();
+       }
     }
 
     @FXML    
     private void narcoticsBuyFired(ActionEvent event) {   
         if (narcoticsChoose2.getValue() != null) {
             int amount = converter.fromString(narcoticsChoose2.getValue().toString());
-            ship.setNumOfGoods(ship.getNumOfGoods() + amount);
-            player.setMoney(player.getMoney() - narcoticsBuyPrice * amount);
-            System.out.println(player.getMoney());
-            System.out.println(ship.getNumOfGoods());
-            //mess(toBuyList, toBuyMap, toSellList, toSellMap);
-        }
+            for (int i = 1; i <= amount; i++) {
+                mp.playerBuy(new Narcotics());
+            }       
+            mess(toBuyList, toBuyMap, toSellList, toSellMap, mp);
+            updatePlayerInfo();
+       }
     }
-
-//    @FXML    
-//    private void roboticsBuyFired(ActionEvent event) {   
-//    }
     
-    
-    @Override
-    public void initialize(URL url, ResourceBundle rb) {
-        GraphicsContext gc = canvas.getGraphicsContext2D();
-        Universe uni = new Universe();
-        List<SolarSystem> solarList = uni.getUniverse();
-        
-        // draw long-range
+    private void drawLongRange(int centerX, int centerY, int range, GraphicsContext gc) {
+        gc.clearRect(0, 0, canvas.getWidth(), canvas.getHeight());
         for (SolarSystem ss : solarList) {
             int x = ss.getX();
             int y = ss.getY();
             gc.fillOval(x - 1, y - 1, 2, 2);
         }
-        Random rand = new Random();
-        int index = rand.nextInt(solarList.size());
-        solarSystem = solarList.get(index);
-        Capital curr = solarSystem.getPlanet();
-        ship = new PlayerShip();
-        int range = ship.getMaxRange();
-        int currX = solarSystem.getX();
-        int currY = solarSystem.getY();
-        gc.strokeOval(currX - range, currY - range, 2*range, 2*range);
-        
-        //target system
-        String currName = "Name:  " + curr.getName();
-        //String capSize = "Name  " + cap.get
-        String currTechLevel = "Tech Level:  " + curr.getTechLevel();
-        String currGovernment = "Government:  " + curr.getPoliticalSystem();
-        String currResource = "Resource:  " + curr.getResourcesLevel();
-        String currPolice = "Police:  " + curr.getPolice();
-        String currPirate = "Pirate:  " + curr.getPirate();
-        ObservableList<String> items =FXCollections.observableArrayList (
-        currName, currTechLevel, currGovernment, currResource, currPolice, currPirate);
-        systemListView.setItems(items);
-        
-        //draw short-range
-        GraphicsContext gc2 = canvas2.getGraphicsContext2D();
+        gc.strokeOval(centerX - range, centerY - range, 2*range, 2*range);
+    }
+    
+    private List<String> drawShortRange(int centerX, int centerY, int range, GraphicsContext gc2) {
+        gc2.clearRect(0, 0, canvas.getWidth(), canvas.getHeight());
+        reachablePlanets = new ArrayList<String>();
         double h = canvas2.getHeight();
         double w = canvas2.getWidth();
         double smallBound = min(h, w);
-        double bigBound = max(h, w);
         gc2.fillOval(w/2 - 2, h/2 - 2, 4, 4);
-        gc2.strokeOval(w/2 - smallBound/4, h/2 - smallBound/4, smallBound/2, smallBound/2);
-        double startX = currX - 40;
-        double startY = currY - 40;
-        double endX = currX + 40;
-        double endY = currY + 40;
-        double ratio = (smallBound/4)/20;
+        gc2.strokeOval(w/2 - smallBound/2, h/2 - smallBound/2, smallBound, smallBound);
+        double ratio = (smallBound/2)/range;
         for (SolarSystem ss : solarList) {
             int x = ss.getX();
             int y = ss.getY();
-            if (x >= startX && x <= endX && y >= startY && y <= endY) {
-                double zoomInH = (x - currX) * ratio;
-                double zoomInV = (y - currY) * ratio;
-                gc2.fillOval(w/2 + zoomInH - 2, h/2 + zoomInV - 2, 4, 4);
+            double zoomInH = (x - centerX) * ratio;
+            double zoomInV = (y - centerY) * ratio;
+            gc2.fillOval(w/2 + zoomInH - 2, h/2 + zoomInV - 2, 4, 4);
+            double distSqr = pow(zoomInH, 2) + pow(zoomInV, 2);
+            double newRad = ratio * range;
+            double radSqr = pow(newRad, 2);
+            if (distSqr <= radSqr) {
+                gc2.strokeText(ss.getName(), w/2 + zoomInH - 2, h/2 + zoomInV - 2, 50);
+                reachablePlanets.add(ss.getName());
             }
         }
-        ship.loadShip();
-        //set target system listview
-        ObservableList<String> items2 = FXCollections.observableArrayList(
-        "Name: ", "Tech Level: ", "Government: ", "Resource: ", "Police: ", "Pirate: ");
-        targetListView.setItems(items2);  
+        return reachablePlanets;
+    }
+    
+    
+    @Override
+    public void initialize(URL url, ResourceBundle rb) {
+    	try {
+			db = new SqliteAPI();
+			player = db.getPlayer();
+	        ship = db.getShip();
+	        uni = db.getUniverse();
+	        realFuel = maxFuel = ship.getBase().getFuel();
+	        realPull = maxPull = ship.getBase().getHullStrength();
+	        solarList = uni.getUniverse();
+	        for (SolarSystem ss:solarList) {
+	        	System.out.println(ss.getX() + " " + ss.getY());
+	        }
+		} catch (ClassNotFoundException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		} catch (SQLException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+    	
+       
+        //get current solarsystem
+        Random rand = new Random();
+        re = new RandomEvent();
+        int index = rand.nextInt(solarList.size());
+        solarSystem = solarList.get(index);
+        Capital curr = solarSystem.getPlanet();
+        GraphicsContext gc = canvas.getGraphicsContext2D();
+        // draw map
+        for (SolarSystem ss : solarList) {
+            int x = ss.getX();
+            int y = ss.getY();
+            gc.fillOval(x - 1, y - 1, 2, 2);
+        }
         
-        player = new GameCharacter("David", 4, 4, 4, 4);
+        int range = ship.getBase().getFuel();
+        currX = solarSystem.getX();
+        currY = solarSystem.getY();
+        drawLongRange(currX , currY, range, gc);
+        GraphicsContext gc2 = canvas2.getGraphicsContext2D();
+        reachablePlanets = drawShortRange(currX, currY, range, gc2);
+        
+        loadCurrentInfo();
+        clearTargetListView();
+                
         trade = new Trade(player, ship, solarSystem);
-        List<String> toBuyList = trade.getGoodsToBuy();
-        List<String> toSellList = trade.getGoodsToSell();
-        Map<String, Integer> toSellMap = trade.getPricesToSell();
-        Map<String, Integer> toBuyMap = trade.getPricesToBuy();
+        toBuyList = trade.getGoodsToBuy();
+        toSellList = trade.getGoodsToSell();
+        toSellMap = trade.getPricesToSell();
+        toBuyMap = trade.getPricesToBuy();
         converter = new IntegerStringConverter();
-        //
     
          waterPrice2.setText("Can't Buy");
          fursPrice2.setText("Can't Buy");
@@ -525,18 +727,35 @@ public class GameScreenController implements Initializable, ControlledScreen {
          medicinesPrice.setText("Can't Sell");        
          machinesPrice.setText("Can't Sell");        
          narcoticsPrice.setText("Can't Sell");
-         mess(toBuyList, toBuyMap, toSellList, toSellMap);
-         System.out.println(player.getMoney());
-         System.out.println(ship.getNumOfGoods());
-        
+         mp = new MarketPlace();
+         mess(toBuyList, toBuyMap, toSellList, toSellMap, mp);
+         
+         //dock info
+         showDockInfo(ship, maxFuel, maxPull);
+         updatePlayerInfo();
+         
     }
     
-    public void mess(List<String> toBuyList, Map<String, Integer> toBuyMap, List<String> toSellList, Map<String, Integer> toSellMap) {
+    private int countNumOfGood(List<Good> cargo, String name) {
+        int count = 0;
+        for (Good g : cargo) {
+            System.out.println(g.getName());
+            if (name.equals(g.getName())) {
+                count++;
+            }
+        }
+        System.out.println("countnum: " + count);
+        return count;
+    }  
+    
+    public void mess(List<String> toBuyList, Map<String, Integer> toBuyMap, List<String> toSellList, Map<String, Integer> toSellMap, MarketPlace mp) {
+        int maxAmount1;
+        int maxAmount2;
+        maxAmount1 = ship.getCargoSpace() - mp.getCargo().size();
         for (String s : toBuyList) {
             if (s.equals("Water")) {
                 waterPrice2.setText("" + toBuyMap.get("Water"));
-                int maxAmount1 = ship.getCargoSpace() - ship.getNumOfGoods();
-                int maxAmount2 = player.getMoney() / toBuyMap.get("Water");
+                maxAmount2 = mp.getPlayerMoney() / toBuyMap.get("Water");
                 int maxBuy = Math.min(maxAmount1,maxAmount2);
                 ObservableList<String> buyChoice = FXCollections.observableArrayList ();
                 for (int i = maxBuy; i >= 0;i--) {
@@ -545,10 +764,7 @@ public class GameScreenController implements Initializable, ControlledScreen {
                 waterChoose2.setItems(buyChoice);
             } else if (s.equals("Furs")) {
                 fursPrice2.setText("" + toBuyMap.get("Furs"));
-                         int maxAmount1 = ship.getCargoSpace() - ship.getNumOfGoods();
-                System.out.println(player.getMoney());
-                System.out.println(ship.getCargo().size() - ship.getNumOfGoods());
-                int maxAmount2 = player.getMoney() / toBuyMap.get("Furs");
+                maxAmount2 = mp.getPlayerMoney() / toBuyMap.get("Furs");
                 int maxBuy = Math.min(maxAmount1,maxAmount2);
                 ObservableList<String> buyChoice = FXCollections.observableArrayList ();
                 for (int i = maxBuy; i >= 0;i--) {
@@ -557,10 +773,7 @@ public class GameScreenController implements Initializable, ControlledScreen {
                 fursChoose2.setItems(buyChoice);
             } else if (s.equals("Food")) {
                 foodPrice2.setText("" + toBuyMap.get("Food"));
-                         int maxAmount1 = ship.getCargoSpace() - ship.getNumOfGoods();
-                System.out.println(player.getMoney());
-                System.out.println(ship.getCargo().size() - ship.getNumOfGoods());
-                int maxAmount2 = player.getMoney() / toBuyMap.get("Food");
+                maxAmount2 = mp.getPlayerMoney() / toBuyMap.get("Food");  
                 int maxBuy = Math.min(maxAmount1,maxAmount2);
                 ObservableList<String> buyChoice = FXCollections.observableArrayList ();
                 for (int i = maxBuy; i >= 0;i--) {
@@ -569,10 +782,7 @@ public class GameScreenController implements Initializable, ControlledScreen {
                 foodChoose2.setItems(buyChoice);
             } else if (s.equals("Ore")) {
                 orePrice2.setText("" + toBuyMap.get("Ore"));
-                         int maxAmount1 = ship.getCargoSpace() - ship.getNumOfGoods();
-                System.out.println(player.getMoney());
-                System.out.println(ship.getCargo().size() - ship.getNumOfGoods());
-                int maxAmount2 = player.getMoney() / toBuyMap.get("Ore");
+                maxAmount2 = mp.getPlayerMoney() / toBuyMap.get("Ore"); 
                 int maxBuy = Math.min(maxAmount1,maxAmount2);
                 ObservableList<String> buyChoice = FXCollections.observableArrayList ();
                 for (int i = maxBuy; i >= 0;i--) {
@@ -581,10 +791,7 @@ public class GameScreenController implements Initializable, ControlledScreen {
                 oreChoose2.setItems(buyChoice);
             } else if (s.equals("Games")) {
                 gamesPrice2.setText("" + toBuyMap.get("Games"));
-                int maxAmount1 = ship.getCargoSpace() - ship.getNumOfGoods();
-                System.out.println(player.getMoney());
-                System.out.println(ship.getCargo().size() - ship.getNumOfGoods());
-                int maxAmount2 = player.getMoney() / toBuyMap.get("Games");
+                maxAmount2 = mp.getPlayerMoney() / toBuyMap.get("Games");
                 int maxBuy = Math.min(maxAmount1,maxAmount2);
                 ObservableList<String> buyChoice = FXCollections.observableArrayList ();
                 for (int i = maxBuy; i >= 0;i--) {
@@ -593,10 +800,7 @@ public class GameScreenController implements Initializable, ControlledScreen {
                 gamesChoose2.setItems(buyChoice);
             } else if (s.equals("Firearms")) {
                 firearmsPrice2.setText("" + toBuyMap.get("Firearms"));
-                         int maxAmount1 = ship.getCargoSpace() - ship.getNumOfGoods();
-                System.out.println(player.getMoney());
-                System.out.println(ship.getCargo().size() - ship.getNumOfGoods());
-                int maxAmount2 = player.getMoney() / toBuyMap.get("Firearms");
+                maxAmount2 = mp.getPlayerMoney() / toBuyMap.get("Firearms");
                 int maxBuy = Math.min(maxAmount1,maxAmount2);
                 ObservableList<String> buyChoice = FXCollections.observableArrayList ();
                 for (int i = maxBuy; i >= 0;i--) {
@@ -605,10 +809,7 @@ public class GameScreenController implements Initializable, ControlledScreen {
                 firearmsChoose2.setItems(buyChoice);
             } else if (s.equals("Medicines")) {
                 medicinesPrice2.setText("" + toBuyMap.get("Medicines"));
-                         int maxAmount1 = ship.getCargoSpace() - ship.getNumOfGoods();
-                System.out.println(player.getMoney());
-                System.out.println(ship.getCargo().size() - ship.getNumOfGoods());
-                int maxAmount2 = player.getMoney() / toBuyMap.get("Medicines");
+                maxAmount2 = mp.getPlayerMoney() / toBuyMap.get("Medicines");
                 int maxBuy = Math.min(maxAmount1,maxAmount2);
                 ObservableList<String> buyChoice = FXCollections.observableArrayList ();
                 for (int i = maxBuy; i >= 0;i--) {
@@ -617,10 +818,7 @@ public class GameScreenController implements Initializable, ControlledScreen {
                 medicinesChoose2.setItems(buyChoice);
             } else if (s.equals("Narcotics")) {
                 narcoticsPrice2.setText("" + toBuyMap.get("Narcotics"));
-                         int maxAmount1 = ship.getCargoSpace() - ship.getNumOfGoods();
-                System.out.println(player.getMoney());
-                System.out.println(ship.getCargo().size() - ship.getNumOfGoods());
-                int maxAmount2 = player.getMoney() / toBuyMap.get("Narcotics");
+                maxAmount2 = mp.getPlayerMoney() / toBuyMap.get("Narcotics");
                 int maxBuy = Math.min(maxAmount1,maxAmount2);
                 ObservableList<String> buyChoice = FXCollections.observableArrayList ();
                 for (int i = maxBuy; i >= 0;i--) {
@@ -629,10 +827,7 @@ public class GameScreenController implements Initializable, ControlledScreen {
                 narcoticsChoose2.setItems(buyChoice);
             } else if (s.equals("Machines")) {
                 machinesPrice2.setText("" + toBuyMap.get("water"));
-                         int maxAmount1 = ship.getCargoSpace() - ship.getNumOfGoods();
-                System.out.println(player.getMoney());
-                System.out.println(ship.getCargo().size() - ship.getNumOfGoods());
-                int maxAmount2 = player.getMoney() / toBuyMap.get("Machines");
+                maxAmount2 = mp.getPlayerMoney() / toBuyMap.get("Machines");
                 int maxBuy = Math.min(maxAmount1,maxAmount2);
                 ObservableList<String> buyChoice = FXCollections.observableArrayList ();
                 for (int i = maxBuy; i >= 0;i--) {
@@ -641,12 +836,13 @@ public class GameScreenController implements Initializable, ControlledScreen {
                 machinesChoose2.setItems(buyChoice);
             } 
         }
-        
+        int maxSell;
         for (String s : toSellList) {
             if (s.equals("Water")) {
                 waterSellPrice = toSellMap.get("Water");
                 waterPrice.setText("" + waterSellPrice);
-                int maxSell = ship.getCargo().size();
+                maxSell = countNumOfGood(mp.getCargo(), "Water");
+                System.out.println("maxsell: " + maxSell);
                 ObservableList<String> choices =FXCollections.observableArrayList ();
                 for (int i = maxSell; i >= 0; i--) {
                     choices.add("" + i);
@@ -657,7 +853,7 @@ public class GameScreenController implements Initializable, ControlledScreen {
             } else if (s.equals("Furs")) {
                 fursSellPrice = toSellMap.get("Furs");
                 fursPrice.setText("" + waterSellPrice);
-                int maxSell = ship.getCargo().size();
+                maxSell = countNumOfGood(mp.getCargo(), "Furs");
                 ObservableList<String> choices =FXCollections.observableArrayList ();
                 for (int i = maxSell; i >= 0; i--) {
                     choices.add("" + i);
@@ -667,7 +863,7 @@ public class GameScreenController implements Initializable, ControlledScreen {
             } else if (s.equals("Food")) {
                 foodSellPrice = toSellMap.get("Food");
                 foodPrice.setText("" + foodSellPrice);
-                int maxSell = ship.getCargo().size();
+                maxSell = countNumOfGood(mp.getCargo(), "Food");
                 ObservableList<String> choices =FXCollections.observableArrayList ();
                 for (int i = maxSell; i >= 0; i--) {
                     choices.add("" + i);
@@ -677,7 +873,7 @@ public class GameScreenController implements Initializable, ControlledScreen {
             } else if (s.equals("Ore")) {
                 oreSellPrice = toSellMap.get("Ore");
                 orePrice.setText("" + oreSellPrice);
-                int maxSell = ship.getCargo().size();
+                maxSell = countNumOfGood(mp.getCargo(), "Ore");
                 ObservableList<String> choices =FXCollections.observableArrayList ();
                 for (int i = maxSell; i >= 0; i--) {
                     choices.add("" + i);
@@ -687,7 +883,7 @@ public class GameScreenController implements Initializable, ControlledScreen {
             } else if (s.equals("Games")) {
                 gamesSellPrice = toSellMap.get("Games");
                 gamesPrice.setText("" + gamesSellPrice);
-                int maxSell = ship.getCargo().size();
+                maxSell = countNumOfGood(mp.getCargo(), "Games");
                 ObservableList<String> choices =FXCollections.observableArrayList ();
                 for (int i = maxSell; i >= 0; i--) {
                     choices.add("" + i);
@@ -697,7 +893,7 @@ public class GameScreenController implements Initializable, ControlledScreen {
             } else if (s.equals("Firearms")) {
                 firearmsSellPrice = toSellMap.get("Firearms");
                 firearmsPrice.setText("" + firearmsSellPrice);
-                int maxSell = ship.getCargo().size();
+                maxSell = countNumOfGood(mp.getCargo(), "Firearms");
                 ObservableList<String> choices =FXCollections.observableArrayList ();
                 for (int i = maxSell; i >= 0; i--) {
                     choices.add("" + i);
@@ -707,7 +903,7 @@ public class GameScreenController implements Initializable, ControlledScreen {
             } else if (s.equals("Medicines")) {
                 medicinesSellPrice = toSellMap.get("Medicines");
                 medicinesPrice.setText("" + medicinesSellPrice);
-                int maxSell = ship.getCargo().size();
+                maxSell = countNumOfGood(mp.getCargo(), "Medicines");
                 ObservableList<String> choices =FXCollections.observableArrayList ();
                 for (int i = maxSell; i >= 0; i--) {
                     choices.add("" + i);
@@ -717,7 +913,7 @@ public class GameScreenController implements Initializable, ControlledScreen {
             } else if (s.equals("Narcotics")) {
                 narcoticsSellPrice = toSellMap.get("Narcotics");
                 narcoticsPrice.setText("" + narcoticsSellPrice);
-                int maxSell = ship.getCargo().size();
+                maxSell = countNumOfGood(mp.getCargo(), "Narcotics");
                 ObservableList<String> choices =FXCollections.observableArrayList ();
                 for (int i = maxSell; i >= 0; i--) {
                     choices.add("" + i);
@@ -727,7 +923,7 @@ public class GameScreenController implements Initializable, ControlledScreen {
             } else if (s.equals("Machines")) {
                 machinesSellPrice = toSellMap.get("Machines");
                 machinesPrice.setText("" + machinesSellPrice);
-                int maxSell = ship.getCargo().size();
+                maxSell = countNumOfGood(mp.getCargo(), "Machines");
                 ObservableList<String> choices =FXCollections.observableArrayList ();
                 for (int i = maxSell; i >= 0; i--) {
                     choices.add("" + i);
@@ -737,9 +933,6 @@ public class GameScreenController implements Initializable, ControlledScreen {
             } 
         }
     }
-    
-    
-    
-    
+                
     
 }

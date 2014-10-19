@@ -39,6 +39,8 @@ public class WelcomeScreenController implements Initializable, ControlledScreen 
 
     @FXML
     private void loadGameFired(ActionEvent event) {
+    	myController.loadScreen(Main.screen3ID, Main.screen3File);
+    	myController.setScreen(Main.screen3ID);
     }
 
     @Override

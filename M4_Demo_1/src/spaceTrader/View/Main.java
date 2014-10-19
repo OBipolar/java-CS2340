@@ -30,7 +30,7 @@ public class Main extends Application {
         ScreensController mainContainer = new ScreensController();
         mainContainer.loadScreen(Main.screen1ID, Main.screen1File);
         mainContainer.loadScreen(Main.screen2ID, Main.screen2File);
-        mainContainer.loadScreen(Main.screen3ID, Main.screen3File);
+        //mainContainer.loadScreen(Main.screen3ID, Main.screen3File);
         if (mainContainer.getScreen("configure") == null) {
             System.out.println("error");
         } else {
@@ -48,7 +48,7 @@ public class Main extends Application {
 
     /**
      * @param args
-     *            the command line arguments
+     * the command line arguments
      */
     public static void main(String[] args) {
         launch(args);
