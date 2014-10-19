@@ -50,6 +50,21 @@ public class ShipYard {
 		
 	}
 	
+	
+	/**
+	 * Returns true if the ship yard exists on this planet, return false
+	 * otherwise
+	 * 
+	 * 
+	 * @return
+	 */
+	public boolean isYardExist() {
+		//insert logic here
+	}
+	
+	
+	
+	
 	/**
 	 * Players buys a ship with the given name
 	 * 
@@ -86,7 +101,7 @@ public class ShipYard {
 	 * @return
 	 */
 	public Map<String, Integer> getShipPrices() {
-		
+		//insert logic here
 	}
 	
 	/**
