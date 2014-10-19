@@ -18,4 +18,4 @@
 /M4_Demo_1/build/
 /M4_Demo_1/dist/
 build/
-bin/
+bin/*
