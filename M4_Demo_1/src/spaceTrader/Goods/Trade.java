@@ -7,8 +7,8 @@ import java.util.Map;
 import java.util.Random;
 
 import spaceTrader.Planets.GameCharacter;
-import spaceTrader.Planets.PlayerShip;
 import spaceTrader.Planets.SolarSystem;
+import spaceTrader.Ships.PlayerShip;
 
 /**
  * Class that does trade
@@ -17,26 +17,28 @@ import spaceTrader.Planets.SolarSystem;
  *
  */
 public class Trade {
-    
+
     private GameCharacter player;
-    private PlayerShip playerShip;    
+    private PlayerShip playerShip;
     private SolarSystem system;
     private List<String> goodsToSell;
     private List<String> goodsToBuy;
-    private Map<String, Integer> pricesToSell; 
-    private Map<String, Integer> pricesToBuy; 
-    
-    
+    private Map<String, Integer> pricesToSell;
+    private Map<String, Integer> pricesToBuy;
+
     /**
-     * Constructor that takes in a Player, a PlayerShip and a SolarSystem
-     * and sets the trade information
+     * Constructor that takes in a Player, a PlayerShip and a SolarSystem and
+     * sets the trade information
      * 
-     * @param player a Player
-     * @param playerShip a PlayerShip 
-     * @param system a SolarSystem
+     * @param player
+     *            a Player
+     * @param playerShip
+     *            a PlayerShip
+     * @param system
+     *            a SolarSystem
      */
-    public Trade (GameCharacter player, PlayerShip playerShip, SolarSystem system) {
-        
+    public Trade(GameCharacter player, PlayerShip playerShip, SolarSystem system) {
+
         this.player = player;
         this.playerShip = playerShip;
         this.system = system;
@@ -47,16 +49,16 @@ public class Trade {
         setGoodsToSell();
         setGoodsToBuy();
     }
-    
-    
+
     /**
      * Return true if the buying is successful
      * 
-     * @param good good the player wants to buy
+     * @param good
+     *            good the player wants to buy
      * @return true if the buying is successful
      */
-    public boolean buy (Good good) { 
-        
+    public boolean buy(Good good) {
+
         int amount = pricesToBuy.get(good.getName());
         int money = player.getMoney();
         if (amount > money || playerShip.isFull()) {
@@ -69,54 +71,51 @@ public class Trade {
         pricesToSell.put(good.getName(), amount);
         return true;
     }
-    
-    
+
     /**
      * Sells a good in player ship cargo
      * 
-     * @param good a good in cargo
+     * @param good
+     *            a good in cargo
      */
-    public void sell (Good good) {
+    public void sell(Good good) {
         int amount = pricesToSell.get(good.getName());
         int money = player.getMoney();
         money += amount;
         player.setMoney(money);
-        playerShip.remove(good);   
-        goodsToSell.remove(good.getName());
-        pricesToSell.remove(good.getName());
+        playerShip.remove(good);
+        // goodsToSell.remove(good.getName());
+
     }
-    
-    
-    
-    
+
     /**
-     * Sets the goods player can sell on a particular planet depending on 
-     * the planet's tech level 
+     * Sets the goods player can sell on a particular planet depending on the
+     * planet's tech level
      */
     public void setGoodsToSell() {
-        
+
         int techLevel = system.getPlanet().getTechLevel().ordinal();
-        //System.out.println("techlevel: " + techLevel);
+        // System.out.println("techlevel: " + techLevel);
         List<Good> cargo = playerShip.getCargo();
-        //System.out.println("cargo is empty: " + cargo.isEmpty());
+        // System.out.println("cargo is empty: " + cargo.isEmpty());
         for (Good good : cargo) {
-            //System.out.println("MTLU " + good.getMTLU());
+            // System.out.println("MTLU " + good.getMTLU());
             if (good.getMTLU() <= techLevel) {
                 goodsToSell.add(good.getName());
                 pricesToSell.put(good.getName(), calcPrice(good, techLevel));
-                //System.out.println(good.getName() + calcPrice(good, techLevel));
+                // System.out.println(good.getName() + calcPrice(good,
+                // techLevel));
             }
         }
-               
+
     }
-    
-    
+
     /**
-     * Sets the goods player can buy on a particular planet depending on 
-     * the planet's tech level 
+     * Sets the goods player can buy on a particular planet depending on the
+     * planet's tech level
      */
     public void setGoodsToBuy() {
-        
+
         int techLevel = system.getPlanet().getTechLevel().ordinal();
         List<Good> goods = new ArrayList<Good>();
         goods.add(new Water());
@@ -129,41 +128,42 @@ public class Trade {
         goods.add(new Machines());
         goods.add(new Narcotics());
         goods.add(new Robots());
-        
+
         for (Good good : goods) {
             if (good.getMTLP() <= techLevel) {
                 goodsToBuy.add(good.getName());
                 pricesToBuy.put(good.getName(), calcPrice(good, techLevel));
             }
         }
-        
+
     }
 
     /**
-     * Return the price the player can buy or sell a good on a particular 
-     * planet given its tech level
+     * Return the price the player can buy or sell a good on a particular planet
+     * given its tech level
      * 
-     * @param good a good
-     * @param techLevel the planet's tech level
-     * @return the price the player can buy or sell a good on a particular 
-     * planet given its tech level
+     * @param good
+     *            a good
+     * @param techLevel
+     *            the planet's tech level
+     * @return the price the player can buy or sell a good on a particular
+     *         planet given its tech level
      */
     private int calcPrice(Good good, int techLevel) {
-        return good.getBasePrice() * (1 + getRandomNum(good.getVar() / 10)) 
+        return good.getBasePrice() * (1 + getRandomNum(good.getVar() / 10))
                 + good.getIPL() * (techLevel - good.getMTLP());
     }
-  
+
     /**
      * Returns an random integer between 0 and limit (inclusive)
      * 
-     * @param limit an integer
-     * @return  Returns an random integer between 0 and limit (inclusive)
+     * @param limit
+     *            an integer
+     * @return Returns an random integer between 0 and limit (inclusive)
      */
     private int getRandomNum(int limit) {
         return (new Random()).nextInt(limit + 1);
     }
-
-    
 
     public Map<String, Integer> getPricesToSell() {
         return pricesToSell;
@@ -189,8 +189,14 @@ public class Trade {
         this.goodsToBuy = goodsToBuy;
     }
 
+    public PlayerShip getShip() {
+        // TODO Auto-generated method stub
+        return playerShip;
+    }
 
-    
-    
-    
+    public GameCharacter getPlayer() {
+        // TODO Auto-generated method stub
+        return player;
+    }
+
 }

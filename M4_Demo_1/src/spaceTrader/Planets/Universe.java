@@ -111,6 +111,11 @@ public class Universe {
         initialize();
     }
 
+    public Universe(List<SolarSystem> systems) {
+        universe = systems;
+        numOfSystems = SYSTEMSNAMES.length;
+    }
+
     @Override
     public String toString() {
         String out = "";
@@ -140,7 +145,7 @@ public class Universe {
             resourcesLevel = getRandomNum(ResourcesLevel.NUM_OF_RESOURCES_LEVEL);
             techLevel = getRandomNum(TechLevels.NUM_OF_TECHLEVELS);
             pirate = getRandomNum(Pirates.KINDS_OF_PIRATES);
-            police = getRandomNum(Polices.TYPES_OF_POLICE);
+            police = getRandomNum(Polices.TYPES_OF_POLICE - 1);
 
             cap = new Capital(politicalSystem, resourcesLevel, techLevel,
                     pirate, police, systemName);
