@@ -48,7 +48,7 @@ import javafx.geometry.Insets;
 import javafx.geometry.Pos;
 import javafx.scene.Scene;
 import javafx.scene.control.ChoiceBox;
-//import javafx.scene.control.Dialogs;
+import javafx.scene.control.Dialogs;
 import javafx.scene.control.ListView;
 import javafx.scene.layout.VBox;
 import javafx.scene.layout.VBoxBuilder;
