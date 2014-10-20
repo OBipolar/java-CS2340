@@ -15,6 +15,7 @@ import spaceTrader.Goods.Food;
 import spaceTrader.Goods.Furs;
 import spaceTrader.Goods.Games;
 import spaceTrader.Goods.Good;
+import spaceTrader.Goods.GoodFactory;
 import spaceTrader.Goods.Machines;
 import spaceTrader.Goods.Medicine;
 import spaceTrader.Goods.Narcotics;
@@ -32,6 +33,7 @@ import spaceTrader.Ships.Gnat;
 import spaceTrader.Ships.Mosquito;
 import spaceTrader.Ships.PlayerShip;
 import spaceTrader.Ships.Ship;
+import spaceTrader.Ships.ShipFactory;
 
 /**
  * API for communicating with Sqlite databse
@@ -184,63 +186,16 @@ public class SqliteAPI {
         query = "SELECT name FROM cargo";
         execQuery(query);
         List<Good> goods = new ArrayList<>();
+        GoodFactory gF = new GoodFactory();
         while (resultSet.next()) {
-            switch (resultSet.getString(1)) {
-            case "Water":
-                goods.add(new Water());
-                break;
-            case "Firearms":
-                goods.add(new Firearms());
-                break;
-            case "Food":
-                goods.add(new Food());
-                break;
-            case "Furs":
-                goods.add(new Furs());
-                break;
-            case "Games":
-                goods.add(new Games());
-                break;
-            case "Machines":
-                goods.add(new Machines());
-                break;
-            case "Narcotics":
-                goods.add(new Narcotics());
-                break;
-            case "Robots":
-                goods.add(new Robots());
-                break;
-            case "Medicine":
-                goods.add(new Medicine());
-                break;
-            case "Ore":
-                goods.add(new Ore());
-                break;
-            }
+        	goods.add(gF.getGood(resultSet.getString(1)));
+         
         }
 
         query = "SELECT name FROM ship";
         execQuery(query);
-        Ship base = new Flea();
-        if (!resultSet.next())
-            System.out.println("result set empty");
-        switch (resultSet.getString("name")) {
-        case "Flea":
-            base = new Flea();
-            break;
-        case "Gnat":
-            base = new Gnat();
-            break;
-        case "Firefly":
-            base = new Firefly();
-            break;
-        case "Mosquito":
-            base = new Mosquito();
-            break;
-        case "BumbleBee":
-            base = new BumbleBee();
-            break;
-        }
+        ShipFactory sF = new ShipFactory();
+        Ship base = sF.getShip(resultSet.getString("name"));
 
         this.ship = new PlayerShip(base, goods);
 
