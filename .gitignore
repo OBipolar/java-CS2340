@@ -19,6 +19,8 @@
 /M4_Demo_1/dist/
 build/
 bin/*
+nbproject/
+*.db
 .metadata/
 /M7/M7/nbproject/private/
 /M7/M7/dist/
