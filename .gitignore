@@ -1,0 +1,24 @@
+<<<<<<< HEAD
+/.idea
+/.idea/*
+=======
+/M3/nbproject/private/
+/SpaceTrader/M4_Demo/nbproject/private/
+/M4_Demo/nbproject/private/
+/M4_Demo/build/
+/M4_Demo/dist/
+>>>>>>> 2721961c2a52623362b3cf354696b2c5ccf7bf97
+/M5/nbproject/private/
+/M5/build/
+/M5/dist/
+/SpaceTrader/nbproject/private/
+/SpaceTrader/build/
+/SpaceTrader/dist/
+/M4_Demo_1/nbproject/private/
+/M4_Demo_1/build/
+/M4_Demo_1/dist/
+build/
+bin/*
+.metadata/
+nbproject/
+dist/
