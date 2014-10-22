@@ -43,14 +43,14 @@ import spaceTrader.Ships.ShipFactory;
  */
 public class SqliteAPI {
 
-    private Connection connection;
-    private Statement statement;
-    private ResultSet resultSet;
-    private String query;
-    private String update;
-    private GameCharacter player;
-    private PlayerShip ship;
-    private Universe universe;
+    private static Connection connection;
+    private static Statement statement;
+    private static ResultSet resultSet;
+    private static String query;
+    private static String update;
+    private static GameCharacter player;
+    private static PlayerShip ship;
+    private static Universe universe;
 
     /**
      * Delete tables based on given string
