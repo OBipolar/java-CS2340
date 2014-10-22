@@ -17,7 +17,7 @@ import spaceTrader.Planets.TechLevels;
  * @author mli, Jinyu Shi
  *
  */
-public class ShipYard extends MarketPlace {
+public class ShipYard {
 	
 	private SolarSystem system;
 	private Planet planet;
