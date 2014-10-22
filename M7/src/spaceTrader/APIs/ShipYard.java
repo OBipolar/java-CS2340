@@ -8,14 +8,16 @@ import spaceTrader.Planets.GameCharacter;
 import spaceTrader.Planets.Planet;
 import spaceTrader.Planets.SolarSystem;
 import spaceTrader.Ships.PlayerShip;
+import spaceTrader.Ships.ShipFactory;
+import spaceTrader.Planets.TechLevels;
 
 /**
  * API for player to buy ship at a planet
  * 
- * @author mli
+ * @author mli, Jinyu Shi
  *
  */
-public class ShipYard {
+public class ShipYard extends MarketPlace {
 	
 	private SolarSystem system;
 	private Planet planet;
@@ -59,29 +61,42 @@ public class ShipYard {
 	 * @return
 	 */
 	public boolean isYardExist() {
-		//insert logic here
+		return planet.getTechLevel().ordinal() >= 4;
 	}
 	
 	
 	
 	
 	/**
-	 * Players buys a ship with the given name
+	 * Players buy a ship with the given name
 	 * 
 	 * 
 	 * @param name
 	 */
 	public void playerBuy(String name) {
-		//insert logic here
-		
-		
-		try {
-			update();
-		} catch (SQLException e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
+		ShipFactory sF = new ShipFactory();
+		Ship newShipType = sF.getShip(name);
+		int techLevel = planet.getTechLevel().ordinal();
+		if (newShipType.minTechLevel >= techLevel) {
+			int incomings = ship.getBase().getPrice();
+			for (Good good : ship.getCargo()) {
+				if (good.getMTLU() <= techLevel) {
+					income += good.getBasePrice() * (1 + getRandomNum(good.getVar() / 10))
+					+ good.getIPL() * (techLevel - good.getMTLP());
+				}
+			}
+			int balance = player.getMoney() + incomings - newShip.getBase().getPrice();
+			if (balance >= 0) {
+				PlayerShip newShip = new PlayerShip(newShipType, new ArrayList<Good>);
+				player.setMoney(balance);
+			}
+			try {
+				update();
+			} catch (SQLException e) {
+				// TODO Auto-generated catch block
+				e.printStackTrace();
+			}
 		}
-		
 	}
 	
 	
@@ -91,7 +106,20 @@ public class ShipYard {
 	 * @return
 	 */
 	public List<String> getShips() {
-		//insert logic here
+		List<String> shipList = new ArrayList<String>();
+		int techLevel = planet.getTechLevel().ordinal();
+		if (techLevel >= 4) {
+			shipList.add("Flea");
+			shipList.add("Gnat");
+			shipList.add("Firefly");
+			shipList.add("Mosquito");
+			shipList.add("BumbleBee");
+		} else if (techLevel >= 5) {
+			shipList.add("Gnat");
+			shipList.add("Firefly");
+			shipList.add("Mosquito");
+			shipList.add("BumbleBee");
+		}
 	}
 	
 	
@@ -101,7 +129,21 @@ public class ShipYard {
 	 * @return
 	 */
 	public Map<String, Integer> getShipPrices() {
-		//insert logic here
+		Map<String, Integer> priceMap = new HashMap<String, Integer>();
+		int techLevel = planet.getTechLevel().ordinal();
+		if (techLevel >= 4) {
+			priceMap.put("Flea", 2000);
+			priceMap.put("Gnat", 10000);
+			priceMap.put("Firefly", 25000);
+			priceMap.put("Mosquito", 30000);
+			priceMap.put("BumbleBee", 60000);
+		} else if (techLevel >= 5) {
+			priceMap.put("Gnat", 10000);
+			priceMap.put("Firefly", 25000);
+			priceMap.put("Mosquito", 30000);
+			priceMap.put("BumbleBee", 60000);
+		}
+		return priceMap;
 	}
 	
 	/**

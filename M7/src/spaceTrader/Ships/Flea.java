@@ -15,7 +15,7 @@ public class Flea extends Ship {
         setShieldSlots(0);
         setGadgetSlots(0);
         setCrew(1);
-        setFuel(40);
+        setFuel(20);
         setMinTechLevel(4);
         setFuelCost(1);
         setPrice(2000);
