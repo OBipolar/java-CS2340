@@ -4,6 +4,7 @@ import java.sql.SQLException;
 
 import spaceTrader.Planets.GameCharacter;
 import spaceTrader.Planets.SolarSystem;
+import spaceTrader.Ships.PlayerShip;
 
 /**
  * API for player to travel to another planet
@@ -13,8 +14,12 @@ import spaceTrader.Planets.SolarSystem;
  */
 public class Travel {
 
+
+	
+	
     private SqliteAPI db;
     private GameCharacter player;
+    private PlayerShip ship;
 
     public Travel() {
         load();
@@ -30,6 +35,7 @@ public class Travel {
         SolarSystem system;
         try {
             system = db.getSolarSystem(planetName);
+            updateShip();
             player.travel(system.getX(), system.getY());
             update();
 
@@ -51,7 +57,7 @@ public class Travel {
         try {
             db = new SqliteAPI();
             player = db.getPlayer();
-
+            ship = db.getShip();
         } catch (ClassNotFoundException e) {
             // TODO Auto-generated catch block
             e.printStackTrace();
@@ -68,13 +74,31 @@ public class Travel {
     private void update() {
         try {
             db.openConnection();
-            db.updatePlayer(player);
+            db.update(player, ship);
             db.closeConnection();
             player = db.getPlayer();
+            ship = db.getShip();
+            System.out.println("after update, fuel: " + ship.getBase().getFuel());
         } catch (SQLException | ClassNotFoundException e) {
             // TODO Auto-generated catch block
             e.printStackTrace();
         }
+    }
+    
+    /**
+     * Update fuel and hull of the player ship given the destination 
+     * coordinates
+     * 
+     */
+    private void updateShip() {
+    	int fuel = ship.getBase().getFuel();
+    	int fuelLoss = ship.getBase().getFuelCost();
+    	ship.getBase().setFuel(fuel - fuelLoss);
+    	System.out.println("new fuel is " + (fuel - fuelLoss));
+    	int hullStrength = ship.getBase().getHullStrength();
+    	hullStrength--;
+    	ship.getBase().setHullStrength(hullStrength);
+    	
     }
 
 }

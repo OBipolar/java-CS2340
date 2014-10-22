@@ -117,6 +117,7 @@ public class SqliteAPI {
      */
     public void updateShip(PlayerShip ps) throws SQLException {
         ship = ps;
+        System.out.println("ship variable in db now has fuel: " + ship.getBase().getFuel());
         update = "DROP TABLE ship";
         execUpdate(update);
         createShipTable();
@@ -188,15 +189,17 @@ public class SqliteAPI {
         List<Good> goods = new ArrayList<>();
         GoodFactory gF = new GoodFactory();
         while (resultSet.next()) {
-        	goods.add(gF.getGood(resultSet.getString(1)));
-         
+        	goods.add(gF.getGood(resultSet.getString(1)));        
         }
 
-        query = "SELECT name FROM ship";
+        query = "SELECT * FROM ship";
         execQuery(query);
         ShipFactory sF = new ShipFactory();
         Ship base = sF.getShip(resultSet.getString("name"));
-
+        int fuel = resultSet.getInt("fuel");
+        int hullStrength = resultSet.getInt("hullStrength");
+        base.setHullStrength(hullStrength);
+        base.setFuel(fuel);
         this.ship = new PlayerShip(base, goods);
 
     }
@@ -475,7 +478,7 @@ public class SqliteAPI {
      */
     private void createShipTable() throws SQLException {
         update = "CREATE TABLE ship (id INTEGER PRIMARY KEY, "
-                + "name TEXT not NULL)";
+                + "name TEXT not NULL, fuel INTEGER, hullStrength INTEGER)";
         execUpdate(update);
 
     }
@@ -512,8 +515,9 @@ public class SqliteAPI {
      * @throws SQLException
      */
     private void addShip() throws SQLException {
-        update = String.format("INSERT INTO ship (name) VALUES('%s')", ship
-                .getBase().getName());
+        update = String.format("INSERT INTO ship (name, fuel, hullStrength)"
+        		+ " VALUES('%s', '%d', '%d')", ship.getBase().getName(),
+        		ship.getBase().getFuel(), ship.getBase().getHullStrength());
         execUpdate(update);
     }
 
