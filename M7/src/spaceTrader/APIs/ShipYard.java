@@ -1,6 +1,8 @@
 package spaceTrader.APIs;
 
 import java.sql.SQLException;
+import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
@@ -8,6 +10,7 @@ import spaceTrader.Planets.GameCharacter;
 import spaceTrader.Planets.Planet;
 import spaceTrader.Planets.SolarSystem;
 import spaceTrader.Ships.PlayerShip;
+import spaceTrader.Ships.Ship;
 import spaceTrader.Ships.ShipFactory;
 import spaceTrader.Planets.TechLevels;
 
@@ -17,7 +20,7 @@ import spaceTrader.Planets.TechLevels;
  * @author mli, Jinyu Shi
  *
  */
-public class ShipYard extends MarketPlace {
+public class ShipYard {
 	
 	private SolarSystem system;
 	private Planet planet;
@@ -25,7 +28,8 @@ public class ShipYard extends MarketPlace {
 	private GameCharacter player;
 	private PlayerShip ship;
 	// ships that player can buy on the planet
-	private List<String> ships;
+	private List<Ship> ships;
+	private List<String> shipNames;
 	private Map<String, Integer> shipPrices;
 	
 	
@@ -42,6 +46,18 @@ public class ShipYard extends MarketPlace {
 			planet = system.getPlanet();
 			player = db.getPlayer();
 			ship = db.getShip();
+			ShipFactory sF = new ShipFactory();
+			ships = sF.getShip(planet.getTechLevel().ordinal());
+			shipNames = new ArrayList<>();
+			for (Ship s : ships) {
+				if (player.getMoney() >= s.getPrice()) {
+					shipNames.add(s.getName());
+				}
+			}
+            shipPrices = new HashMap<String, Integer>();
+			for (Ship s : ships) {
+				shipPrices.put(s.getName(), s.getPrice());
+			}
 		} catch (ClassNotFoundException e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
@@ -74,29 +90,19 @@ public class ShipYard extends MarketPlace {
 	 * @param name
 	 */
 	public void playerBuy(String name) {
+	
 		ShipFactory sF = new ShipFactory();
-		Ship newShipType = sF.getShip(name);
-		int techLevel = planet.getTechLevel().ordinal();
-		if (newShipType.minTechLevel >= techLevel) {
-			int incomings = ship.getBase().getPrice();
-			for (Good good : ship.getCargo()) {
-				if (good.getMTLU() <= techLevel) {
-					income += good.getBasePrice() * (1 + getRandomNum(good.getVar() / 10))
-					+ good.getIPL() * (techLevel - good.getMTLP());
-				}
-			}
-			int balance = player.getMoney() + incomings - newShip.getBase().getPrice();
-			if (balance >= 0) {
-				PlayerShip newShip = new PlayerShip(newShipType, new ArrayList<Good>);
-				player.setMoney(balance);
-			}
-			try {
-				update();
-			} catch (SQLException e) {
-				// TODO Auto-generated catch block
-				e.printStackTrace();
-			}
+		Ship newShip = sF.getShip(name);		
+		PlayerShip temp = new PlayerShip(ship);		
+		ship = new PlayerShip(newShip, temp.getCargo());		
+		player.setMoney(player.getMoney() - newShip.getPrice());
+		try {
+			update();
+		} catch (SQLException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
 		}
+
 	}
 	
 	
@@ -105,21 +111,9 @@ public class ShipYard extends MarketPlace {
 	 * 
 	 * @return
 	 */
-	public List<String> getShips() {
-		List<String> shipList = new ArrayList<String>();
-		int techLevel = planet.getTechLevel().ordinal();
-		if (techLevel >= 4) {
-			shipList.add("Flea");
-			shipList.add("Gnat");
-			shipList.add("Firefly");
-			shipList.add("Mosquito");
-			shipList.add("BumbleBee");
-		} else if (techLevel >= 5) {
-			shipList.add("Gnat");
-			shipList.add("Firefly");
-			shipList.add("Mosquito");
-			shipList.add("BumbleBee");
-		}
+	public List<String> getShipNames() {
+
+		return shipNames;
 	}
 	
 	
@@ -129,21 +123,8 @@ public class ShipYard extends MarketPlace {
 	 * @return
 	 */
 	public Map<String, Integer> getShipPrices() {
-		Map<String, Integer> priceMap = new HashMap<String, Integer>();
-		int techLevel = planet.getTechLevel().ordinal();
-		if (techLevel >= 4) {
-			priceMap.put("Flea", 2000);
-			priceMap.put("Gnat", 10000);
-			priceMap.put("Firefly", 25000);
-			priceMap.put("Mosquito", 30000);
-			priceMap.put("BumbleBee", 60000);
-		} else if (techLevel >= 5) {
-			priceMap.put("Gnat", 10000);
-			priceMap.put("Firefly", 25000);
-			priceMap.put("Mosquito", 30000);
-			priceMap.put("BumbleBee", 60000);
-		}
-		return priceMap;
+
+		return shipPrices;
 	}
 	
 	/**

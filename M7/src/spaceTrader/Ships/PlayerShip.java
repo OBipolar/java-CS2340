@@ -16,6 +16,13 @@ public class PlayerShip {
     private int cargoSpace;
     private int numOfGoods;
 
+    public PlayerShip(PlayerShip ship) {
+    	this(ship.getBase(), ship.getCargo());
+    }
+    
+    
+    
+    
     public PlayerShip() {
 
         setBase(new Flea());
