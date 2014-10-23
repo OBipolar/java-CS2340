@@ -15,23 +15,23 @@ CS-2340 Team Project Repository (**Team A-Dobee**)
 ## M7
 * Test:
     * Class Diagram: **Pass**
-    * Previous Funcionality Works:
-    * Random events happen on player turn
-    * Effects of random events are processed
-    * Game has way to load and save (ui)
-    * Game can be saved
-    * Saved game can be loaded
-    * Javadocs and code style, Design Discussion
+    * Previous Funcionality Works: **Pass**
+    * Random events happen on player turn: **Pass**
+    * Effects of random events are processed: **Pass**
+    * Game has way to load and save (ui): **Pass**
+    * Game can be saved: **Pass**
+    * Saved game can be loaded: **Pass**
+    * Javadocs and code style, Design Discussion: **Pass**
 * TBD:
-	* Universe Location Reuse
-	* Fuel 
+	* <s>Universe Location Reuse</s>
+	* <s>Fuel</s>
 
 ## M8
 * Test:
 	* Sequence diagram:
 	* Previous functions work:
 	* Some way to go to the shipyard:
-	* Some way to purchase a new ship: 
+	* Some way to purchase a new ship:
 	* Shipyard only available on higher tech planets:
 	* Javadoc and code design:
 * TBD:
