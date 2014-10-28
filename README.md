@@ -35,6 +35,21 @@ CS-2340 Team Project Repository (**Team A-Dobee**)
 	* Shipyard only available on higher tech planets:
 	* Javadoc and code design:
 * TBD:
+    * Design Pattern: Singleton/Monostate
+    * More Random Events
+
+## M9
+* Test:
+    * Method Contracts(individual):
+    * Previous functions work:
+    * Shipyard available at tech planets:
+    * Shipyard offers options to upgrade ship:
+    * Money limits enforced on purchase:
+    * Slot limits enforced on purchase:
+    * Best gadgets available only on highest tech:
+    * Design Pattern coded:
+    * Javadoc and code design:
+* TBD:
 
 ----
 ## Test Log Sample
