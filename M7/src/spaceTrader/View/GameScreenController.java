@@ -63,6 +63,7 @@ import javafx.util.converter.IntegerStringConverter;
 import spaceTrader.APIs.MarketPlace;
 import spaceTrader.APIs.RandomEvent;
 import spaceTrader.APIs.SqliteAPI;
+import spaceTrader.APIs.Travel;
 import spaceTrader.Goods.Firearms;
 import spaceTrader.Goods.Food;
 import spaceTrader.Goods.Furs;
@@ -99,6 +100,7 @@ public class GameScreenController implements Initializable, ControlledScreen {
     private int travelDistance;
     private GraphicsContext gc;
     private GraphicsContext gc2;
+    private Travel travel;
     
     private SolarSystem solarSystem;
     private SolarSystem targetSystem;
@@ -329,9 +331,62 @@ public class GameScreenController implements Initializable, ControlledScreen {
     
     @FXML
     private void warpFired(ActionEvent event) {
-    	try {
+    	int targetX = targetSystem.getX();
+        int targetY = targetSystem.getY();
+        double travelSqr = pow(targetX - solarSystem.getX(), 2) + pow(targetY - solarSystem.getY(), 2);
+        int travelDist = (int)(sqrt(travelSqr));
+        
+//        realFuel = ship.getBase().getFuel() - travelDist;
+//        ship.getBase().setFuel(realFuel);
+//        realPull = ship.getBase().getHullStrength() - 1;
+//        ship.getBase().setHullStrength(realPull);
+//        try {
+//			db = new SqliteAPI();
+//			db.updateShip(ship);
+//		} catch (ClassNotFoundException e) {
+//			// TODO Auto-generated catch block
+//			e.printStackTrace();
+//		} catch (SQLException e) {
+//			// TODO Auto-generated catch block
+//			e.printStackTrace();
+//		}
+        
+        travel = new Travel();
+        travel.warpTo(targetSystem.getName(), travelDist, 1);
+        int range = 0;
+        try {
 			db = new SqliteAPI();
 			ship = db.getShip();
+			range = ship.getBase().getFuel();
+			System.out.println("updated ship fuel: " + range);
+			
+			 System.out.println("dist: " + travelDist);
+		        System.out.println("range: " + range);
+		        solarSystem = targetSystem;
+		        trade = new Trade(player, ship, solarSystem);
+		        toBuyList = trade.getGoodsToBuy();
+		        toBuyMap = trade.getPricesToBuy();
+		        toSellList = trade.getGoodsToSell();
+		        toSellMap = trade.getPricesToSell();
+		        mp = new MarketPlace();
+		        mess(toBuyList, toBuyMap, toSellList, toSellMap, mp);
+		        
+		        showDockInfo(ship, range, realPull);
+		        gc = canvas.getGraphicsContext2D();
+		        drawLongRange(targetX, targetY, range, gc);
+		        gc2 = canvas2.getGraphicsContext2D();
+		        drawShortRange(targetX, targetY, range, gc2);
+		        loadCurrentInfo();
+		        clearTargetListView();
+		        re = new RandomEvent();
+		        String s = re.update();
+		        player = db.getPlayer();
+		     
+		        System.out.println("random event: " + s);
+		    	ObservableList<String> randomInfo = FXCollections.observableArrayList(s, "");
+		        travelInfoListView.setItems(randomInfo);
+		        updatePlayerInfo();
+		        
 		} catch (ClassNotFoundException e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
@@ -339,45 +394,8 @@ public class GameScreenController implements Initializable, ControlledScreen {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
 		}
-        int targetX = targetSystem.getX();
-        int targetY = targetSystem.getY();
-        double travelSqr = pow(targetX - currX, 2) + pow(targetY - currY, 2);
-        int travelDist = (int)(sqrt(travelSqr));
-        System.out.println("dist: " + travelDist);
-        System.out.println("range: " + ship.getBase().getFuel());
-        solarSystem = targetSystem;
-        trade = new Trade(player, ship, solarSystem);
-        toBuyList = trade.getGoodsToBuy();
-        toBuyMap = trade.getPricesToBuy();
-        toSellList = trade.getGoodsToSell();
-        toSellMap = trade.getPricesToSell();
-        mp = new MarketPlace();
-        mess(toBuyList, toBuyMap, toSellList, toSellMap, mp);
-        realFuel = ship.getBase().getFuel() - travelDist;
-        ship.getBase().setFuel(realFuel);
-        realPull = ship.getBase().getHullStrength() - 1;
-        ship.getBase().setHullStrength(realPull);
-        try {
-			db.updateShip(ship);
-		} catch (SQLException e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
-		}
-        showDockInfo(ship, realFuel, realPull);
-        gc = canvas.getGraphicsContext2D();
-        drawLongRange(targetX, targetY, realFuel, gc);
-        gc2 = canvas2.getGraphicsContext2D();
-        drawShortRange(targetX, targetY, realFuel, gc2);
-        loadCurrentInfo();
-        clearTargetListView();
         
-        String s = re.update();
-        player = db.getPlayer();
-     
-        System.out.println("random event: " + s);
-    	ObservableList<String> randomInfo = FXCollections.observableArrayList(s, "");
-        travelInfoListView.setItems(randomInfo);
-        updatePlayerInfo();
+       
         
         
     }
@@ -390,6 +408,11 @@ public class GameScreenController implements Initializable, ControlledScreen {
 	        String s2 = "Cargo Space Remaining: " + (ship.getCargoSpace() - db.getShip().getCargo().size());
 	        ObservableList<String> playerInfo = FXCollections.observableArrayList(
 	         s1, s2);
+	        
+	        for (Good g : db.getShip().getCargo()) {
+	        	playerInfo.add(g.getName());
+	        }
+	        
 	        playerListView.setItems(playerInfo);
 		} catch (ClassNotFoundException | SQLException e) {
 			// TODO Auto-generated catch block
@@ -665,9 +688,9 @@ public class GameScreenController implements Initializable, ControlledScreen {
 	        realFuel = maxFuel = ship.getBase().getFuel();
 	        realPull = maxPull = ship.getBase().getHullStrength();
 	        solarList = uni.getUniverse();
-	        for (SolarSystem ss:solarList) {
-	        	System.out.println(ss.getX() + " " + ss.getY());
-	        }
+//	        for (SolarSystem ss:solarList) {
+//	        	System.out.println(ss.getX() + " " + ss.getY());
+//	        }
 		} catch (ClassNotFoundException e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
@@ -675,21 +698,27 @@ public class GameScreenController implements Initializable, ControlledScreen {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
 		}
-    	
-       
+        
         //get current solarsystem
-        Random rand = new Random();
-        re = new RandomEvent();
-        int index = rand.nextInt(solarList.size());
-        solarSystem = solarList.get(index);
-        Capital curr = solarSystem.getPlanet();
+//        Random rand = new Random();
+//        re = new RandomEvent();
+//        int index = rand.nextInt(solarList.size());
+    	
+        //solarSystem = solarList.get(index);
+        //Capital curr = solarSystem.getPlanet();
         GraphicsContext gc = canvas.getGraphicsContext2D();
         // draw map
         for (SolarSystem ss : solarList) {
             int x = ss.getX();
             int y = ss.getY();
             gc.fillOval(x - 1, y - 1, 2, 2);
+            if (x == player.getXpos() && y == player.getYpos()) {
+            	solarSystem = ss;
+            	
+            }
         }
+        
+        Capital curr = solarSystem.getPlanet();
         
         int range = ship.getBase().getFuel();
         currX = solarSystem.getX();
@@ -739,12 +768,12 @@ public class GameScreenController implements Initializable, ControlledScreen {
     private int countNumOfGood(List<Good> cargo, String name) {
         int count = 0;
         for (Good g : cargo) {
-            System.out.println(g.getName());
+            //System.out.println(g.getName());
             if (name.equals(g.getName())) {
                 count++;
             }
         }
-        System.out.println("countnum: " + count);
+        //System.out.println("countnum: " + count);
         return count;
     }  
     
@@ -842,7 +871,7 @@ public class GameScreenController implements Initializable, ControlledScreen {
                 waterSellPrice = toSellMap.get("Water");
                 waterPrice.setText("" + waterSellPrice);
                 maxSell = countNumOfGood(mp.getCargo(), "Water");
-                System.out.println("maxsell: " + maxSell);
+                //System.out.println("maxsell: " + maxSell);
                 ObservableList<String> choices =FXCollections.observableArrayList ();
                 for (int i = maxSell; i >= 0; i--) {
                     choices.add("" + i);
@@ -852,7 +881,7 @@ public class GameScreenController implements Initializable, ControlledScreen {
                 
             } else if (s.equals("Furs")) {
                 fursSellPrice = toSellMap.get("Furs");
-                fursPrice.setText("" + waterSellPrice);
+                fursPrice.setText("" + fursSellPrice);
                 maxSell = countNumOfGood(mp.getCargo(), "Furs");
                 ObservableList<String> choices =FXCollections.observableArrayList ();
                 for (int i = maxSell; i >= 0; i--) {

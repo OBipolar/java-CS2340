@@ -9,6 +9,7 @@ import java.sql.SQLException;
 import java.sql.Statement;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Random;
 
 import spaceTrader.Goods.Firearms;
 import spaceTrader.Goods.Food;
@@ -88,7 +89,9 @@ public class SqliteAPI {
         this.player = player;
         this.universe = new Universe();
         this.ship = new PlayerShip();
-        SolarSystem start = universe.getUniverse().get(0);
+        Random rand = new Random();
+        int size = universe.getUniverse().size();
+        SolarSystem start = universe.getUniverse().get(rand.nextInt(size - 1));
         this.player.setXpos(start.getX());
         this.player.setYpos(start.getY());
         openConnection();
@@ -197,10 +200,16 @@ public class SqliteAPI {
         ShipFactory sF = new ShipFactory();
         Ship base = sF.getShip(resultSet.getString("name"));
         int fuel = resultSet.getInt("fuel");
-        int hullStrength = resultSet.getInt("hullStrength");
+        int hullStrength = resultSet.getInt("hull");
         base.setHullStrength(hullStrength);
         base.setFuel(fuel);
         this.ship = new PlayerShip(base, goods);
+        query = "SELECT fuel FROM ship";
+        execQuery(query);
+        ship.getBase().setFuel(resultSet.getInt("fuel"));
+        query = "SELECT hull FROM ship";
+        execQuery(query);
+        ship.getBase().setHullStrength(resultSet.getInt("hull"));
 
     }
 
@@ -478,7 +487,7 @@ public class SqliteAPI {
      */
     private void createShipTable() throws SQLException {
         update = "CREATE TABLE ship (id INTEGER PRIMARY KEY, "
-                + "name TEXT not NULL, fuel INTEGER, hullStrength INTEGER)";
+                + "name TEXT not NULL, fuel INTEGER, hull INTEGER)";
         execUpdate(update);
 
     }
@@ -515,7 +524,7 @@ public class SqliteAPI {
      * @throws SQLException
      */
     private void addShip() throws SQLException {
-        update = String.format("INSERT INTO ship (name, fuel, hullStrength)"
+        update = String.format("INSERT INTO ship (name, fuel, hull)"
         		+ " VALUES('%s', '%d', '%d')", ship.getBase().getName(),
         		ship.getBase().getFuel(), ship.getBase().getHullStrength());
         execUpdate(update);
