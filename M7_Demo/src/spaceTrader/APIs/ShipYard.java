@@ -95,7 +95,7 @@ public class ShipYard {
 		Ship newShip = sF.getShip(name);		
 		PlayerShip temp = new PlayerShip(ship);		
 		ship = new PlayerShip(newShip, temp.getCargo());		
-		player.setMoney(player.getMoney() - newShip.getPrice() + temp.getBase().getPrice());
+		player.setMoney(player.getMoney() - newShip.getPrice());
 		try {
 			update();
 		} catch (SQLException e) {
@@ -133,12 +133,7 @@ public class ShipYard {
 	 * 
 	 */
 	private void update() throws SQLException {
-		try {
-            db.update(player, ship);
-        } catch (ClassNotFoundException e) {
-            // TODO Auto-generated catch block
-            e.printStackTrace();
-        }
+		db.update(player, ship);
 	}
 	
 	

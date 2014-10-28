@@ -20,7 +20,7 @@ public class Capital extends Planet {
      */
     public Capital(int politicalSystem, int resourcesLevel, int techLevel,
             int pirate, int police, String name) {
-        super(name, politicalSystem, resourcesLevel, techLevel, pirate, police);
+        super(name, resourcesLevel, techLevel, pirate, police, politicalSystem);
 
     }
 

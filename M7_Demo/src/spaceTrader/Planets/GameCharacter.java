@@ -19,7 +19,7 @@ public class GameCharacter {
     private int xpos;
     private int ypos;
 
-    private static final int START_MONEY = 10000;
+    private static final int START_MONEY = 1000;
 
     /**
      * Constructor that sets all properties for a character
