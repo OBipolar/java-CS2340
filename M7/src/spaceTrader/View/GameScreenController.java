@@ -693,6 +693,7 @@ public class GameScreenController implements Initializable, ControlledScreen {
 			player = db.getPlayer();
 	        ship = db.getShip();
 	        uni = db.getUniverse();
+	        //uni = new Universe();
 	        realFuel = maxFuel = ship.getBase().getFuel();
 	        hull = maxPull = ship.getBase().getHullStrength();
 	        solarList = uni.getUniverse();
