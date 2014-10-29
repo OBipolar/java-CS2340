@@ -146,13 +146,23 @@ public class Universe {
             techLevel = getRandomNum(TechLevels.NUM_OF_TECHLEVELS);
             pirate = getRandomNum(Pirates.KINDS_OF_PIRATES);
             police = getRandomNum(Polices.TYPES_OF_POLICE);
-
             cap = new Capital(politicalSystem, resourcesLevel, techLevel,
                     pirate, police, systemName);
             system = new SolarSystem(xPos[i], yPos[i], systemName, cap);
             universe.add(system);
-
         }
+        systemName = SYSTEMSNAMES[0];
+        politicalSystem = getRandomNum(PoliticalSystem.NUM_OF_POLITICAL_SYSTEM);
+        resourcesLevel = getRandomNum(ResourcesLevel.NUM_OF_RESOURCES_LEVEL);
+        techLevel = 6;
+        pirate = getRandomNum(Pirates.KINDS_OF_PIRATES);
+        police = getRandomNum(Polices.TYPES_OF_POLICE);
+        cap = new Capital(politicalSystem, resourcesLevel, techLevel,
+                pirate, police, systemName);
+        system = new SolarSystem(xPos[0], yPos[0], systemName, cap);
+        
+        universe.set(0, system);
+        
 
     }
 
