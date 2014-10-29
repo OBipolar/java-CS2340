@@ -77,7 +77,7 @@ public class ShipYard {
 	 * @return
 	 */
 	public boolean isYardExist() {
-		return planet.getTechLevel().ordinal() >= 1;
+		return planet.getTechLevel().ordinal() >= 4;
 	}
 	
 	/**
