@@ -77,11 +77,8 @@ public class ShipYard {
 	 * @return
 	 */
 	public boolean isYardExist() {
-		return planet.getTechLevel().ordinal() >= 4;
+		return planet.getTechLevel().ordinal() >= 1;
 	}
-	
-	
-	
 	
 	/**
 	 * Players buy a ship with the given name

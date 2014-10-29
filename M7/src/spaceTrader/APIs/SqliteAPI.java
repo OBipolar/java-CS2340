@@ -203,16 +203,16 @@ public class SqliteAPI {
         ShipFactory sF = new ShipFactory();
         Ship base = sF.getShip(resultSet.getString("name"));
         int fuel = resultSet.getInt("fuel");
-        int hullStrength = resultSet.getInt("hull");
+        int hullStrength = resultSet.getInt("hullStrength");
         base.setHullStrength(hullStrength);
         base.setFuel(fuel);
         this.ship = new PlayerShip(base, goods);
         query = "SELECT fuel FROM ship";
         execQuery(query);
         ship.getBase().setFuel(resultSet.getInt("fuel"));
-        query = "SELECT hull FROM ship";
+        query = "SELECT hullStrength FROM ship";
         execQuery(query);
-        ship.getBase().setHullStrength(resultSet.getInt("hull"));
+        ship.getBase().setHullStrength(resultSet.getInt("hullStrength"));
 
     }
 
@@ -242,8 +242,6 @@ public class SqliteAPI {
             systems.add(system);
         }
         this.universe = new Universe(systems);
-
-
     }
 
     /**
@@ -511,15 +509,10 @@ public class SqliteAPI {
      * @throws SQLException
      * @throws ClassNotFoundException 
      */
-<<<<<<< HEAD
-    private void createShipTable() throws SQLException {
-        update = "CREATE TABLE ship (id INTEGER PRIMARY KEY, "
-                + "name TEXT not NULL, fuel INTEGER, hull INTEGER)";
-=======
     private void createShipTable() throws SQLException, ClassNotFoundException {
         update = "CREATE TABLE ship (id INTEGER PRIMARY KEY, "
                 + "name TEXT not NULL, fuel INTEGER, hullStrength INTEGER)";
->>>>>>> ed5432a5517939cee75e80d7f744dcd5af9aa337
+//>>>>>>> ed5432a5517939cee75e80d7f744dcd5af9aa337
         execUpdate(update);
 
     }
@@ -557,13 +550,8 @@ public class SqliteAPI {
      * @throws SQLException
      * @throws ClassNotFoundException 
      */
-<<<<<<< HEAD
-    private void addShip() throws SQLException {
-        update = String.format("INSERT INTO ship (name, fuel, hull)"
-=======
     private void addShip() throws SQLException, ClassNotFoundException {
         update = String.format("INSERT INTO ship (name, fuel, hullStrength)"
->>>>>>> ed5432a5517939cee75e80d7f744dcd5af9aa337
         		+ " VALUES('%s', '%d', '%d')", ship.getBase().getName(),
         		ship.getBase().getFuel(), ship.getBase().getHullStrength());
         execUpdate(update);

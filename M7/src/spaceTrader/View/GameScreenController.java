@@ -62,6 +62,7 @@ import spaceTrader.Planets.GameCharacter;
 import javafx.util.converter.IntegerStringConverter;
 import spaceTrader.APIs.MarketPlace;
 import spaceTrader.APIs.RandomEvent;
+import spaceTrader.APIs.ShipYard;
 import spaceTrader.APIs.SqliteAPI;
 import spaceTrader.APIs.Travel;
 import spaceTrader.Goods.Firearms;
@@ -87,16 +88,18 @@ public class GameScreenController implements Initializable, ControlledScreen {
     private List<SolarSystem> solarList;
     private List<String> toBuyList;
     private List<String> toSellList;
+    private List<String> shipNames;
     private Map<String, Integer> toSellMap;
     private Map<String, Integer> toBuyMap;
     private MarketPlace mp;
     private SqliteAPI db;
+    private ShipYard sy;
     private int currX;
     private int currY;
     private int maxFuel;
     private int maxPull;
     private int realFuel;
-    private int realPull;
+    private int hull;
     private int travelDistance;
     private GraphicsContext gc;
     private GraphicsContext gc2;
@@ -157,15 +160,21 @@ public class GameScreenController implements Initializable, ControlledScreen {
     @FXML
     private Canvas canvas2;
     @FXML
+    private TextField selectShip;
+    @FXML
     private AnchorPane cargoChart;
     @FXML
     private Button findPlanet;
+    @FXML
+    private Button buyShip;
     @FXML
     private ListView systemListView;
     @FXML
     private ListView playerListView;
     @FXML
     private ListView travelInfoListView;
+    @FXML
+    private ListView shipyardListView;
     
     @FXML
     private ChoiceBox waterChoose;
@@ -336,21 +345,6 @@ public class GameScreenController implements Initializable, ControlledScreen {
         double travelSqr = pow(targetX - solarSystem.getX(), 2) + pow(targetY - solarSystem.getY(), 2);
         int travelDist = (int)(sqrt(travelSqr));
         
-//        realFuel = ship.getBase().getFuel() - travelDist;
-//        ship.getBase().setFuel(realFuel);
-//        realPull = ship.getBase().getHullStrength() - 1;
-//        ship.getBase().setHullStrength(realPull);
-//        try {
-//			db = new SqliteAPI();
-//			db.updateShip(ship);
-//		} catch (ClassNotFoundException e) {
-//			// TODO Auto-generated catch block
-//			e.printStackTrace();
-//		} catch (SQLException e) {
-//			// TODO Auto-generated catch block
-//			e.printStackTrace();
-//		}
-        
         travel = new Travel();
         travel.warpTo(targetSystem.getName(), travelDist, 1);
         int range = 0;
@@ -358,34 +352,35 @@ public class GameScreenController implements Initializable, ControlledScreen {
 			db = new SqliteAPI();
 			ship = db.getShip();
 			range = ship.getBase().getFuel();
+			hull = ship.getBase().getHullStrength();
 			System.out.println("updated ship fuel: " + range);
 			
-			 System.out.println("dist: " + travelDist);
-		        System.out.println("range: " + range);
-		        solarSystem = targetSystem;
-		        trade = new Trade(player, ship, solarSystem);
-		        toBuyList = trade.getGoodsToBuy();
-		        toBuyMap = trade.getPricesToBuy();
-		        toSellList = trade.getGoodsToSell();
-		        toSellMap = trade.getPricesToSell();
-		        mp = new MarketPlace();
-		        mess(toBuyList, toBuyMap, toSellList, toSellMap, mp);
+			System.out.println("dist: " + travelDist);
+		    System.out.println("range: " + range);
+		    solarSystem = targetSystem;
+		    trade = new Trade(player, ship, solarSystem);
+		    toBuyList = trade.getGoodsToBuy();
+		    toBuyMap = trade.getPricesToBuy();
+		    toSellList = trade.getGoodsToSell();
+		    toSellMap = trade.getPricesToSell();
+		    mp = new MarketPlace();
+		    mess(toBuyList, toBuyMap, toSellList, toSellMap, mp);
 		        
-		        showDockInfo(ship, range, realPull);
-		        gc = canvas.getGraphicsContext2D();
-		        drawLongRange(targetX, targetY, range, gc);
-		        gc2 = canvas2.getGraphicsContext2D();
-		        drawShortRange(targetX, targetY, range, gc2);
-		        loadCurrentInfo();
-		        clearTargetListView();
-		        re = new RandomEvent();
-		        String s = re.update();
-		        player = db.getPlayer();
-		     
-		        System.out.println("random event: " + s);
-		    	ObservableList<String> randomInfo = FXCollections.observableArrayList(s, "");
-		        travelInfoListView.setItems(randomInfo);
-		        updatePlayerInfo();
+		    showDockInfo(ship, range, hull);
+		    gc = canvas.getGraphicsContext2D();
+		    drawLongRange(targetX, targetY, range, gc);
+		    gc2 = canvas2.getGraphicsContext2D();
+		    drawShortRange(targetX, targetY, range, gc2);
+		    loadCurrentInfo();
+		    clearTargetListView();
+		    re = new RandomEvent();
+		    String s = re.update();
+		    player = db.getPlayer();
+	     
+		    System.out.println("random event: " + s);
+		    ObservableList<String> randomInfo = FXCollections.observableArrayList(s, "");
+		    travelInfoListView.setItems(randomInfo);
+		    updatePlayerInfo();
 		        
 		} catch (ClassNotFoundException e) {
 			// TODO Auto-generated catch block
@@ -393,10 +388,7 @@ public class GameScreenController implements Initializable, ControlledScreen {
 		} catch (SQLException e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
-		}
-        
-       
-        
+		}   
         
     }
     
@@ -429,6 +421,11 @@ public class GameScreenController implements Initializable, ControlledScreen {
     @FXML
     private void repairFired(ActionEvent event) {
         
+    }
+    
+    @FXML
+    private void buyShipFired(ActionEvent event) {
+    	
     }
     
     @FXML    
@@ -677,20 +674,38 @@ public class GameScreenController implements Initializable, ControlledScreen {
         return reachablePlanets;
     }
     
+    private void showShipNames(List<String> shipNames) {
+    	 ObservableList<String> shipItem = FXCollections.observableArrayList();
+    	 int count = 1;
+    	 for (String s : shipNames) {
+    		 shipItem.add(count + ". " + s);
+    		 count++;
+    	 }
+         shipyardListView.setItems(shipItem);
+    }
+    
     
     @Override
     public void initialize(URL url, ResourceBundle rb) {
     	try {
 			db = new SqliteAPI();
+			sy = new ShipYard();
 			player = db.getPlayer();
 	        ship = db.getShip();
 	        uni = db.getUniverse();
 	        realFuel = maxFuel = ship.getBase().getFuel();
-	        realPull = maxPull = ship.getBase().getHullStrength();
+	        hull = maxPull = ship.getBase().getHullStrength();
 	        solarList = uni.getUniverse();
-//	        for (SolarSystem ss:solarList) {
-//	        	System.out.println(ss.getX() + " " + ss.getY());
-//	        }
+	        System.out.println("shipyard exists: " + sy.isYardExist());
+	        if (sy.isYardExist()) {
+	        	shipNames = sy.getShipNames();
+	        	showShipNames(shipNames);
+	        	for (String s : shipNames) {
+	        		System.out.println(s);
+	        	}
+	        	
+	        }
+	        
 		} catch (ClassNotFoundException e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
@@ -698,14 +713,7 @@ public class GameScreenController implements Initializable, ControlledScreen {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
 		}
-        
-        //get current solarsystem
-//        Random rand = new Random();
-//        re = new RandomEvent();
-//        int index = rand.nextInt(solarList.size());
-    	
-        //solarSystem = solarList.get(index);
-        //Capital curr = solarSystem.getPlanet();
+
         GraphicsContext gc = canvas.getGraphicsContext2D();
         // draw map
         for (SolarSystem ss : solarList) {
