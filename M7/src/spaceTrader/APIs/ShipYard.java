@@ -93,6 +93,7 @@ public class ShipYard {
 		PlayerShip temp = new PlayerShip(ship);		
 		ship = new PlayerShip(newShip, temp.getCargo());		
 		player.setMoney(player.getMoney() - newShip.getPrice() + temp.getBase().getPrice());
+		System.out.println("playerBuy called");
 		try {
 			update();
 		} catch (SQLException e) {

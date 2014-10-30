@@ -111,6 +111,7 @@ public class ConfigurePageController implements Initializable, ControlledScreen 
 				sqlite = new SqliteAPI(player);
 				System.out.println(SqliteAPI.isDBCreated());
 				System.out.println(player.getName());
+				System.out.println("xpos: " + player.getXpos());
 				myController.loadScreen("gamePage", "GameScreen.fxml");
 			} catch (Exception e) {
 				// TODO Auto-generated catch block

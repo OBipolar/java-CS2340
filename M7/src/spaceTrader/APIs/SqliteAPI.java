@@ -84,15 +84,25 @@ public class SqliteAPI {
      */
     public SqliteAPI(GameCharacter player) throws ClassNotFoundException,
             SQLException {
-        this.player = player;
+//        this.player = player;
+//        this.universe = new Universe();
+//        this.ship = new PlayerShip();
+//        Random rand = new Random();
+//        int size = universe.getUniverse().size();
+//        SolarSystem start = universe.getUniverse().get(rand.nextInt(size - 1));
+//        this.player.setXpos(start.getX());
+//        this.player.setYpos(start.getY());
+//        initialize();
+    	
+    	this.player = player;
         this.universe = new Universe();
         this.ship = new PlayerShip();
-        Random rand = new Random();
-        int size = universe.getUniverse().size();
-        SolarSystem start = universe.getUniverse().get(rand.nextInt(size - 1));
+        SolarSystem start = universe.getUniverse().get(0);
         this.player.setXpos(start.getX());
         this.player.setYpos(start.getY());
         initialize();
+    	
+    	
     }
 
     public SqliteAPI() throws ClassNotFoundException, SQLException {
