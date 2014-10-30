@@ -275,14 +275,14 @@ public class GameScreenController implements Initializable, ControlledScreen {
         boolean found = false;
         for (String s : reachablePlanets) {
             String temp1 = s.toLowerCase();
-            if (temp1.equals(planetName)) {
+            if (temp1.equals(planetName) && (!planetName.equals(solarSystem.getName().toLowerCase()))) {
                 for (SolarSystem sys : uni.getUniverse()) {
                     if (sys.getName().equals(s)) {
                         targetSystem = sys;
+                        found = true;
+                        loadTargetInfo();
                     }
                 }
-                found = true;
-                loadTargetInfo();
             }
         }
         if (!found) {
@@ -408,10 +408,11 @@ public class GameScreenController implements Initializable, ControlledScreen {
 			db = new SqliteAPI();
 			System.out.println("money after buy ship: " + db.getPlayer().getMoney());
 			String s1 = "Cash: " + db.getPlayer().getMoney() + " cr";
+			String s3 = "Current ship type: " + db.getShip().getBase().getName();
 	        System.out.println("money after stolen (2): " + db.getPlayer().getMoney());
 	        String s2 = "Cargo Space Remaining: " + (ship.getCargoSpace() - db.getShip().getCargo().size());
 	        ObservableList<String> playerInfo = FXCollections.observableArrayList(
-	         s1, s2);
+	         s1, s3, s2);
 	        
 	        for (Good g : db.getShip().getCargo()) {
 	        	playerInfo.add(g.getName());
@@ -484,13 +485,15 @@ public class GameScreenController implements Initializable, ControlledScreen {
 			int perCost = db.getShip().getBase().getFuelCost();
 			int amount = converter.fromString(refuelChoose.getValue().toString());
 			int Cost = amount * perCost;
+			
 			player = db.getPlayer();
 			ship = db.getShip();
 			player.setMoney(db.getPlayer().getMoney() - Cost);
 			ship.getBase().setFuel(db.getShip().getBase().getFuel() + amount);
 			updateDatabase(player,ship);
 			setRefuelChoose();
-			showDockInfo(ship, ship.getBase().getFuel(), ship.getBase().getHullStrength());
+			// update dock info, redraw long and short range charts
+			showDockInfo(db.getShip(), db.getShip().getBase().getFuel(), db.getShip().getBase().getHullStrength());
 			gc = canvas.getGraphicsContext2D();
 		    drawLongRange(db.getPlayer().getXpos(), db.getPlayer().getYpos(), db.getShip().getBase().getFuel(), gc);
 		    gc2 = canvas2.getGraphicsContext2D();
@@ -539,6 +542,21 @@ public class GameScreenController implements Initializable, ControlledScreen {
     	int index = isConvert.fromString(selectShip.textProperty().get());
     	sy.playerBuy(shipNames.get(index - 1));
     	updatePlayerInfo();
+    	try {
+			db = new SqliteAPI();
+			showDockInfo(db.getShip(), db.getShip().getBase().getFuel(), db.getShip().getBase().getHullStrength());
+			gc = canvas.getGraphicsContext2D();
+		    drawLongRange(db.getPlayer().getXpos(), db.getPlayer().getYpos(), db.getShip().getBase().getFuel(), gc);
+		    gc2 = canvas2.getGraphicsContext2D();
+		    drawShortRange(db.getPlayer().getXpos(), db.getPlayer().getYpos(), db.getShip().getBase().getFuel(), gc2);
+		} catch (ClassNotFoundException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		} catch (SQLException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+    	
     }
     
     @FXML    
@@ -902,7 +920,7 @@ public class GameScreenController implements Initializable, ControlledScreen {
         return count;
     }
     
-    private void updateDatabase(GameCharacter player,PlayerShip ship) {
+    private void updateDatabase(GameCharacter player, PlayerShip ship) {
         try {
             db.openConnection();
             db.update(player, ship);

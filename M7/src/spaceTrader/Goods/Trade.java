@@ -58,7 +58,6 @@ public class Trade {
      * @return true if the buying is successful
      */
     public boolean buy(Good good) {
-
         int amount = pricesToBuy.get(good.getName());
         int money = player.getMoney();
         if (amount > money || playerShip.isFull()) {
