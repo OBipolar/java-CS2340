@@ -1,4 +1,4 @@
-package spaceTrader.Planets;
+package spaceTrader.Ships;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -8,8 +8,6 @@ import spaceTrader.Goods.Furs;
 import spaceTrader.Goods.Good;
 import spaceTrader.Goods.Ore;
 import spaceTrader.Goods.Water;
-import spaceTrader.Ships.Flea;
-import spaceTrader.Ships.Ship;
 
 public class PlayerShip {
 
@@ -18,6 +16,13 @@ public class PlayerShip {
     private int cargoSpace;
     private int numOfGoods;
 
+    public PlayerShip(PlayerShip ship) {
+    	this(ship.getBase(), ship.getCargo());
+    }
+    
+    
+    
+    
     public PlayerShip() {
 
         setBase(new Flea());

@@ -1,6 +1,8 @@
 package spaceTrader.APIs;
 
 import java.sql.SQLException;
+import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 import java.util.Random;
@@ -11,6 +13,7 @@ import spaceTrader.Planets.GameCharacter;
 import spaceTrader.Planets.Planet;
 import spaceTrader.Planets.SolarSystem;
 import spaceTrader.Ships.PlayerShip;
+import spaceTrader.Ships.Ship;
 import spaceTrader.Ships.ShipFactory;
 import spaceTrader.Ships.Ship;
 import spaceTrader.Goods.Good;
@@ -22,7 +25,7 @@ import spaceTrader.Planets.TechLevels;
  * @author mli, Jinyu Shi
  *
  */
-public class ShipYard extends MarketPlace {
+public class ShipYard {
 	
 	private SolarSystem system;
 	private Planet planet;
@@ -30,7 +33,8 @@ public class ShipYard extends MarketPlace {
 	private GameCharacter player;
 	private PlayerShip ship;
 	// ships that player can buy on the planet
-	private List<String> ships;
+	private List<Ship> ships;
+	private List<String> shipNames;
 	private Map<String, Integer> shipPrices;
 	
 	
@@ -47,6 +51,18 @@ public class ShipYard extends MarketPlace {
 			planet = system.getPlanet();
 			player = db.getPlayer();
 			ship = db.getShip();
+			ShipFactory sF = new ShipFactory();
+			ships = sF.getShip(planet.getTechLevel().ordinal());
+			shipNames = new ArrayList<>();
+			for (Ship s : ships) {
+				if (player.getMoney() >= s.getPrice()) {
+					shipNames.add(s.getName());
+				}
+			}
+            shipPrices = new HashMap<String, Integer>();
+			for (Ship s : ships) {
+				shipPrices.put(s.getName(), s.getPrice());
+			}
 		} catch (ClassNotFoundException e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
@@ -79,7 +95,9 @@ public class ShipYard extends MarketPlace {
 	 * @param name
 	 */
 	public void playerBuy(String name) {
+	
 		ShipFactory sF = new ShipFactory();
+<<<<<<< HEAD
 		Ship newShipType = sF.getShip(name);
 		int techLevel = planet.getTechLevel().ordinal();
 		if (newShipType.getMinTechLevel() >= techLevel) {
@@ -101,7 +119,19 @@ public class ShipYard extends MarketPlace {
 				// TODO Auto-generated catch block
 				e.printStackTrace();
 			}
+=======
+		Ship newShip = sF.getShip(name);		
+		PlayerShip temp = new PlayerShip(ship);		
+		ship = new PlayerShip(newShip, temp.getCargo());		
+		player.setMoney(player.getMoney() - newShip.getPrice() + temp.getBase().getPrice());
+		try {
+			update();
+		} catch (SQLException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+>>>>>>> FETCH_HEAD
 		}
+
 	}
 	
 	
@@ -110,6 +140,7 @@ public class ShipYard extends MarketPlace {
 	 * 
 	 * @return
 	 */
+<<<<<<< HEAD
 	public List<String> getShips() {
             List<String> shipList = new ArrayList<String>();
             int techLevel = planet.getTechLevel().ordinal();
@@ -126,6 +157,11 @@ public class ShipYard extends MarketPlace {
 		shipList.add("BumbleBee");
             }
             return shipList;
+=======
+	public List<String> getShipNames() {
+
+		return shipNames;
+>>>>>>> FETCH_HEAD
 	}
 	
 	
@@ -135,21 +171,8 @@ public class ShipYard extends MarketPlace {
 	 * @return
 	 */
 	public Map<String, Integer> getShipPrices() {
-		Map<String, Integer> priceMap = new HashMap<String, Integer>();
-		int techLevel = planet.getTechLevel().ordinal();
-		if (techLevel >= 4) {
-			priceMap.put("Flea", 2000);
-			priceMap.put("Gnat", 10000);
-			priceMap.put("Firefly", 25000);
-			priceMap.put("Mosquito", 30000);
-			priceMap.put("BumbleBee", 60000);
-		} else if (techLevel >= 5) {
-			priceMap.put("Gnat", 10000);
-			priceMap.put("Firefly", 25000);
-			priceMap.put("Mosquito", 30000);
-			priceMap.put("BumbleBee", 60000);
-		}
-		return priceMap;
+
+		return shipPrices;
 	}
 	
 	/**
@@ -158,7 +181,12 @@ public class ShipYard extends MarketPlace {
 	 * 
 	 */
 	private void update() throws SQLException {
-		db.update(player, ship);
+		try {
+            db.update(player, ship);
+        } catch (ClassNotFoundException e) {
+            // TODO Auto-generated catch block
+            e.printStackTrace();
+        }
 	}
 	
 	

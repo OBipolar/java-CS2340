@@ -145,7 +145,7 @@ public class Universe {
             resourcesLevel = getRandomNum(ResourcesLevel.NUM_OF_RESOURCES_LEVEL);
             techLevel = getRandomNum(TechLevels.NUM_OF_TECHLEVELS);
             pirate = getRandomNum(Pirates.KINDS_OF_PIRATES);
-            police = getRandomNum(Polices.TYPES_OF_POLICE - 1);
+            police = getRandomNum(Polices.TYPES_OF_POLICE);
 
             cap = new Capital(politicalSystem, resourcesLevel, techLevel,
                     pirate, police, systemName);
@@ -183,7 +183,7 @@ public class Universe {
      * 
      * @param limit
      *            an integer
-     * @return Returns an random integer between 0 and limit (inclusive)
+     * @return Returns an random integer between 0 and limit (exclusive)
      */
     private int getRandomNum(int limit) {
         return (new Random()).nextInt(limit);
