@@ -9,6 +9,7 @@ import java.sql.SQLException;
 import java.sql.Statement;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Random;
 
 import spaceTrader.Goods.Firearms;
 import spaceTrader.Goods.Food;
@@ -83,13 +84,25 @@ public class SqliteAPI {
      */
     public SqliteAPI(GameCharacter player) throws ClassNotFoundException,
             SQLException {
-        this.player = player;
+//        this.player = player;
+//        this.universe = new Universe();
+//        this.ship = new PlayerShip();
+//        Random rand = new Random();
+//        int size = universe.getUniverse().size();
+//        SolarSystem start = universe.getUniverse().get(rand.nextInt(size - 1));
+//        this.player.setXpos(start.getX());
+//        this.player.setYpos(start.getY());
+//        initialize();
+    	
+    	this.player = player;
         this.universe = new Universe();
         this.ship = new PlayerShip();
         SolarSystem start = universe.getUniverse().get(0);
         this.player.setXpos(start.getX());
         this.player.setYpos(start.getY());
         initialize();
+    	
+    	
     }
 
     public SqliteAPI() throws ClassNotFoundException, SQLException {
@@ -204,6 +217,12 @@ public class SqliteAPI {
         base.setHullStrength(hullStrength);
         base.setFuel(fuel);
         this.ship = new PlayerShip(base, goods);
+        query = "SELECT fuel FROM ship";
+        execQuery(query);
+        ship.getBase().setFuel(resultSet.getInt("fuel"));
+        query = "SELECT hullStrength FROM ship";
+        execQuery(query);
+        ship.getBase().setHullStrength(resultSet.getInt("hullStrength"));
 
     }
 
@@ -233,8 +252,6 @@ public class SqliteAPI {
             systems.add(system);
         }
         this.universe = new Universe(systems);
-
-
     }
 
     /**
@@ -505,6 +522,7 @@ public class SqliteAPI {
     private void createShipTable() throws SQLException, ClassNotFoundException {
         update = "CREATE TABLE ship (id INTEGER PRIMARY KEY, "
                 + "name TEXT not NULL, fuel INTEGER, hullStrength INTEGER)";
+//>>>>>>> ed5432a5517939cee75e80d7f744dcd5af9aa337
         execUpdate(update);
 
     }

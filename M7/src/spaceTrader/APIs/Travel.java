@@ -13,9 +13,6 @@ import spaceTrader.Ships.PlayerShip;
  *
  */
 public class Travel {
-
-
-	
 	
     private SqliteAPI db;
     private GameCharacter player;
@@ -31,12 +28,14 @@ public class Travel {
      * @param planetName
      *            the name of the planet
      */
-    public void warpTo(String planetName) {
+    public void warpTo(String planetName, int travelDist, int hullExhaust) {
         SolarSystem system;
         try {
             system = db.getSolarSystem(planetName);
             updateShip();
             player.travel(system.getX(), system.getY());
+            ship.getBase().setFuel(ship.getBase().getFuel() - travelDist);
+            ship.getBase().setHullStrength(ship.getBase().getHullStrength() - hullExhaust);
             update();
 
         } catch (ClassNotFoundException e) {

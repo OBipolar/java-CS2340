@@ -80,9 +80,6 @@ public class ShipYard {
 		return planet.getTechLevel().ordinal() >= 4;
 	}
 	
-	
-	
-	
 	/**
 	 * Players buy a ship with the given name
 	 * 
@@ -95,7 +92,8 @@ public class ShipYard {
 		Ship newShip = sF.getShip(name);		
 		PlayerShip temp = new PlayerShip(ship);		
 		ship = new PlayerShip(newShip, temp.getCargo());		
-		player.setMoney(player.getMoney() - newShip.getPrice());
+		player.setMoney(player.getMoney() - newShip.getPrice() + temp.getBase().getPrice());
+		System.out.println("playerBuy called");
 		try {
 			update();
 		} catch (SQLException e) {
@@ -133,7 +131,12 @@ public class ShipYard {
 	 * 
 	 */
 	private void update() throws SQLException {
-		db.update(player, ship);
+		try {
+            db.update(player, ship);
+        } catch (ClassNotFoundException e) {
+            // TODO Auto-generated catch block
+            e.printStackTrace();
+        }
 	}
 	
 	
