@@ -72,17 +72,8 @@ public class Travel {
      * 
      */
     private void update() {
-        try {
-            db.openConnection();
-            db.update(player, ship);
-            db.closeConnection();
-            player = db.getPlayer();
-            ship = db.getShip();
-            System.out.println("after update, fuel: " + ship.getBase().getFuel());
-        } catch (SQLException | ClassNotFoundException e) {
-            // TODO Auto-generated catch block
-            e.printStackTrace();
-        }
+        db.setPlayer(player);
+        db.setShip(ship);
     }
     
     /**

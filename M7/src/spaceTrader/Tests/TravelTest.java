@@ -12,7 +12,7 @@ import spaceTrader.APIs.Travel;
 import spaceTrader.Planets.SolarSystem;
 import spaceTrader.Ships.PlayerShip;
 
-public class TravelJunit {
+public class TravelTest {
 
 	private Travel api;
 	private SqliteAPI db;
@@ -34,15 +34,6 @@ public class TravelJunit {
 		int hullStrength = ship.getBase().getHullStrength();
 		
 		api.warpTo(s.getName());
-		try {
-			db = new SqliteAPI();
-		} catch (ClassNotFoundException e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
-		} catch (SQLException e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
-		}
 		ship = db.getShip();
 		System.out.println("in junit now after travel, ship has fuel: " + ship.getBase().getFuel());
 		int newFuel = ship.getBase().getFuel();

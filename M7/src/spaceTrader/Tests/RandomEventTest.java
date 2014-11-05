@@ -5,7 +5,7 @@ import org.junit.Test;
 
 import spaceTrader.APIs.RandomEvent;
 
-public class RandomEventJunit {
+public class RandomEventTest {
 
     private RandomEvent r;
 

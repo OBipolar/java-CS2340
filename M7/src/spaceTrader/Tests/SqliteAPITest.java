@@ -15,7 +15,7 @@ import spaceTrader.Goods.Ore;
 import spaceTrader.Goods.Water;
 import spaceTrader.Planets.GameCharacter;
 
-public class SqliteAPIJunit {
+public class SqliteAPITest {
 
     private SqliteAPI api;
 

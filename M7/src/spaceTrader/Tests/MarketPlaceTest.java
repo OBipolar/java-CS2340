@@ -12,7 +12,7 @@ import spaceTrader.APIs.MarketPlace;
 import spaceTrader.Goods.Good;
 import spaceTrader.Goods.Water;
 
-public class MarketPlaceJunit {
+public class MarketPlaceTest {
 
     private MarketPlace mp;
 
