@@ -223,22 +223,13 @@ public class SqliteAPI {
         base.setHullStrength(hullStrength);
         base.setFuel(fuel);
         this.ship = new PlayerShip(base, goods);
-<<<<<<< HEAD
-        query = "SELECT fuel FROM ship";
-        execQuery(query);
-        ship.getBase().setFuel(resultSet.getInt("fuel"));
-        query = "SELECT hullStrength FROM ship";
-        execQuery(query);
-        ship.getBase().setHullStrength(resultSet.getInt("hullStrength"));
-
-=======
         ship.setAttack(resultSet.getInt("attack"));
         ship.setCargoSpace(resultSet.getInt("cargoBay"));
         ship.setGadgetsSlots(resultSet.getInt("gadgetsSlots"));
         ship.setShield(resultSet.getInt("shield"));
         ship.setShieldSlots(resultSet.getInt("shieldSlots"));
         ship.setWeaponSlots(resultSet.getInt("weaponSlots"));
->>>>>>> 8afc74d02215f407ca8cbd53d489509abd6e91ad
+
     }
 
     /**
@@ -536,15 +527,11 @@ public class SqliteAPI {
      */
     private void createShipTable() throws SQLException, ClassNotFoundException {
         update = "CREATE TABLE ship (id INTEGER PRIMARY KEY, "
-<<<<<<< HEAD
-                + "name TEXT not NULL, fuel INTEGER, hullStrength INTEGER)";
-//>>>>>>> ed5432a5517939cee75e80d7f744dcd5af9aa337
-=======
                 + "name TEXT not NULL, fuel INTEGER, hullStrength INTEGER, "
                 + "weaponSlots INTEGER, shieldSlots INTEGER, "
                 + "gadgetsSlots INTEGER, attack INTEGER, shield INTEGER, "
                 + "cargoBay INTEGER)";
->>>>>>> 8afc74d02215f407ca8cbd53d489509abd6e91ad
+
         execUpdate(update);
         //System.out.println("\n" + update);
         //System.out.println("ship tatbl");
@@ -584,11 +571,6 @@ public class SqliteAPI {
      * @throws ClassNotFoundException 
      */
     private void addShip() throws SQLException, ClassNotFoundException {
-<<<<<<< HEAD
-        update = String.format("INSERT INTO ship (name, fuel, hullStrength)"
-        		+ " VALUES('%s', '%d', '%d')", ship.getBase().getName(),
-        		ship.getBase().getFuel(), ship.getBase().getHullStrength());
-=======
         update = String.format("INSERT INTO ship (name, fuel, hullStrength, "
                 + "weaponSlots, shieldSlots, gadgetsSlots, attack, shield, "
                 + "cargoBay)"
@@ -597,7 +579,6 @@ public class SqliteAPI {
         		ship.getBase().getHullStrength(), ship.getWeaponSlots(),
         		ship.getShieldSlots(), ship.getGadgetsSlots(), 
         		ship.getAttack(), ship.getShield(), ship.getCargoSpace());
->>>>>>> 8afc74d02215f407ca8cbd53d489509abd6e91ad
         execUpdate(update);
     }
 

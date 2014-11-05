@@ -5,13 +5,7 @@ import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
-<<<<<<< HEAD
-import java.util.Random;
-import java.util.ArrayList;
-import java.util.HashMap;
-=======
 import java.util.Set;
->>>>>>> 8afc74d02215f407ca8cbd53d489509abd6e91ad
 
 import spaceTrader.Equipment.CargoExpansion;
 import spaceTrader.Equipment.EquipmentFactory;
@@ -73,10 +67,6 @@ public class ShipYard {
 			List<Shield> shields = eF.getShield(techLevel);
 			
 			shipNames = new ArrayList<>();
-<<<<<<< HEAD
-			System.out.println("current ship cargo " + ship.getCargo().size());
-			
-=======
 			weaponNames = new ArrayList<>();
 			shieldNames = new ArrayList<>();
 			gadgetNames = new ArrayList<>();
@@ -84,7 +74,7 @@ public class ShipYard {
 			weaponPrices = new HashMap<String, Integer>(); 
 			shieldPrices = new HashMap<String, Integer>(); 
 			gadgetPrices = new HashMap<String, Integer>(); 
->>>>>>> 8afc74d02215f407ca8cbd53d489509abd6e91ad
+
 			for (Ship s : ships) {
 				if (player.getMoney() >= s.getPrice() && ship.getCargo().size() <= s.getCargoBay()) {
 					shipNames.add(s.getName());
@@ -127,12 +117,9 @@ public class ShipYard {
 	 */
 	public boolean isYardExist() {
 		return planet.getTechLevel().ordinal() >= 4;
-<<<<<<< HEAD
-	}
-	
-=======
+
 	}	
->>>>>>> 8afc74d02215f407ca8cbd53d489509abd6e91ad
+
 	/**
 	 * Players buy a ship with the given name
 	 * 
@@ -142,47 +129,11 @@ public class ShipYard {
 	public void playerBuyShip(String name) {
 	
 		ShipFactory sF = new ShipFactory();
-<<<<<<< HEAD
-		Ship newShipType = sF.getShip(name);
-		int techLevel = planet.getTechLevel().ordinal();
-		if (newShipType.getMinTechLevel() >= techLevel) {
-			int incomings = ship.getBase().getPrice();
-			for (Good good : ship.getCargo()) {
-				if (good.getMTLU() <= techLevel) {
-					incomings += good.getBasePrice() * (1 + (new Random()).nextInt(good.getVar() / 10 + 1))
-					+ good.getIPL() * (techLevel - good.getMTLP());
-				}
-			}
-			int balance = player.getMoney() + incomings - newShipType.getPrice();
-			if (balance >= 0) {
-				PlayerShip newShip = new PlayerShip(newShipType, new ArrayList<Good>());
-				player.setMoney(balance);
-			}
-			try {
-				update();
-			} catch (SQLException e) {
-				// TODO Auto-generated catch block
-				e.printStackTrace();
-			}
-=======
 		Ship newShip = sF.getShip(name);		
 		PlayerShip temp = new PlayerShip(ship);		
 		ship = new PlayerShip(newShip, temp.getCargo());		
 		player.setMoney(player.getMoney() - newShip.getPrice() + temp.getBase().getPrice());
-<<<<<<< HEAD
-		System.out.println("playerBuy called");
-		try {
-			update();
-		} catch (SQLException e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
->>>>>>> FETCH_HEAD
-		}
-=======
 		update();
->>>>>>> 8afc74d02215f407ca8cbd53d489509abd6e91ad
-
-
 	}
 	
 	/**
@@ -234,7 +185,6 @@ public class ShipYard {
 	 * 
 	 * @return
 	 */
-<<<<<<< HEAD
 	public List<String> getShips() {
             List<String> shipList = new ArrayList<String>();
             int techLevel = planet.getTechLevel().ordinal();
@@ -245,22 +195,19 @@ public class ShipYard {
                 shipList.add("Mosquito");
                 shipList.add("BumbleBee");
             } else if (techLevel >= 5) {
-		shipList.add("Gnat");
-		shipList.add("Firefly");
-		shipList.add("Mosquito");
-		shipList.add("BumbleBee");
+            	shipList.add("Gnat");
+            	shipList.add("Firefly");
+            	shipList.add("Mosquito");
+            	shipList.add("BumbleBee");
             }
             return shipList;
-=======
+	}
+
 	public List<String> getShipNames() {
 		return shipNames;
-<<<<<<< HEAD
->>>>>>> FETCH_HEAD
-=======
 	}	
 	public List<String> getWeaponNames() {
 	    return weaponNames;
->>>>>>> 8afc74d02215f407ca8cbd53d489509abd6e91ad
 	}
     public List<String> getShieldNames() {
         return shieldNames;
