@@ -10,17 +10,16 @@ import org.junit.Test;
 import spaceTrader.APIs.SqliteAPI;
 import spaceTrader.APIs.Travel;
 import spaceTrader.Planets.SolarSystem;
+import spaceTrader.Planets.Universe;
 import spaceTrader.Ships.PlayerShip;
 
 public class TravelTest {
 
 	private Travel api;
-	private SqliteAPI db;
 	
 	@Before
 	public void setUp() throws Exception {
 		api = new Travel();
-		db = new SqliteAPI();
 	}
 
 	@Test
@@ -28,13 +27,16 @@ public class TravelTest {
 		
 		
 		// find a random solar system to warp to 
-		SolarSystem s = db.getUniverse().getUniverse().get(5);
-		PlayerShip ship = db.getShip();
+	    Universe u = SqliteAPI.getUniverse();
+	    System.out.println(u == null);
+	    System.out.println(u.getUniverse().size());
+		SolarSystem s = u.getUniverse().get(5);
+		PlayerShip ship = SqliteAPI.getShip();
 		int fuel = ship.getBase().getFuel();
 		int hullStrength = ship.getBase().getHullStrength();
 		
-		api.warpTo(s.getName());
-		ship = db.getShip();
+		api.warpTo(s.getName(), 20 , 1);
+		ship = SqliteAPI.getShip();
 		System.out.println("in junit now after travel, ship has fuel: " + ship.getBase().getFuel());
 		int newFuel = ship.getBase().getFuel();
 		int newHullStrength = ship.getBase().getHullStrength();

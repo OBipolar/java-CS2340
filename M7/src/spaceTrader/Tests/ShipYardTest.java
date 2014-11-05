@@ -21,29 +21,27 @@ import spaceTrader.Ships.ShipFactory;
 public class ShipYardTest {
 
     private ShipYard sY;
-    private SqliteAPI db;
     
     
     @Before
     public void setUp() throws Exception {
         sY = new ShipYard();
-        db = new SqliteAPI();
     }
 
     @Test
     public void testPlayerBuyShip() {
-        PlayerShip playerShip = db.getShip();
+        PlayerShip playerShip = SqliteAPI.getShip();
         List<String> shipNames = sY.getShipNames();
         String ship = shipNames.get(0);
         sY.playerBuyShip(ship);
-        assertNotEquals(playerShip, db.getShip());
+        assertNotEquals(playerShip, SqliteAPI.getShip());
         
     }
 
     @Test
     public void testPlayerBuyWeapon() {
-        PlayerShip playerShip = db.getShip();
-        GameCharacter player = db.getPlayer();
+        PlayerShip playerShip = SqliteAPI.getShip();
+        GameCharacter player = SqliteAPI.getPlayer();
         int money = player.getMoney();
         int attack = playerShip.getAttack();
         int weaponSlots = playerShip.getWeaponSlots();
@@ -51,39 +49,39 @@ public class ShipYardTest {
         List<String> names = sY.getWeaponNames();
         String weapon = names.get(0);
         sY.playerBuyWeapon(weapon);
-        assertNotEquals(attack, db.getShip().getAttack());
-        assertNotEquals(weaponSlots, db.getShip().getWeaponSlots());
-        assertNotEquals(money, db.getPlayer().getMoney());
-        db.update();
+        assertNotEquals(attack, SqliteAPI.getShip().getAttack());
+        assertNotEquals(weaponSlots, SqliteAPI.getShip().getWeaponSlots());
+        assertNotEquals(money, SqliteAPI.getPlayer().getMoney());
+        SqliteAPI.update();
 
     }
 
     @Test
     public void testPlayerBuyShield() {
-        PlayerShip playerShip = db.getShip();
-        GameCharacter player = db.getPlayer();
+        PlayerShip playerShip = SqliteAPI.getShip();
+        GameCharacter player = SqliteAPI.getPlayer();
         int money = player.getMoney();
         int shield = playerShip.getShield();
         int shieldSlots = playerShip.getShieldSlots();
         List<String> names = sY.getShieldNames();
         String name = names.get(0);
         sY.playerBuyShield(name);
-        assertNotEquals(shield, db.getShip().getShield());
-        assertNotEquals(shieldSlots, db.getShip().getShieldSlots());
-        assertNotEquals(money, db.getPlayer().getMoney());
+        assertNotEquals(shield, SqliteAPI.getShip().getShield());
+        assertNotEquals(shieldSlots, SqliteAPI.getShip().getShieldSlots());
+        assertNotEquals(money, SqliteAPI.getPlayer().getMoney());
     }
     
     @Test
     public void testPlayerBuyCargoExpansion() {
-        PlayerShip playerShip = db.getShip();
-        GameCharacter player = db.getPlayer();
+        PlayerShip playerShip = SqliteAPI.getShip();
+        GameCharacter player = SqliteAPI.getPlayer();
         int money = player.getMoney();
         int cargoBay = playerShip.getBase().getCargoBay();
         List<String> name = sY.getGadgetNames();
         if (!name.isEmpty()) {
             sY.playerBuyCargoExpansion();
-            assertNotEquals(cargoBay, db.getShip().getCargoSpace());
-            assertNotEquals(money, db.getPlayer().getMoney());
+            assertNotEquals(cargoBay, SqliteAPI.getShip().getCargoSpace());
+            assertNotEquals(money, SqliteAPI.getPlayer().getMoney());
         }
     }
 

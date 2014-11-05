@@ -17,8 +17,6 @@ import spaceTrader.Planets.SolarSystem;
 import spaceTrader.Ships.PlayerShip;
 import spaceTrader.Ships.Ship;
 import spaceTrader.Ships.ShipFactory;
-import spaceTrader.Ships.Ship;
-import spaceTrader.Goods.Good;
 import spaceTrader.Planets.TechLevels;
 
 /**
@@ -31,7 +29,6 @@ public class ShipYard {
 	
 	private SolarSystem system;
 	private Planet planet;
-	private SqliteAPI db;
 	private GameCharacter player;
 	private PlayerShip ship;
 	private List<String> shipNames;
@@ -52,11 +49,11 @@ public class ShipYard {
 	public ShipYard() {
 		
 		try {
-			db = new SqliteAPI();
-			system = db.getSolarSystem();
+
+			system = SqliteAPI.getSolarSystem();
 			planet = system.getPlanet();
-			player = db.getPlayer();
-			ship = db.getShip();
+			player = SqliteAPI.getPlayer();
+			ship = SqliteAPI.getShip();
 			
 			int techLevel = planet.getTechLevel().ordinal();
 			
@@ -74,9 +71,13 @@ public class ShipYard {
 			weaponPrices = new HashMap<String, Integer>(); 
 			shieldPrices = new HashMap<String, Integer>(); 
 			gadgetPrices = new HashMap<String, Integer>(); 
+<<<<<<< HEAD
 
+=======
+>>>>>>> 33ad2ce0a7076166dbb16aa7b5cf2e34128b7971
 			for (Ship s : ships) {
-				if (player.getMoney() >= s.getPrice() && ship.getCargo().size() <= s.getCargoBay()) {
+				if (player.getMoney() >= s.getPrice()
+				        && ship.getCargoSpace() <= s.getCargoBay()) {
 					shipNames.add(s.getName());
 					shipPrices.put(s.getName(), s.getPrice());
 				}
@@ -117,9 +118,13 @@ public class ShipYard {
 	 */
 	public boolean isYardExist() {
 		return planet.getTechLevel().ordinal() >= 4;
+<<<<<<< HEAD
 
 	}	
 
+=======
+	}	
+>>>>>>> 33ad2ce0a7076166dbb16aa7b5cf2e34128b7971
 	/**
 	 * Players buy a ship with the given name
 	 * 
@@ -134,6 +139,11 @@ public class ShipYard {
 		ship = new PlayerShip(newShip, temp.getCargo());		
 		player.setMoney(player.getMoney() - newShip.getPrice() + temp.getBase().getPrice());
 		update();
+<<<<<<< HEAD
+=======
+
+
+>>>>>>> 33ad2ce0a7076166dbb16aa7b5cf2e34128b7971
 	}
 	
 	/**
@@ -144,8 +154,8 @@ public class ShipYard {
 	public void playerBuyWeapon(String name) {
 	    EquipmentFactory eF = new EquipmentFactory();
 	    Weapon w = eF.getWeapon(name);
-	    player = db.getPlayer();
-	    ship = db.getShip();
+	    player = SqliteAPI.getPlayer();
+	    ship = SqliteAPI.getShip();
 	    ship.addWeapon(w);  
 	    player.setMoney(player.getMoney() - w.getPrice());
 	    update();
@@ -159,8 +169,8 @@ public class ShipYard {
 	public void playerBuyShield(String name) {
 	    EquipmentFactory eF = new EquipmentFactory();
 	    Shield s = eF.getShield(name);
-	    ship = db.getShip();
-	    player = db.getPlayer();
+	    ship = SqliteAPI.getShip();
+	    player = SqliteAPI.getPlayer();
 	    ship.addShield(s);
 	    player.setMoney(player.getMoney() - s.getPrice());
 	    update();
@@ -172,11 +182,11 @@ public class ShipYard {
 	public void playerBuyCargoExpansion() {
 	    EquipmentFactory eF = new EquipmentFactory();
 	    CargoExpansion c = eF.getCargoExpansion();
-	    player = db.getPlayer();
-	    ship = db.getShip();
+	    player = SqliteAPI.getPlayer();
+	    ship = SqliteAPI.getShip();
 	    ship.addCargoExpansoin(c);;
 	    player.setMoney(player.getMoney() - c.getPrice());
-	    db.setShip(ship);
+	    SqliteAPI.setShip(ship);
 	}
 	
 	
@@ -185,6 +195,7 @@ public class ShipYard {
 	 * 
 	 * @return
 	 */
+<<<<<<< HEAD
 	public List<String> getShips() {
             List<String> shipList = new ArrayList<String>();
             int techLevel = planet.getTechLevel().ordinal();
@@ -203,6 +214,8 @@ public class ShipYard {
             return shipList;
 	}
 
+=======
+>>>>>>> 33ad2ce0a7076166dbb16aa7b5cf2e34128b7971
 	public List<String> getShipNames() {
 		return shipNames;
 	}	
@@ -239,8 +252,8 @@ public class ShipYard {
 	 * updates 
 	 */
 	private void update() {
-        db.setShip(ship);
-        db.setPlayer(player);
+	    SqliteAPI.setShip(ship);
+	    SqliteAPI.setPlayer(player);
 	}
 	
 	

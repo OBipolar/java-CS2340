@@ -23,30 +23,20 @@ public class RandomEvent {
      * @return the result of the random event in string format
      */
     public String update() {
-        SqliteAPI api;
-        try {
-            api = new SqliteAPI();
-            String s = "";
-            GameCharacter player = api.getPlayer();
-            if (isMoneyLost()) {
-            	int amount = (player.getMoney() / MONEY_LOSS);
-                player.setMoney(player.getMoney() - amount);
-                s = "A UGA student just stole " + amount
-                        + " cr of money from you";
-            } else {
-                s = "Nothing special happens this turn";
-            }
-            System.out.println("money after stolen: " + player.getMoney());
-            api.setPlayer(player);
-            return s;
-        } catch (ClassNotFoundException e) {
-            // TODO Auto-generated catch block
-            e.printStackTrace();
-        } catch (SQLException e) {
-            // TODO Auto-generated catch block
-            e.printStackTrace();
+
+        String s = "";
+        GameCharacter player = SqliteAPI.getPlayer();
+        if (isMoneyLost()) {
+        	int amount = (player.getMoney() / MONEY_LOSS);
+            player.setMoney(player.getMoney() - amount);
+            s = "A UGA student just stole " + amount
+                    + " cr of money from you";
+        } else {
+            s = "Nothing special happens this turn";
         }
-        return null;
+        System.out.println("money after stolen: " + player.getMoney());
+        SqliteAPI.setPlayer(player);
+        return s;
 
     }
 

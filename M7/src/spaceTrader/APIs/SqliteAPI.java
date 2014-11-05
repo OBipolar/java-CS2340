@@ -9,7 +9,6 @@ import java.sql.SQLException;
 import java.sql.Statement;
 import java.util.ArrayList;
 import java.util.List;
-import java.util.Random;
 
 import spaceTrader.Goods.Firearms;
 import spaceTrader.Goods.Food;
@@ -62,7 +61,7 @@ public class SqliteAPI {
      * @throws SQLException
      * @throws ClassNotFoundException
      */
-    private void deleteTable(String... args) throws SQLException,
+    private static void deleteTable(String... args) throws SQLException,
             ClassNotFoundException {
         for (String s : args) {
             if (tableExist(s)) {
@@ -84,32 +83,20 @@ public class SqliteAPI {
      */
     public SqliteAPI(GameCharacter player) throws ClassNotFoundException,
             SQLException {
-//        this.player = player;
-//        this.universe = new Universe();
-//        this.ship = new PlayerShip();
-//        Random rand = new Random();
-//        int size = universe.getUniverse().size();
-//        SolarSystem start = universe.getUniverse().get(rand.nextInt(size - 1));
-//        this.player.setXpos(start.getX());
-//        this.player.setYpos(start.getY());
-//        initialize();
-    	
-    	this.player = player;
+        this.player = player;
         this.universe = new Universe();
         this.ship = new PlayerShip();
         SolarSystem start = universe.getUniverse().get(0);
         this.player.setXpos(start.getX());
         this.player.setYpos(start.getY());
         initialize();
-    	
-    	
     }
 
     public SqliteAPI() throws ClassNotFoundException, SQLException {
         loadData();
     }
 
-    public void update() {
+    public static void update() {
         try {
             updatePlayer();
             updateShip();
@@ -131,7 +118,7 @@ public class SqliteAPI {
      * @throws SQLException
      * @throws ClassNotFoundException 
      */
-    public void updateShip() throws SQLException, ClassNotFoundException {
+    private static void updateShip() throws SQLException, ClassNotFoundException {
         openConnection();
         System.out.println("ship variable in db now has fuel: " + ship.getBase().getFuel());
         update = "DROP TABLE ship";
@@ -153,7 +140,7 @@ public class SqliteAPI {
      * @throws SQLException
      * @throws ClassNotFoundException 
      */
-    public void updatePlayer() throws SQLException, ClassNotFoundException {
+    private static void updatePlayer() throws SQLException, ClassNotFoundException {
         openConnection();
         System.out.println("Player in sqlite has money  " + player.getMoney() );
         update = "DROP TABLE player";
@@ -169,7 +156,7 @@ public class SqliteAPI {
      * @throws SQLException
      * @throws ClassNotFoundException
      */
-    private void loadData() throws SQLException, ClassNotFoundException {
+    private static void loadData() throws SQLException, ClassNotFoundException {
         openConnection();
         loadPlayer();
         loadPlayerShip();
@@ -183,7 +170,7 @@ public class SqliteAPI {
      * @throws SQLException
      * @throws ClassNotFoundException 
      */
-    private void loadPlayer() throws SQLException, ClassNotFoundException {
+    private static void loadPlayer() throws SQLException, ClassNotFoundException {
         query = "SELECT * FROM player";
         execQuery(query);
         GameCharacter player = new GameCharacter();
@@ -195,7 +182,7 @@ public class SqliteAPI {
         player.setFighterP(resultSet.getInt("fighterP"));
         player.setPilotP(resultSet.getInt("pilotP"));
         player.setTraderP(resultSet.getInt("traderP"));
-        this.player = player;
+        SqliteAPI.player = player;
     }
 
     /**
@@ -204,7 +191,7 @@ public class SqliteAPI {
      * @throws SQLException
      * @throws ClassNotFoundException 
      */
-    private void loadPlayerShip() throws SQLException, ClassNotFoundException {
+    private static void loadPlayerShip() throws SQLException, ClassNotFoundException {
         query = "SELECT name FROM cargo";
         execQuery(query);
         List<Good> goods = new ArrayList<>();
@@ -222,14 +209,21 @@ public class SqliteAPI {
         int hullStrength = resultSet.getInt("hullStrength");
         base.setHullStrength(hullStrength);
         base.setFuel(fuel);
+<<<<<<< HEAD
         this.ship = new PlayerShip(base, goods);
+=======
+        SqliteAPI.ship = new PlayerShip(base, goods);
+>>>>>>> 33ad2ce0a7076166dbb16aa7b5cf2e34128b7971
         ship.setAttack(resultSet.getInt("attack"));
         ship.setCargoSpace(resultSet.getInt("cargoBay"));
         ship.setGadgetsSlots(resultSet.getInt("gadgetsSlots"));
         ship.setShield(resultSet.getInt("shield"));
         ship.setShieldSlots(resultSet.getInt("shieldSlots"));
         ship.setWeaponSlots(resultSet.getInt("weaponSlots"));
+<<<<<<< HEAD
 
+=======
+>>>>>>> 33ad2ce0a7076166dbb16aa7b5cf2e34128b7971
     }
 
     /**
@@ -238,7 +232,7 @@ public class SqliteAPI {
      * @throws SQLException
      * @throws ClassNotFoundException 
      */
-    private void loadUniverse() throws SQLException, ClassNotFoundException {
+    private static void loadUniverse() throws SQLException, ClassNotFoundException {
         String query = "SELECT * from universe";
         execQuery(query);
         Capital capital;
@@ -257,7 +251,9 @@ public class SqliteAPI {
                     resultSet.getInt("ypos"), capital.getName(), capital);
             systems.add(system);
         }
-        this.universe = new Universe(systems);
+        universe = new Universe(systems);
+
+
     }
 
     /**
@@ -279,7 +275,7 @@ public class SqliteAPI {
      * @throws ClassNotFoundException
      * @throws SQLException
      */
-    public void openConnection() throws ClassNotFoundException, SQLException {
+    private static void openConnection() throws ClassNotFoundException, SQLException {
 
         Class.forName("org.sqlite.JDBC");
         connection = DriverManager.getConnection("jdbc:sqlite:SpaceTrader.db");
@@ -293,7 +289,7 @@ public class SqliteAPI {
      * 
      * @throws SQLException
      */
-    public void closeConnection() throws SQLException {
+    private static void closeConnection() throws SQLException {
 /*        if (resultSet != null) {
             resultSet.close();  
         }
@@ -311,7 +307,7 @@ public class SqliteAPI {
      * 
      * @return the universe
      */
-    public Universe getUniverse() {
+    public static Universe getUniverse() {
         return universe;
     }
 
@@ -323,7 +319,7 @@ public class SqliteAPI {
      * @throws SQLException
      * @throws ClassNotFoundException
      */
-    public SolarSystem getSolarSystem() throws SQLException,
+    public static SolarSystem getSolarSystem() throws SQLException,
             ClassNotFoundException {
         openConnection();
         int xPos = player.getXpos();
@@ -360,7 +356,7 @@ public class SqliteAPI {
      * @throws SQLException
      * @throws ClassNotFoundException
      */
-    public SolarSystem getSolarSystem(String name) throws SQLException,
+    public static SolarSystem getSolarSystem(String name) throws SQLException,
             ClassNotFoundException {
         String query = String.format(
                 "SELECT * from universe where name = '%s'", name);
@@ -391,7 +387,7 @@ public class SqliteAPI {
      * 
      * @return the player model
      */
-    public GameCharacter getPlayer() {
+    public static GameCharacter getPlayer() {
 
         return player;
     }
@@ -401,7 +397,7 @@ public class SqliteAPI {
      * 
      * @return ship;
      */
-    public PlayerShip getShip() {
+    public static PlayerShip getShip() {
         return ship;
     }
 
@@ -411,7 +407,7 @@ public class SqliteAPI {
      * @throws SQLException
      * @throws ClassNotFoundException
      */
-    private void initialize() throws SQLException, ClassNotFoundException {
+    private static void initialize() throws SQLException, ClassNotFoundException {
         openConnection();
         if (isDBCreated()) {
             String[] tables = { "cargo", "player", "ship", "universe" };
@@ -439,7 +435,7 @@ public class SqliteAPI {
      * @throws SQLException
      * @throws ClassNotFoundException 
      */
-    public void execQuery(String query) throws SQLException, ClassNotFoundException {
+    private static void execQuery(String query) throws SQLException, ClassNotFoundException {
         resultSet = statement.executeQuery(query);
     }
 
@@ -451,7 +447,7 @@ public class SqliteAPI {
      * @throws SQLException
      * @throws ClassNotFoundException 
      */
-    public void execUpdate(String update) throws SQLException, ClassNotFoundException {
+    private static void execUpdate(String update) throws SQLException, ClassNotFoundException {
         openConnection();
         statement.executeUpdate(update);
         closeConnection();
@@ -466,7 +462,7 @@ public class SqliteAPI {
      * @throws SQLException
      * @throws ClassNotFoundException 
      */
-    private boolean tableExist(String tableName) throws SQLException, ClassNotFoundException {
+    private static boolean tableExist(String tableName) throws SQLException, ClassNotFoundException {
         openConnection();
         DatabaseMetaData metadata = connection.getMetaData();
         resultSet = metadata.getTables(null, null, tableName, null);
@@ -484,7 +480,7 @@ public class SqliteAPI {
      * @throws SQLException
      * @throws ClassNotFoundException 
      */
-    private void createPlayerTable() throws SQLException, ClassNotFoundException {
+    private static void createPlayerTable() throws SQLException, ClassNotFoundException {
         update = "CREATE TABLE player "
                 + "(id INTEGER PRIMARY KEY, name TEXT not NULL, "
                 + " pilotP INTEGER, fighterP INTEGER, " + " traderP INTEGER, "
@@ -499,7 +495,7 @@ public class SqliteAPI {
      * @throws SQLException
      * @throws ClassNotFoundException 
      */
-    private void createUniverseTable() throws SQLException, ClassNotFoundException {
+    private static void createUniverseTable() throws SQLException, ClassNotFoundException {
         update = "CREATE TABLE universe (id INTEGER PRIMARY KEY, "
                 + "name TEXT not NULL, xpos INTEGER, ypos INTEGER, "
                 + "PoliticalSystem INTEGER, ResourcesLevel INTEGER,"
@@ -513,7 +509,7 @@ public class SqliteAPI {
      * @throws SQLException
      * @throws ClassNotFoundException 
      */
-    private void createCargoTable() throws SQLException, ClassNotFoundException {
+    private static void createCargoTable() throws SQLException, ClassNotFoundException {
         update = "CREATE TABLE cargo (id INTEGER PRIMARY KEY, "
                 + "name TEXT not NULL)";
         execUpdate(update);
@@ -524,14 +520,23 @@ public class SqliteAPI {
      * 
      * @throws SQLException
      * @throws ClassNotFoundException 
+<<<<<<< HEAD
      */
     private void createShipTable() throws SQLException, ClassNotFoundException {
         update = "CREATE TABLE ship (id INTEGER PRIMARY KEY, "
+=======
+     */
+    private static void createShipTable() throws SQLException, ClassNotFoundException {
+        update = "CREATE TABLE ship (id INTEGER PRIMARY KEY, "
+>>>>>>> 33ad2ce0a7076166dbb16aa7b5cf2e34128b7971
                 + "name TEXT not NULL, fuel INTEGER, hullStrength INTEGER, "
                 + "weaponSlots INTEGER, shieldSlots INTEGER, "
                 + "gadgetsSlots INTEGER, attack INTEGER, shield INTEGER, "
                 + "cargoBay INTEGER)";
+<<<<<<< HEAD
 
+=======
+>>>>>>> 33ad2ce0a7076166dbb16aa7b5cf2e34128b7971
         execUpdate(update);
         //System.out.println("\n" + update);
         //System.out.println("ship tatbl");
@@ -543,7 +548,7 @@ public class SqliteAPI {
      * @throws SQLException
      * @throws ClassNotFoundException 
      */
-    private void addPlayer() throws SQLException, ClassNotFoundException {
+    private static void addPlayer() throws SQLException, ClassNotFoundException {
         SolarSystem start = universe.getUniverse().get(0);
         int xPos, yPos;
         if (player.getXpos() == 0) {
@@ -569,8 +574,13 @@ public class SqliteAPI {
      * 
      * @throws SQLException
      * @throws ClassNotFoundException 
+<<<<<<< HEAD
      */
     private void addShip() throws SQLException, ClassNotFoundException {
+=======
+     */
+    private static void addShip() throws SQLException, ClassNotFoundException {
+>>>>>>> 33ad2ce0a7076166dbb16aa7b5cf2e34128b7971
         update = String.format("INSERT INTO ship (name, fuel, hullStrength, "
                 + "weaponSlots, shieldSlots, gadgetsSlots, attack, shield, "
                 + "cargoBay)"
@@ -578,7 +588,11 @@ public class SqliteAPI {
         		ship.getBase().getName(), ship.getBase().getFuel(), 
         		ship.getBase().getHullStrength(), ship.getWeaponSlots(),
         		ship.getShieldSlots(), ship.getGadgetsSlots(), 
+<<<<<<< HEAD
         		ship.getAttack(), ship.getShield(), ship.getCargoSpace());
+=======
+        		ship.getAttack(), ship.getShield(), ship.getCargoSpace());
+>>>>>>> 33ad2ce0a7076166dbb16aa7b5cf2e34128b7971
         execUpdate(update);
     }
 
@@ -590,7 +604,7 @@ public class SqliteAPI {
      * @throws SQLException
      * @throws ClassNotFoundException 
      */
-    private void addPlanet(SolarSystem system) throws SQLException, ClassNotFoundException {
+    private static void addPlanet(SolarSystem system) throws SQLException, ClassNotFoundException {
         Capital planet = system.getPlanet();
         update = String.format("INSERT INTO universe (name, xPos, yPos, "
                 + "PoliticalSystem, ResourcesLevel, TechLevel, Pirate, "
@@ -610,7 +624,7 @@ public class SqliteAPI {
      * @throws SQLException
      * @throws ClassNotFoundException 
      */
-    private void loadCargo() throws SQLException, ClassNotFoundException {
+    private static void loadCargo() throws SQLException, ClassNotFoundException {
         List<Good> cargo = ship.getCargo();
         for (Good g : cargo) {
             update = String.format("INSERT INTO cargo (name) VALUES ('%s')",
@@ -619,11 +633,11 @@ public class SqliteAPI {
         }
     }
     
-    public void setPlayer(GameCharacter p) {
+    public static void setPlayer(GameCharacter p) {
         player = p;
     }
     
-    public void setShip(PlayerShip s) {
+    public static void setShip(PlayerShip s) {
         ship = s;
     }
 
