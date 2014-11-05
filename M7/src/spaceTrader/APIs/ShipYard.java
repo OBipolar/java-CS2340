@@ -73,7 +73,8 @@ public class ShipYard {
 			shieldPrices = new HashMap<String, Integer>(); 
 			gadgetPrices = new HashMap<String, Integer>(); 
 			for (Ship s : ships) {
-				if (player.getMoney() >= s.getPrice()) {
+				if (player.getMoney() >= s.getPrice()
+				        && ship.getCargoSpace() <= s.getCargoBay()) {
 					shipNames.add(s.getName());
 					shipPrices.put(s.getName(), s.getPrice());
 				}

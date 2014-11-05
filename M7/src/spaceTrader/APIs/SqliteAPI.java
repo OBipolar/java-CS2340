@@ -118,7 +118,7 @@ public class SqliteAPI {
      * @throws SQLException
      * @throws ClassNotFoundException 
      */
-    public void updateShip() throws SQLException, ClassNotFoundException {
+    private void updateShip() throws SQLException, ClassNotFoundException {
         openConnection();
         System.out.println("ship variable in db now has fuel: " + ship.getBase().getFuel());
         update = "DROP TABLE ship";
@@ -140,7 +140,7 @@ public class SqliteAPI {
      * @throws SQLException
      * @throws ClassNotFoundException 
      */
-    public void updatePlayer() throws SQLException, ClassNotFoundException {
+    private void updatePlayer() throws SQLException, ClassNotFoundException {
         openConnection();
         System.out.println("Player in sqlite has money  " + player.getMoney() );
         update = "DROP TABLE player";
@@ -267,7 +267,7 @@ public class SqliteAPI {
      * @throws ClassNotFoundException
      * @throws SQLException
      */
-    public void openConnection() throws ClassNotFoundException, SQLException {
+    private void openConnection() throws ClassNotFoundException, SQLException {
 
         Class.forName("org.sqlite.JDBC");
         connection = DriverManager.getConnection("jdbc:sqlite:SpaceTrader.db");
@@ -281,7 +281,7 @@ public class SqliteAPI {
      * 
      * @throws SQLException
      */
-    public void closeConnection() throws SQLException {
+    private void closeConnection() throws SQLException {
 /*        if (resultSet != null) {
             resultSet.close();  
         }
@@ -379,7 +379,7 @@ public class SqliteAPI {
      * 
      * @return the player model
      */
-    public GameCharacter getPlayer() {
+    public static GameCharacter getPlayer() {
 
         return player;
     }
@@ -389,7 +389,7 @@ public class SqliteAPI {
      * 
      * @return ship;
      */
-    public PlayerShip getShip() {
+    public static PlayerShip getShip() {
         return ship;
     }
 
@@ -427,7 +427,7 @@ public class SqliteAPI {
      * @throws SQLException
      * @throws ClassNotFoundException 
      */
-    public void execQuery(String query) throws SQLException, ClassNotFoundException {
+    private void execQuery(String query) throws SQLException, ClassNotFoundException {
         resultSet = statement.executeQuery(query);
     }
 
@@ -439,7 +439,7 @@ public class SqliteAPI {
      * @throws SQLException
      * @throws ClassNotFoundException 
      */
-    public void execUpdate(String update) throws SQLException, ClassNotFoundException {
+    private void execUpdate(String update) throws SQLException, ClassNotFoundException {
         openConnection();
         statement.executeUpdate(update);
         closeConnection();
@@ -606,11 +606,11 @@ public class SqliteAPI {
         }
     }
     
-    public void setPlayer(GameCharacter p) {
+    public static void setPlayer(GameCharacter p) {
         player = p;
     }
     
-    public void setShip(PlayerShip s) {
+    public static void setShip(PlayerShip s) {
         ship = s;
     }
 
