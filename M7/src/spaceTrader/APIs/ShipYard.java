@@ -5,6 +5,9 @@ import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+import java.util.Random;
+import java.util.ArrayList;
+import java.util.HashMap;
 
 import spaceTrader.Planets.GameCharacter;
 import spaceTrader.Planets.Planet;
@@ -12,6 +15,8 @@ import spaceTrader.Planets.SolarSystem;
 import spaceTrader.Ships.PlayerShip;
 import spaceTrader.Ships.Ship;
 import spaceTrader.Ships.ShipFactory;
+import spaceTrader.Ships.Ship;
+import spaceTrader.Goods.Good;
 import spaceTrader.Planets.TechLevels;
 
 /**
@@ -91,6 +96,29 @@ public class ShipYard {
 	public void playerBuy(String name) {
 	
 		ShipFactory sF = new ShipFactory();
+<<<<<<< HEAD
+		Ship newShipType = sF.getShip(name);
+		int techLevel = planet.getTechLevel().ordinal();
+		if (newShipType.getMinTechLevel() >= techLevel) {
+			int incomings = ship.getBase().getPrice();
+			for (Good good : ship.getCargo()) {
+				if (good.getMTLU() <= techLevel) {
+					incomings += good.getBasePrice() * (1 + (new Random()).nextInt(good.getVar() / 10 + 1))
+					+ good.getIPL() * (techLevel - good.getMTLP());
+				}
+			}
+			int balance = player.getMoney() + incomings - newShipType.getPrice();
+			if (balance >= 0) {
+				PlayerShip newShip = new PlayerShip(newShipType, new ArrayList<Good>());
+				player.setMoney(balance);
+			}
+			try {
+				update();
+			} catch (SQLException e) {
+				// TODO Auto-generated catch block
+				e.printStackTrace();
+			}
+=======
 		Ship newShip = sF.getShip(name);		
 		PlayerShip temp = new PlayerShip(ship);		
 		ship = new PlayerShip(newShip, temp.getCargo());		
@@ -101,6 +129,7 @@ public class ShipYard {
 		} catch (SQLException e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
+>>>>>>> FETCH_HEAD
 		}
 
 	}
@@ -111,9 +140,28 @@ public class ShipYard {
 	 * 
 	 * @return
 	 */
+<<<<<<< HEAD
+	public List<String> getShips() {
+            List<String> shipList = new ArrayList<String>();
+            int techLevel = planet.getTechLevel().ordinal();
+            if (techLevel >= 4) {
+                shipList.add("Flea");
+                shipList.add("Gnat");
+                shipList.add("Firefly");
+                shipList.add("Mosquito");
+                shipList.add("BumbleBee");
+            } else if (techLevel >= 5) {
+		shipList.add("Gnat");
+		shipList.add("Firefly");
+		shipList.add("Mosquito");
+		shipList.add("BumbleBee");
+            }
+            return shipList;
+=======
 	public List<String> getShipNames() {
 
 		return shipNames;
+>>>>>>> FETCH_HEAD
 	}
 	
 	
