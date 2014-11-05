@@ -29,7 +29,6 @@ public class ShipYard {
 	
 	private SolarSystem system;
 	private Planet planet;
-	private SqliteAPI db;
 	private GameCharacter player;
 	private PlayerShip ship;
 	private List<String> shipNames;
@@ -50,11 +49,11 @@ public class ShipYard {
 	public ShipYard() {
 		
 		try {
-			db = new SqliteAPI();
-			system = db.getSolarSystem();
+
+			system = SqliteAPI.getSolarSystem();
 			planet = system.getPlanet();
-			player = db.getPlayer();
-			ship = db.getShip();
+			player = SqliteAPI.getPlayer();
+			ship = SqliteAPI.getShip();
 			
 			int techLevel = planet.getTechLevel().ordinal();
 			
@@ -142,8 +141,8 @@ public class ShipYard {
 	public void playerBuyWeapon(String name) {
 	    EquipmentFactory eF = new EquipmentFactory();
 	    Weapon w = eF.getWeapon(name);
-	    player = db.getPlayer();
-	    ship = db.getShip();
+	    player = SqliteAPI.getPlayer();
+	    ship = SqliteAPI.getShip();
 	    ship.addWeapon(w);  
 	    player.setMoney(player.getMoney() - w.getPrice());
 	    update();
@@ -157,8 +156,8 @@ public class ShipYard {
 	public void playerBuyShield(String name) {
 	    EquipmentFactory eF = new EquipmentFactory();
 	    Shield s = eF.getShield(name);
-	    ship = db.getShip();
-	    player = db.getPlayer();
+	    ship = SqliteAPI.getShip();
+	    player = SqliteAPI.getPlayer();
 	    ship.addShield(s);
 	    player.setMoney(player.getMoney() - s.getPrice());
 	    update();
@@ -170,11 +169,11 @@ public class ShipYard {
 	public void playerBuyCargoExpansion() {
 	    EquipmentFactory eF = new EquipmentFactory();
 	    CargoExpansion c = eF.getCargoExpansion();
-	    player = db.getPlayer();
-	    ship = db.getShip();
+	    player = SqliteAPI.getPlayer();
+	    ship = SqliteAPI.getShip();
 	    ship.addCargoExpansoin(c);;
 	    player.setMoney(player.getMoney() - c.getPrice());
-	    db.setShip(ship);
+	    SqliteAPI.setShip(ship);
 	}
 	
 	
@@ -219,8 +218,8 @@ public class ShipYard {
 	 * updates 
 	 */
 	private void update() {
-        db.setShip(ship);
-        db.setPlayer(player);
+	    SqliteAPI.setShip(ship);
+	    SqliteAPI.setPlayer(player);
 	}
 	
 	

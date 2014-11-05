@@ -17,7 +17,6 @@ import spaceTrader.Ships.PlayerShip;
  */
 public class MarketPlace {
 
-    private SqliteAPI db;
     private GameCharacter player;
     private PlayerShip ship;
     private Trade trade;
@@ -71,20 +70,21 @@ public class MarketPlace {
      * 
      */
     private void load() {
-        try {
-            db = new SqliteAPI();
-            player = db.getPlayer();
-            ship = db.getShip();
 
-            system = db.getSolarSystem();
+            player = SqliteAPI.getPlayer();
+            ship = SqliteAPI.getShip();
 
-        } catch (ClassNotFoundException e) {
-            // TODO Auto-generated catch block
-            e.printStackTrace();
-        } catch (SQLException e) {
-            // TODO Auto-generated catch block
-            e.printStackTrace();
-        }
+            try {
+                system = SqliteAPI.getSolarSystem();
+            } catch (ClassNotFoundException e) {
+                // TODO Auto-generated catch block
+                e.printStackTrace();
+            } catch (SQLException e) {
+                // TODO Auto-generated catch block
+                e.printStackTrace();
+            }
+
+
     }
 
     /**
@@ -92,8 +92,8 @@ public class MarketPlace {
      * 
      */
     private void update() {
-        db.setPlayer(player);
-        db.setShip(ship);
+        SqliteAPI.setPlayer(player);
+        SqliteAPI.setShip(ship);
     }
 
 }
