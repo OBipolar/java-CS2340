@@ -25,6 +25,7 @@ import java.util.List;
 import java.util.Map;
 
 import javafx.scene.control.Label;
+import javafx.scene.control.MenuBar;
 import javafx.scene.control.TextField;
 import javafx.scene.control.Button;
 import javafx.event.ActionEvent;
@@ -259,6 +260,8 @@ public class GameScreenController implements Initializable, ControlledScreen {
      private Label narcoticsPrice;
     @FXML
     private TextField findPlanetField;
+    @FXML
+    private MenuBar menuBar;
     
     @Override
     public void setScreenParent(ScreensController screenParent) {
@@ -410,7 +413,7 @@ public class GameScreenController implements Initializable, ControlledScreen {
 			String s1 = "Cash: " + db.getPlayer().getMoney() + " cr";
 			String s3 = "Current ship type: " + db.getShip().getBase().getName();
 	        System.out.println("money after stolen (2): " + db.getPlayer().getMoney());
-	        String s2 = "Cargo Space Remaining: " + (ship.getCargoSpace() - db.getShip().getCargo().size());
+	        String s2 = "Cargo Space Remaining: " + (db.getShip().getBase().getCargoBay() - db.getShip().getCargo().size());
 	        ObservableList<String> playerInfo = FXCollections.observableArrayList(
 	         s1, s3, s2);
 	        
@@ -549,6 +552,7 @@ public class GameScreenController implements Initializable, ControlledScreen {
 		    drawLongRange(db.getPlayer().getXpos(), db.getPlayer().getYpos(), db.getShip().getBase().getFuel(), gc);
 		    gc2 = canvas2.getGraphicsContext2D();
 		    drawShortRange(db.getPlayer().getXpos(), db.getPlayer().getYpos(), db.getShip().getBase().getFuel(), gc2);
+		    mess(toBuyList, toBuyMap, toSellList, toSellMap, mp);
 		} catch (ClassNotFoundException e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
@@ -563,11 +567,15 @@ public class GameScreenController implements Initializable, ControlledScreen {
     private void waterSellFired(ActionEvent event) {
         if (waterChoose.getValue() != null) {
             int amount = converter.fromString(waterChoose.getValue().toString());
+            mp = new MarketPlace();
             for (int i = 1; i <= amount; i++) {
                 mp.playerSell(new Water());
             }
             mess(toBuyList, toBuyMap, toSellList, toSellMap, mp);
+            updateDatabase(db.getPlayer(), db.getShip());
             updatePlayerInfo();
+            sy = new ShipYard();
+            showShipNames(sy);
        }
     }
     
@@ -575,88 +583,120 @@ public class GameScreenController implements Initializable, ControlledScreen {
      private void fursSellFired(ActionEvent event) {
         if (fursChoose.getValue() != null) {
             int amount = converter.fromString(fursChoose.getValue().toString());
+            mp = new MarketPlace();
             for (int i = 1; i <= amount; i++) {
                 mp.playerSell(new Furs());
             }
             mess(toBuyList, toBuyMap, toSellList, toSellMap, mp);
+            updateDatabase(db.getPlayer(), db.getShip());
             updatePlayerInfo();
+            sy = new ShipYard();
+            showShipNames(sy);
        } 
     }
      @FXML    
      private void foodSellFired(ActionEvent event) {  
         if (foodChoose.getValue() != null) {
             int amount = converter.fromString(foodChoose.getValue().toString());
+            mp = new MarketPlace();
             for (int i = 1; i <= amount; i++) {
                 mp.playerSell(new Food());
             }
             mess(toBuyList, toBuyMap, toSellList, toSellMap, mp);
+            updateDatabase(db.getPlayer(), db.getShip());
             updatePlayerInfo();
+            sy = new ShipYard();
+            showShipNames(sy);
        }
     }
      @FXML    
      private void oreSellFired(ActionEvent event) {   
         if (oreChoose.getValue() != null) {
             int amount = converter.fromString(oreChoose.getValue().toString());
+            mp = new MarketPlace();
             for (int i = 1; i <= amount; i++) {
                 mp.playerSell(new Ore());
             }
             mess(toBuyList, toBuyMap, toSellList, toSellMap, mp);
+            updateDatabase(db.getPlayer(), db.getShip());
             updatePlayerInfo();
+            sy = new ShipYard();
+            showShipNames(sy);
        }
     }
      @FXML    
      private void gamesSellFired(ActionEvent event) { 
         if (gamesChoose.getValue() != null) {
             int amount = converter.fromString(gamesChoose.getValue().toString());
+            mp = new MarketPlace();
             for (int i = 1; i <= amount; i++) {
                 mp.playerSell(new Games());
             }
             mess(toBuyList, toBuyMap, toSellList, toSellMap, mp);
+            updateDatabase(db.getPlayer(), db.getShip());
             updatePlayerInfo();
+            sy = new ShipYard();
+            showShipNames(sy);
        }
     }
      @FXML    
      private void firearmsSellFired(ActionEvent event) {   
         if (firearmsChoose.getValue() != null) {
             int amount = converter.fromString(firearmsChoose.getValue().toString());
+            mp = new MarketPlace();
             for (int i = 1; i <= amount; i++) {
                 mp.playerSell(new Firearms());
             }
             mess(toBuyList, toBuyMap, toSellList, toSellMap, mp);
+            updateDatabase(db.getPlayer(), db.getShip());
             updatePlayerInfo();
+            sy = new ShipYard();
+            showShipNames(sy);
        }
     }
      @FXML    
      private void medicinesSellFired(ActionEvent event) {  
        if (medicinesChoose.getValue() != null) {
             int amount = converter.fromString(medicinesChoose.getValue().toString());
+            mp = new MarketPlace();
             for (int i = 1; i <= amount; i++) {
                 mp.playerSell(new Medicine());
             }
             mess(toBuyList, toBuyMap, toSellList, toSellMap, mp);
+            updateDatabase(db.getPlayer(), db.getShip());
             updatePlayerInfo();
+            sy = new ShipYard();
+            showShipNames(sy);
        }
     }
      @FXML    
      private void machinesSellFired(ActionEvent event) { 
         if (machinesChoose.getValue() != null) {
             int amount = converter.fromString(machinesChoose.getValue().toString());
+            mp = new MarketPlace();
             for (int i = 1; i <= amount; i++) {
                 mp.playerSell(new Machines());
             }
             mess(toBuyList, toBuyMap, toSellList, toSellMap, mp);
+            updateDatabase(db.getPlayer(), db.getShip());
             updatePlayerInfo();
+            sy = new ShipYard();
+            showShipNames(sy);
        }
     }
      @FXML    
      private void narcoticsSellFired(ActionEvent event) { 
         if (narcoticsChoose.getValue() != null) {
             int amount = converter.fromString(narcoticsChoose.getValue().toString());
+            mp = new MarketPlace();
             for (int i = 1; i <= amount; i++) {
                 mp.playerSell(new Narcotics());
             }
             mess(toBuyList, toBuyMap, toSellList, toSellMap, mp);
+            updateDatabase(db.getPlayer(), db.getShip());
             updatePlayerInfo();
+            sy = new ShipYard();
+            showShipNames(sy);
        }
     }
 
@@ -665,11 +705,15 @@ public class GameScreenController implements Initializable, ControlledScreen {
     private void waterBuyFired(ActionEvent event) {
         if (waterChoose2.getValue() != null) {
             int amount = converter.fromString(waterChoose2.getValue().toString());
+            mp = new MarketPlace();
             for (int i = 1; i <= amount; i++) {
                 mp.playerBuy(new Water());
-            }       
+            }
             mess(toBuyList, toBuyMap, toSellList, toSellMap, mp);
+            updateDatabase(db.getPlayer(), db.getShip());
             updatePlayerInfo();
+            sy = new ShipYard();
+            showShipNames(sy);
        }
     }
 
@@ -677,11 +721,15 @@ public class GameScreenController implements Initializable, ControlledScreen {
     private void fursBuyFired(ActionEvent event) {   
         if (fursChoose2.getValue() != null) {
             int amount = converter.fromString(fursChoose2.getValue().toString());
+            mp = new MarketPlace();
             for (int i = 1; i <= amount; i++) {
                 mp.playerBuy(new Furs());
             }       
             mess(toBuyList, toBuyMap, toSellList, toSellMap, mp);
+            updateDatabase(db.getPlayer(), db.getShip());
             updatePlayerInfo();
+            sy = new ShipYard();
+            showShipNames(sy);
        }
     }
 
@@ -689,11 +737,15 @@ public class GameScreenController implements Initializable, ControlledScreen {
     private void foodBuyFired(ActionEvent event) {  
         if (foodChoose2.getValue() != null) {
             int amount = converter.fromString(foodChoose2.getValue().toString());
+            mp = new MarketPlace();
             for (int i = 1; i <= amount; i++) {
                 mp.playerBuy(new Food());
             }       
             mess(toBuyList, toBuyMap, toSellList, toSellMap, mp);
+            updateDatabase(db.getPlayer(), db.getShip());
             updatePlayerInfo();
+            sy = new ShipYard();
+            showShipNames(sy);
        }
     }
 
@@ -701,11 +753,15 @@ public class GameScreenController implements Initializable, ControlledScreen {
     private void oreBuyFired(ActionEvent event) {   
         if (oreChoose2.getValue() != null) {
             int amount = converter.fromString(oreChoose2.getValue().toString());
+            mp = new MarketPlace();
             for (int i = 1; i <= amount; i++) {
                 mp.playerBuy(new Ore());
             }       
             mess(toBuyList, toBuyMap, toSellList, toSellMap, mp);
+            updateDatabase(db.getPlayer(), db.getShip());
             updatePlayerInfo();
+            sy = new ShipYard();
+            showShipNames(sy);
        }
     }
 
@@ -713,11 +769,15 @@ public class GameScreenController implements Initializable, ControlledScreen {
     private void gamesBuyFired(ActionEvent event) {   
         if (gamesChoose2.getValue() != null) {
             int amount = converter.fromString(gamesChoose2.getValue().toString());
+            mp = new MarketPlace();
             for (int i = 1; i <= amount; i++) {
                 mp.playerBuy(new Games());
             }       
             mess(toBuyList, toBuyMap, toSellList, toSellMap, mp);
+            updateDatabase(db.getPlayer(), db.getShip());
             updatePlayerInfo();
+            sy = new ShipYard();
+            showShipNames(sy);
        }
     }
 
@@ -725,11 +785,15 @@ public class GameScreenController implements Initializable, ControlledScreen {
     private void firearmsBuyFired(ActionEvent event) {   
         if (firearmsChoose2.getValue() != null) {
             int amount = converter.fromString(firearmsChoose2.getValue().toString());
+            mp = new MarketPlace();
             for (int i = 1; i <= amount; i++) {
                 mp.playerBuy(new Firearms());
             }       
             mess(toBuyList, toBuyMap, toSellList, toSellMap, mp);
+            updateDatabase(db.getPlayer(), db.getShip());
             updatePlayerInfo();
+            sy = new ShipYard();
+            showShipNames(sy);
        }
     }
 
@@ -737,11 +801,15 @@ public class GameScreenController implements Initializable, ControlledScreen {
     private void medicinesBuyFired(ActionEvent event) {   
         if (medicinesChoose2.getValue() != null) {
             int amount = converter.fromString(medicinesChoose2.getValue().toString());
+            mp = new MarketPlace();
             for (int i = 1; i <= amount; i++) {
                 mp.playerBuy(new Medicine());
             }       
             mess(toBuyList, toBuyMap, toSellList, toSellMap, mp);
+            updateDatabase(db.getPlayer(), db.getShip());
             updatePlayerInfo();
+            sy = new ShipYard();
+            showShipNames(sy);
        }
     }
 
@@ -749,11 +817,15 @@ public class GameScreenController implements Initializable, ControlledScreen {
     private void machinesBuyFired(ActionEvent event) {   
         if (machinesChoose2.getValue() != null) {
             int amount = converter.fromString(machinesChoose2.getValue().toString());
+            mp = new MarketPlace();
             for (int i = 1; i <= amount; i++) {
                 mp.playerBuy(new Machines());
             }       
             mess(toBuyList, toBuyMap, toSellList, toSellMap, mp);
+            updateDatabase(db.getPlayer(), db.getShip());
             updatePlayerInfo();
+            sy = new ShipYard();
+            showShipNames(sy);
        }
     }
 
@@ -761,11 +833,15 @@ public class GameScreenController implements Initializable, ControlledScreen {
     private void narcoticsBuyFired(ActionEvent event) {   
         if (narcoticsChoose2.getValue() != null) {
             int amount = converter.fromString(narcoticsChoose2.getValue().toString());
+            mp = new MarketPlace();
             for (int i = 1; i <= amount; i++) {
                 mp.playerBuy(new Narcotics());
             }       
             mess(toBuyList, toBuyMap, toSellList, toSellMap, mp);
+            updateDatabase(db.getPlayer(), db.getShip());
             updatePlayerInfo();
+            sy = new ShipYard();
+            showShipNames(sy);
        }
     }
     
@@ -934,7 +1010,7 @@ public class GameScreenController implements Initializable, ControlledScreen {
     public void mess(List<String> toBuyList, Map<String, Integer> toBuyMap, List<String> toSellList, Map<String, Integer> toSellMap, MarketPlace mp) {
         int maxAmount1;
         int maxAmount2;
-        maxAmount1 = ship.getCargoSpace() - mp.getCargo().size();
+        maxAmount1 = db.getShip().getBase().getCargoBay() - mp.getCargo().size();
         for (String s : toBuyList) {
             if (s.equals("Water")) {
                 waterPrice2.setText("" + toBuyMap.get("Water"));

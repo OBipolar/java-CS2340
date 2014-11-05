@@ -24,11 +24,11 @@
          <content>
             <ListView fx:id="targetListView" prefHeight="171.0" prefWidth="207.0" />
          </content></TitledPane>
-      <MenuBar prefHeight="29.0" prefWidth="800.0">
+      <MenuBar fx:id="menuBar" prefHeight="29.0" prefWidth="800.0">
         <menus>
           <Menu mnemonicParsing="false" text="File">
             <items>
-              <MenuItem mnemonicParsing="false" text="Close" />
+              <MenuItem mnemonicParsing="false" text="Save" />
             </items>
           </Menu>
           <Menu mnemonicParsing="false" text="Edit">

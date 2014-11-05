@@ -49,8 +49,10 @@ public class ShipYard {
 			ShipFactory sF = new ShipFactory();
 			ships = sF.getShip(planet.getTechLevel().ordinal());
 			shipNames = new ArrayList<>();
+			System.out.println("current ship cargo " + ship.getCargo().size());
+			
 			for (Ship s : ships) {
-				if (player.getMoney() >= s.getPrice()) {
+				if (player.getMoney() >= s.getPrice() && ship.getCargo().size() <= s.getCargoBay()) {
 					shipNames.add(s.getName());
 				}
 			}
