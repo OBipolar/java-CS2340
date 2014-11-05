@@ -12,7 +12,7 @@ public class Gnat extends Ship {
         setName("Gnat");
         setCargoBay(15);
         setWeaponSlots(1);
-        setShieldSlots(0);
+        setShieldSlots(1);
         setGadgetSlots(1);
         setCrew(1);
         setFuel(14);

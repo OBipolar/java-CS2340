@@ -15,6 +15,7 @@ public class RandomEvent {
 
     private int num;
     private final static int BOUND = 2;
+    private final static int MONEY_LOSS = 20;
 
     /**
      * Returns the result of the random event in string format
@@ -28,7 +29,7 @@ public class RandomEvent {
             String s = "";
             GameCharacter player = api.getPlayer();
             if (isMoneyLost()) {
-            	int amount = (player.getMoney() / 5);
+            	int amount = (player.getMoney() / MONEY_LOSS);
                 player.setMoney(player.getMoney() - amount);
                 s = "A UGA student just stole " + amount
                         + " cr of money from you";
@@ -36,9 +37,7 @@ public class RandomEvent {
                 s = "Nothing special happens this turn";
             }
             System.out.println("money after stolen: " + player.getMoney());
-            api.openConnection();
-            api.updatePlayer(player);
-            api.closeConnection();
+            api.setPlayer(player);
             return s;
         } catch (ClassNotFoundException e) {
             // TODO Auto-generated catch block

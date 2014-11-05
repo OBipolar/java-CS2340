@@ -1,5 +1,7 @@
 package spaceTrader.Ships;
 
+import spaceTrader.Equipment.Weapon;
+
 /**
  * Parent class of all ships
  * 
@@ -26,6 +28,10 @@ public class Ship {
     private int trader;
     private int repairCost;
     private int size;
+    private int attack;
+    private int shield;
+    
+  
 
     public String toString() {
         return String.format("ship type: %s\n", name);
@@ -173,6 +179,22 @@ public class Ship {
 
     public void setHullStrength(int hullStrength) {
         this.hullStrength = hullStrength;
+    }
+
+    public int getAttack() {
+        return attack;
+    }
+
+    public void setAttack(int attack) {
+        this.attack = attack;
+    }
+
+    public int getShield() {
+        return shield;
+    }
+
+    public void setShield(int shield) {
+        this.shield = shield;
     }
 
 }

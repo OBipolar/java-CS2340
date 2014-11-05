@@ -3,6 +3,9 @@ package spaceTrader.Ships;
 import java.util.ArrayList;
 import java.util.List;
 
+import spaceTrader.Equipment.CargoExpansion;
+import spaceTrader.Equipment.Shield;
+import spaceTrader.Equipment.Weapon;
 import spaceTrader.Goods.Food;
 import spaceTrader.Goods.Furs;
 import spaceTrader.Goods.Good;
@@ -25,7 +28,7 @@ public class PlayerShip {
     
     public PlayerShip() {
 
-        setBase(new Flea());
+        setBase(new Gnat());
         setCargoSpace(base.getCargoBay());
         cargo = new ArrayList<Good>();
         setNumOfGoods(cargo.size());
@@ -47,6 +50,35 @@ public class PlayerShip {
         }
         return String
                 .format("Base ship: %s, cargo: %s", base.toString(), goods);
+    }
+    
+    /**
+     * Adds a Weapon to the ship
+     * 
+     * @param w a Weapon
+     */
+    public void addWeapon(Weapon w) {
+        setAttack(getAttack() + w.getDamage());
+        setWeaponSlots(getWeaponSlots() - 1);
+    }
+    
+    /**
+     * Adds a Shield to the ship
+     * 
+     * @param s a Shield
+     */
+    public void addShield(Shield s) {
+        setShield(getShield() + s.getStrength());
+        setShieldSlots(getShieldSlots() - 1);
+    }
+    
+    /**
+     * Add cargo expansion gadget to the ship
+     * 
+     * @param c a CargoExpansion
+     */
+    public void addCargoExpansoin(CargoExpansion c) {
+        setCargoSpace(getCargoSpace() + c.getExpansion());
     }
 
     private void loadShip() {
@@ -99,6 +131,58 @@ public class PlayerShip {
 
     public void setNumOfGoods(int numOfGoods) {
         this.numOfGoods = numOfGoods;
+    }
+    
+    /**
+     * Return the attack attribute of the player ship
+     * 
+     * @return the attack attribute of the player ship
+     */
+    public int getAttack() {
+        return base.getAttack();
+    }
+    
+    public void setAttack(int attack) {
+        base.setAttack(attack);
+    }
+    
+    /**
+     * Return the shield attribute of the player ship
+     * 
+     * @return the shield attribute of the player ship
+     */
+    public int getShield() {
+        return base.getShield();
+    }
+    
+    public void setShield(int shield) {
+        base.setShield(shield);
+    }
+    
+    public int getWeaponSlots() {
+        return base.getWeaponSlots();
+    }
+    
+    public void setWeaponSlots(int weaponSlots) {
+        base.setWeaponSlots(weaponSlots);
+    }
+    
+    public int getShieldSlots() {
+        return base.getShieldSlots();
+    }
+    
+    public void setShieldSlots(int shieldSlots) {
+        base.setShieldSlots(shieldSlots);
+    }
+    
+    public int getGadgetsSlots() {
+        return base.getGadgetSlots();
+        
+    }
+    
+    public void setGadgetsSlots(int gadgetSlots) {
+        base.setGadgetSlots(gadgetSlots);
+        
     }
 
 }
