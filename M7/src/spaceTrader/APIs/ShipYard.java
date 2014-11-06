@@ -22,7 +22,7 @@ import spaceTrader.Planets.TechLevels;
 /**
  * API for player to buy ship at a planet
  * 
- * @author mli, Jinyu Shi
+ * @author mli, Jinyu Shi, ZixiangZhu
  *
  */
 public class ShipYard {
@@ -118,6 +118,33 @@ public class ShipYard {
 
 	}	
 
+	
+	/**
+	 * Return the result of this refuel attempt
+	 * 
+	 * @return the result of this refuel attempt
+	 */
+	public String refuel() {
+	    String name = ship.getBase().getName();
+        ShipFactory sF = new ShipFactory();
+        Ship newShip = sF.getShip(name);  
+        int fullFuel = newShip.getFuel();
+        if (ship.getBase().getFuel() >= fullFuel) {
+            return "Fuel is full";
+        } else {
+            int cost = ship.getBase().getFuelCost();
+            int loss = cost * (fullFuel - ship.getBase().getFuel());
+            int money = player.getMoney() - loss;
+            player.setMoney(money);
+            ship.getBase().setFuel(fullFuel);
+            update();
+            return "This refuel cost " + loss + " cr";
+        }
+	}
+	
+	
+	
+	
 	/**
 	 * Players buy a ship with the given name
 	 * 
