@@ -135,6 +135,9 @@ public class ShipYard {
             int cost = ship.getBase().getFuelCost();
             int loss = cost * (fullFuel - ship.getBase().getFuel());
             int money = player.getMoney() - loss;
+            if (money < 0) {
+                return "You don't have enough money to repair";
+            }
             player.setMoney(money);
             ship.getBase().setFuel(fullFuel);
             update();
