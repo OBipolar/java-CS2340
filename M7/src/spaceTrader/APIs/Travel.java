@@ -31,7 +31,7 @@ public class Travel {
         SolarSystem system;
         try {
             system = SqliteAPI.getSolarSystem(planetName);
-            updateShip();
+            //updateShip();
             player.travel(system.getX(), system.getY());
             ship.getBase().setFuel(ship.getBase().getFuel() - travelDist);
             ship.getBase().setHullStrength(ship.getBase().getHullStrength() - hullExhaust);

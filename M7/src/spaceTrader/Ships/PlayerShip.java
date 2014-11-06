@@ -79,6 +79,7 @@ public class PlayerShip {
      */
     public void addCargoExpansoin(CargoExpansion c) {
         setCargoSpace(getCargoSpace() + c.getExpansion());
+        setGadgetsSlots(getGadgetsSlots() - 1);
     }
 
     private void loadShip() {

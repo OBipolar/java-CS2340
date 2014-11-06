@@ -71,10 +71,7 @@ public class ShipYard {
 			weaponPrices = new HashMap<String, Integer>(); 
 			shieldPrices = new HashMap<String, Integer>(); 
 			gadgetPrices = new HashMap<String, Integer>(); 
-<<<<<<< HEAD
 
-=======
->>>>>>> 33ad2ce0a7076166dbb16aa7b5cf2e34128b7971
 			for (Ship s : ships) {
 				if (player.getMoney() >= s.getPrice()
 				        && ship.getCargoSpace() <= s.getCargoBay()) {
@@ -83,21 +80,21 @@ public class ShipYard {
 				}
 			}
 			for (Weapon w : weapons) {
-			    if (player.getMoney() >= w.getPrice()) {
+			    if (player.getMoney() >= w.getPrice() && ship.getWeaponSlots() > 0) {
                     weaponNames.add(w.getName());
                     weaponPrices.put(w.getName(), w.getPrice());
                 }
 			}
 	        for (Shield s : shields) {
-                if (player.getMoney() >= s.getPrice()) {
+                if (player.getMoney() >= s.getPrice() && ship.getShieldSlots() > 0) {
                     shieldNames.add(s.getName());
                     shieldPrices.put(s.getName(), s.getPrice());
                 }
 	        }
 	        CargoExpansion c = eF.getCargoExpansion();
-	        if (player.getMoney() >= c.getPrice()) {
+	        if (player.getMoney() >= c.getPrice() && ship.getGadgetsSlots() > 0) {
 	            gadgetNames.add(c.getName());
-	            shipPrices.put(c.getName(), c.getPrice());
+	            gadgetPrices.put(c.getName(), c.getPrice());
 	        }		
 		} catch (ClassNotFoundException e) {
 			// TODO Auto-generated catch block
@@ -118,13 +115,9 @@ public class ShipYard {
 	 */
 	public boolean isYardExist() {
 		return planet.getTechLevel().ordinal() >= 4;
-<<<<<<< HEAD
 
 	}	
 
-=======
-	}	
->>>>>>> 33ad2ce0a7076166dbb16aa7b5cf2e34128b7971
 	/**
 	 * Players buy a ship with the given name
 	 * 
@@ -139,11 +132,6 @@ public class ShipYard {
 		ship = new PlayerShip(newShip, temp.getCargo());		
 		player.setMoney(player.getMoney() - newShip.getPrice() + temp.getBase().getPrice());
 		update();
-<<<<<<< HEAD
-=======
-
-
->>>>>>> 33ad2ce0a7076166dbb16aa7b5cf2e34128b7971
 	}
 	
 	/**
@@ -195,7 +183,6 @@ public class ShipYard {
 	 * 
 	 * @return
 	 */
-<<<<<<< HEAD
 	public List<String> getShips() {
             List<String> shipList = new ArrayList<String>();
             int techLevel = planet.getTechLevel().ordinal();
@@ -214,8 +201,6 @@ public class ShipYard {
             return shipList;
 	}
 
-=======
->>>>>>> 33ad2ce0a7076166dbb16aa7b5cf2e34128b7971
 	public List<String> getShipNames() {
 		return shipNames;
 	}	

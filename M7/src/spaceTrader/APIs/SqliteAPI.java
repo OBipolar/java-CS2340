@@ -209,21 +209,13 @@ public class SqliteAPI {
         int hullStrength = resultSet.getInt("hullStrength");
         base.setHullStrength(hullStrength);
         base.setFuel(fuel);
-<<<<<<< HEAD
-        this.ship = new PlayerShip(base, goods);
-=======
         SqliteAPI.ship = new PlayerShip(base, goods);
->>>>>>> 33ad2ce0a7076166dbb16aa7b5cf2e34128b7971
         ship.setAttack(resultSet.getInt("attack"));
         ship.setCargoSpace(resultSet.getInt("cargoBay"));
         ship.setGadgetsSlots(resultSet.getInt("gadgetsSlots"));
         ship.setShield(resultSet.getInt("shield"));
         ship.setShieldSlots(resultSet.getInt("shieldSlots"));
         ship.setWeaponSlots(resultSet.getInt("weaponSlots"));
-<<<<<<< HEAD
-
-=======
->>>>>>> 33ad2ce0a7076166dbb16aa7b5cf2e34128b7971
     }
 
     /**
@@ -520,23 +512,14 @@ public class SqliteAPI {
      * 
      * @throws SQLException
      * @throws ClassNotFoundException 
-<<<<<<< HEAD
-     */
-    private void createShipTable() throws SQLException, ClassNotFoundException {
-        update = "CREATE TABLE ship (id INTEGER PRIMARY KEY, "
-=======
      */
     private static void createShipTable() throws SQLException, ClassNotFoundException {
         update = "CREATE TABLE ship (id INTEGER PRIMARY KEY, "
->>>>>>> 33ad2ce0a7076166dbb16aa7b5cf2e34128b7971
                 + "name TEXT not NULL, fuel INTEGER, hullStrength INTEGER, "
                 + "weaponSlots INTEGER, shieldSlots INTEGER, "
                 + "gadgetsSlots INTEGER, attack INTEGER, shield INTEGER, "
                 + "cargoBay INTEGER)";
-<<<<<<< HEAD
 
-=======
->>>>>>> 33ad2ce0a7076166dbb16aa7b5cf2e34128b7971
         execUpdate(update);
         //System.out.println("\n" + update);
         //System.out.println("ship tatbl");
@@ -574,13 +557,8 @@ public class SqliteAPI {
      * 
      * @throws SQLException
      * @throws ClassNotFoundException 
-<<<<<<< HEAD
-     */
-    private void addShip() throws SQLException, ClassNotFoundException {
-=======
      */
     private static void addShip() throws SQLException, ClassNotFoundException {
->>>>>>> 33ad2ce0a7076166dbb16aa7b5cf2e34128b7971
         update = String.format("INSERT INTO ship (name, fuel, hullStrength, "
                 + "weaponSlots, shieldSlots, gadgetsSlots, attack, shield, "
                 + "cargoBay)"
@@ -588,11 +566,7 @@ public class SqliteAPI {
         		ship.getBase().getName(), ship.getBase().getFuel(), 
         		ship.getBase().getHullStrength(), ship.getWeaponSlots(),
         		ship.getShieldSlots(), ship.getGadgetsSlots(), 
-<<<<<<< HEAD
         		ship.getAttack(), ship.getShield(), ship.getCargoSpace());
-=======
-        		ship.getAttack(), ship.getShield(), ship.getCargoSpace());
->>>>>>> 33ad2ce0a7076166dbb16aa7b5cf2e34128b7971
         execUpdate(update);
     }
 

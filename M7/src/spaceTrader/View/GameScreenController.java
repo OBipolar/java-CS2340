@@ -19,15 +19,19 @@ import static java.lang.Math.sqrt;
 import java.net.URL;
 import java.sql.SQLException;
 import java.util.ArrayList;
-//import java.util.List;
 import java.util.ResourceBundle;
 import java.util.List;
 import java.util.Map;
 
 import javafx.scene.control.Label;
 import javafx.scene.control.MenuBar;
+import javafx.scene.control.RadioButton;
+import javafx.scene.control.Tab;
+import javafx.scene.control.TabPane;
 import javafx.scene.control.TextField;
 import javafx.scene.control.Button;
+import javafx.scene.control.Toggle;
+import javafx.scene.control.ToggleGroup;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.fxml.Initializable;
@@ -40,11 +44,15 @@ import javafx.scene.canvas.Canvas;
 import javafx.scene.canvas.GraphicsContext;
 import spaceTrader.Planets.SolarSystem;
 import spaceTrader.Planets.Universe;
+import javafx.beans.value.ChangeListener;
+import javafx.beans.value.ObservableValue;
 
 import java.util.Random;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 
+import javafx.beans.value.ChangeListener;
+import javafx.beans.value.ObservableValue;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 import javafx.geometry.Insets;
@@ -54,14 +62,13 @@ import javafx.scene.control.ChoiceBox;
 import javafx.scene.control.Dialogs;
 import javafx.scene.control.ListView;
 import javafx.scene.layout.VBox;
-import javafx.scene.layout.VBoxBuilder;
 import javafx.scene.text.Text;
 import javafx.stage.Modality;
 import javafx.stage.Stage;
+import spaceTrader.Equipment.Weapon;
 import spaceTrader.Goods.Trade;
 import spaceTrader.Planets.Capital;
 import spaceTrader.Planets.GameCharacter;
-//import spaceTrader.Planets.PlayerShip;
 import javafx.util.converter.IntegerStringConverter;
 import spaceTrader.APIs.MarketPlace;
 import spaceTrader.APIs.RandomEvent;
@@ -92,6 +99,13 @@ public class GameScreenController implements Initializable, ControlledScreen {
     private List<String> toBuyList;
     private List<String> toSellList;
     private List<String> shipNames;
+    private List<String> weaponNames;
+    private List<String> shieldNames;
+    private List<String> gadgetNames;
+    private Map<String, Integer> shipPrices;
+	private Map<String, Integer> weaponPrices;
+	private Map<String, Integer> shieldPrices;
+	private Map<String, Integer> gadgetPrices;
     private Map<String, Integer> toSellMap;
     private Map<String, Integer> toBuyMap;
     private MarketPlace mp;
@@ -101,14 +115,12 @@ public class GameScreenController implements Initializable, ControlledScreen {
     private int currY;
     private int maxFuel;
     private int maxPull;
-    private int realFuel;
     private int hull;
-    private int travelDistance;
     private GraphicsContext gc;
     private GraphicsContext gc2;
     private Travel travel;
     private IntegerStringConverter isConvert;
-    
+    private String tempShipName;
     private SolarSystem solarSystem;
     private SolarSystem targetSystem;
     private PlayerShip ship;
@@ -116,13 +128,7 @@ public class GameScreenController implements Initializable, ControlledScreen {
     private GameCharacter player;
     private List<String> reachablePlanets;
     private RandomEvent re;
-    private boolean checkFindFired;
     ObservableList<String> playerInfo;
-    
-    private int maxNum;
-    private int sellPrice;
-    private int buyPrice;
-    private int lpu;
     
     private int waterSellPrice;
     private int fursSellPrice;
@@ -133,16 +139,6 @@ public class GameScreenController implements Initializable, ControlledScreen {
     private int medicinesSellPrice;
     private int machinesSellPrice;
     private int narcoticsSellPrice;
-     
-    private int waterBuyPrice;
-    private int fursBuyPrice;
-    private int foodBuyPrice;
-    private int oreBuyPrice;
-    private int gamesBuyPrice;
-    private int firearmsBuyPrice;
-    private int medicinesBuyPrice;
-    private int machinesBuyPrice;
-    private int narcoticsBuyPrice;
 
     @FXML
     private TitledPane galaChart;
@@ -157,6 +153,8 @@ public class GameScreenController implements Initializable, ControlledScreen {
     @FXML
     private AnchorPane dock;
     @FXML
+    private TabPane shipyardPane;
+    @FXML
     private ListView targetListView;
     @FXML
     private ListView dockListView;
@@ -170,8 +168,7 @@ public class GameScreenController implements Initializable, ControlledScreen {
     private AnchorPane cargoChart;
     @FXML
     private Button findPlanet;
-    @FXML
-    private Button buyShip;
+
     @FXML
     private ListView systemListView;
     @FXML
@@ -179,7 +176,22 @@ public class GameScreenController implements Initializable, ControlledScreen {
     @FXML
     private ListView travelInfoListView;
     @FXML
-    private ListView shipyardListView;
+    private ListView shipListView;
+    @FXML
+    private ListView weaponListView;
+    @FXML
+    private ListView shieldListView;
+    @FXML
+    private ListView gadgetListView;
+    @FXML
+    private Tab shipTab;
+    @FXML
+    private Tab weaponTab;
+    @FXML
+    private Tab shieldTab;
+    @FXML
+    private Tab gadgetTab;
+    
     
     @FXML
     private ChoiceBox waterChoose;
@@ -262,15 +274,20 @@ public class GameScreenController implements Initializable, ControlledScreen {
     @FXML
     private TextField findPlanetField;
     @FXML
+    private TextField upgradeTextField;
+    @FXML
     private MenuBar menuBar;
+   
     
     @Override
     public void setScreenParent(ScreensController screenParent) {
         myController = screenParent;
     }
     
-    private void setMarketPlace() {
-        mp = new MarketPlace();
+    
+    @FXML
+    private void saveButtonFired(ActionEvent event) {
+    	db.update();
     }
     
     @FXML
@@ -359,9 +376,8 @@ public class GameScreenController implements Initializable, ControlledScreen {
         travel = new Travel();
         travel.warpTo(targetSystem.getName(), travelDist, 1);
         int range = 0;
-        //try {
-			//db = new SqliteAPI();
 			ship = db.getShip();
+			System.out.println("travelling ship: " + ship.getBase().getName());
 			range = ship.getBase().getFuel();
 			hull = ship.getBase().getHullStrength();
 			System.out.println("updated ship fuel: " + range);
@@ -395,39 +411,27 @@ public class GameScreenController implements Initializable, ControlledScreen {
 		    setRefuelChoose();
 		    setRepairChoose();
 		    sy = new ShipYard();
-		    showShipNames(sy);
-		        
-//		} catch (ClassNotFoundException e) {
-//			// TODO Auto-generated catch block
-//			e.printStackTrace();
-//		} catch (SQLException e) {
-//			// TODO Auto-generated catch block
-//			e.printStackTrace();
-//		}   
+		    showShipNames(sy); 
         
     }
     
     private void updatePlayerInfo() {
-    	//try {
-			//db = new SqliteAPI();
-			System.out.println("money after buy ship: " + db.getPlayer().getMoney());
+			
 			String s1 = "Cash: " + db.getPlayer().getMoney() + " cr";
-			String s3 = "Current ship type: " + db.getShip().getBase().getName();
-	        System.out.println("money after stolen (2): " + db.getPlayer().getMoney());
-	        String s2 = "Cargo Space Remaining: " + (db.getShip().getBase().getCargoBay() - db.getShip().getCargo().size());
+			String s2 = "Ship Type: " + db.getShip().getBase().getName();
+	        String s3 = "Attack: " + db.getShip().getAttack() + "  Shield: " + db.getShip().getShield();
+	        String s4 = "Remaining Weapon Slots: " + db.getShip().getWeaponSlots();
+	        String s7 = "Remaining Shield Slots: " + db.getShip().getShieldSlots();
+	        String s5 = "Remaining Gadget Slots: " + db.getShip().getGadgetsSlots();
+	        String s6 = "Cargo Space Remaining: " + (db.getShip().getCargoSpace() - db.getShip().getCargo().size());
 	        playerInfo = FXCollections.observableArrayList(
-	         s1, s3, s2);
+	         s1, s2, s3, s4, s7, s5, s6);
 	        
 	        for (Good g : db.getShip().getCargo()) {
 	        	playerInfo.add(g.getName());
 	        }
 	        
 	        playerListView.setItems(playerInfo);
-//		}
-//    	catch (ClassNotFoundException | SQLException e) {
-//			// TODO Auto-generated catch block
-//			e.printStackTrace();
-//		}
         
     }
     
@@ -482,88 +486,134 @@ public class GameScreenController implements Initializable, ControlledScreen {
 //		}
     	
     }
-    
+//    
     @FXML
     private void refuelFired(ActionEvent event) {
-//        try {
-//			db = new SqliteAPI();
-//			int perCost = db.getShip().getBase().getFuelCost();
-//			int amount = converter.fromString(refuelChoose.getValue().toString());
-//			int cost = amount * perCost;
-//			
-//			player = db.getPlayer();
-//			ship = db.getShip();
-//			player.setMoney(db.getPlayer().getMoney() - cost);
-//			ship.getBase().setFuel(db.getShip().getBase().getFuel() + amount);
-//			updateDatabase(player,ship);
-//			setRefuelChoose();
-//			// update dock info, redraw long and short range charts
-//			showDockInfo(db.getShip(), db.getShip().getBase().getFuel(), db.getShip().getBase().getHullStrength());
-//			gc = canvas.getGraphicsContext2D();
-//		    drawLongRange(db.getPlayer().getXpos(), db.getPlayer().getYpos(), db.getShip().getBase().getFuel(), gc);
-//		    gc2 = canvas2.getGraphicsContext2D();
-//		    drawShortRange(db.getPlayer().getXpos(), db.getPlayer().getYpos(), db.getShip().getBase().getFuel(), gc2);
-//			
-//			
-//			updatePlayerInfo();
-//		} catch (ClassNotFoundException e) {
-//			// TODO Auto-generated catch block
-//			e.printStackTrace();
-//		} catch (SQLException e) {
-//			// TODO Auto-generated catch block
-//			e.printStackTrace();
-//		}
-        
+////        try {
+////			db = new SqliteAPI();
+////			int perCost = db.getShip().getBase().getFuelCost();
+////			int amount = converter.fromString(refuelChoose.getValue().toString());
+////			int cost = amount * perCost;
+////			
+////			player = db.getPlayer();
+////			ship = db.getShip();
+////			player.setMoney(db.getPlayer().getMoney() - cost);
+////			ship.getBase().setFuel(db.getShip().getBase().getFuel() + amount);
+////			updateDatabase(player,ship);
+////			setRefuelChoose();
+////			// update dock info, redraw long and short range charts
+////			showDockInfo(db.getShip(), db.getShip().getBase().getFuel(), db.getShip().getBase().getHullStrength());
+////			gc = canvas.getGraphicsContext2D();
+////		    drawLongRange(db.getPlayer().getXpos(), db.getPlayer().getYpos(), db.getShip().getBase().getFuel(), gc);
+////		    gc2 = canvas2.getGraphicsContext2D();
+////		    drawShortRange(db.getPlayer().getXpos(), db.getPlayer().getYpos(), db.getShip().getBase().getFuel(), gc2);
+////			
+////			
+////			updatePlayerInfo();
+////		} catch (ClassNotFoundException e) {
+////			// TODO Auto-generated catch block
+////			e.printStackTrace();
+////		} catch (SQLException e) {
+////			// TODO Auto-generated catch block
+////			e.printStackTrace();
+////		}
+//        
     }
     
     @FXML
     private void repairFired(ActionEvent event) {
-//    	try {
-//			db = new SqliteAPI();
-//			int perCost = db.getShip().getBase().getRepairCost();
-//			int amount = converter.fromString(repairChoose.getValue().toString());
-//			int cost = amount * perCost;
-//			player = db.getPlayer();
-//			ship = db.getShip();
-//			player.setMoney(player.getMoney() - cost);
-//			ship.getBase().setHullStrength(ship.getBase().getHullStrength() + amount);
-//			updateDatabase(player,ship);
-//			setRepairChoose();
-//			showDockInfo(ship, ship.getBase().getFuel(), ship.getBase().getHullStrength());
-//			updatePlayerInfo();
-//		} catch (ClassNotFoundException e) {
-//			// TODO Auto-generated catch block
-//			e.printStackTrace();
-//		} catch (SQLException e) {
-//			// TODO Auto-generated catch block
-//			e.printStackTrace();
-//		}
+////    	try {
+////			db = new SqliteAPI();
+////			int perCost = db.getShip().getBase().getRepairCost();
+////			int amount = converter.fromString(repairChoose.getValue().toString());
+////			int cost = amount * perCost;
+////			player = db.getPlayer();
+////			ship = db.getShip();
+////			player.setMoney(player.getMoney() - cost);
+////			ship.getBase().setHullStrength(ship.getBase().getHullStrength() + amount);
+////			updateDatabase(player,ship);
+////			setRepairChoose();
+////			showDockInfo(ship, ship.getBase().getFuel(), ship.getBase().getHullStrength());
+////			updatePlayerInfo();
+////		} catch (ClassNotFoundException e) {
+////			// TODO Auto-generated catch block
+////			e.printStackTrace();
+////		} catch (SQLException e) {
+////			// TODO Auto-generated catch block
+////			e.printStackTrace();
+////		}
     }
     
     @FXML
-    private void buyShipFired(ActionEvent event) {
-    	sy = new ShipYard();
-    	isConvert = new IntegerStringConverter();
-    	int index = isConvert.fromString(selectShip.textProperty().get());
-    	sy.playerBuyShip(shipNames.get(index - 1));
-    	System.out.println("player's current ship: " + db.getShip().getBase().getName());
-    	updatePlayerInfo();
-    	//try {
-			//db = new SqliteAPI();
-			showDockInfo(db.getShip(), db.getShip().getBase().getFuel(), db.getShip().getBase().getHullStrength());
-			gc = canvas.getGraphicsContext2D();
-		    drawLongRange(db.getPlayer().getXpos(), db.getPlayer().getYpos(), db.getShip().getBase().getFuel(), gc);
-		    gc2 = canvas2.getGraphicsContext2D();
-		    drawShortRange(db.getPlayer().getXpos(), db.getPlayer().getYpos(), db.getShip().getBase().getFuel(), gc2);
-		    mess(toBuyList, toBuyMap, toSellList, toSellMap, mp);
-//		} catch (ClassNotFoundException e) {
-//			// TODO Auto-generated catch block
-//			e.printStackTrace();
-//		} catch (SQLException e) {
-//			// TODO Auto-generated catch block
-//			e.printStackTrace();
-//		}
-    	
+    private void upgradeBuyFired(ActionEvent event) {
+    	for (Tab t : shipyardPane.getTabs()) {
+    		if (t.isSelected() && t.getId().equals("shipTab")) {
+    			sy = new ShipYard();
+    			shipNames = sy.getShipNames();
+    			if (shipNames.size() > 0) {
+    				int index = shipListView.getSelectionModel().getSelectedIndex();
+        			
+        	    	sy.playerBuyShip(shipNames.get(index));
+        	    	System.out.println("player's current ship: " + db.getShip().getBase().getName());
+        	    	updatePlayerInfo();
+        	    	showDockInfo(db.getShip(), db.getShip().getBase().getFuel(), db.getShip().getBase().getHullStrength());
+        			gc = canvas.getGraphicsContext2D();
+        			drawLongRange(db.getPlayer().getXpos(), db.getPlayer().getYpos(), db.getShip().getBase().getFuel(), gc);
+        			gc2 = canvas2.getGraphicsContext2D();
+        			drawShortRange(db.getPlayer().getXpos(), db.getPlayer().getYpos(), db.getShip().getBase().getFuel(), gc2);
+        			mess(toBuyList, toBuyMap, toSellList, toSellMap, mp);
+        			sy = new ShipYard();
+        			showShipNames(sy);
+    			}
+    			
+    		} else if (t.isSelected() && t.getId().equals("weaponTab")) {
+    			sy = new ShipYard();
+    			weaponNames = sy.getWeaponNames();
+    			if (weaponNames.size() > 0) {
+    				int index = weaponListView.getSelectionModel().getSelectedIndex();
+        			
+        	    	sy.playerBuyWeapon(weaponNames.get(index));
+        	    	
+        	    	updatePlayerInfo();
+        	    	
+        			mess(toBuyList, toBuyMap, toSellList, toSellMap, mp);
+        			sy = new ShipYard();
+        			showShipNames(sy);
+    			}
+    			
+    		} else if (t.isSelected() && t.getId().equals("shieldTab")) {
+    			sy = new ShipYard();
+    			shieldNames = sy.getShieldNames();
+    			if (shieldNames.size() > 0) {
+    				int index = shieldListView.getSelectionModel().getSelectedIndex();
+        			
+        	    	sy.playerBuyShield(shieldNames.get(index));
+        	    	
+        	    	updatePlayerInfo();
+        	    	
+        			mess(toBuyList, toBuyMap, toSellList, toSellMap, mp);
+        			sy = new ShipYard();
+        			showShipNames(sy);
+    			}
+    			
+    		} else if (t.isSelected() && t.getId().equals("gadgetTab")) {
+    			sy = new ShipYard();
+    			gadgetNames = sy.getGadgetNames();
+    			if (gadgetNames.size() > 0) {
+    				int index = gadgetListView.getSelectionModel().getSelectedIndex();
+        			
+        	    	sy.playerBuyCargoExpansion();
+        	    	
+        	    	updatePlayerInfo();
+        	    	
+        			mess(toBuyList, toBuyMap, toSellList, toSellMap, mp);
+        			sy = new ShipYard();
+        			showShipNames(sy);
+    			}
+    			
+    		}
+    	}
+  	
     }
     
     @FXML    
@@ -886,24 +936,96 @@ public class GameScreenController implements Initializable, ControlledScreen {
     
     private void showShipNames(ShipYard sy) {
     	ObservableList<String> shipItem = FXCollections.observableArrayList();
-    	 if (!sy.isYardExist()) {
-    		 shipItem.add("Tech level on this planet is too low to have a shipyard!");
-    	 } else {
-    		 shipNames = sy.getShipNames();
-    		 if (shipNames.size() == 0) {
-    			 shipItem.add("You don't have enough money to buy any ship on this planet!");
-    		 } else {
-    			 int count = 1;
-    	    	 for (String s : shipNames) {
-    	    		 shipItem.add(count + ". " + s);
-    	    		 count++;
-    	    	 }
-    		 }
-    		 
-    	 }
-    	 shipyardListView.setItems(shipItem);
+    	ObservableList<String> weaponItem = FXCollections.observableArrayList();
+    	ObservableList<String> shieldItem = FXCollections.observableArrayList();
+    	ObservableList<String> gadgetItem = FXCollections.observableArrayList();
+   	 	if (!sy.isYardExist()) {
+   	 		shipItem.add("Tech level on this planet is too low to have a shipyard!");
+   	 		weaponItem.add("Tech level on this planet is too low to have a shipyard!");
+   	 		shieldItem.add("Tech level on this planet is too low to have a shipyard!");
+   	 		gadgetItem.add("Tech level on this planet is too low to have a shipyard!");
+   	 	} else {
+   	 		shipNames = sy.getShipNames();
+   	 		shipPrices = sy.getShipPrices();
+   	 		if (shipNames.size() == 0) {
+   	 			shipItem.add("You don't have enough money to buy any ship on this planet!");
+   	 		} else {
+   	 			int count = 1;
+   	 			for (String s : shipNames) {
+   	 				shipItem.add(count + ". " + s + ": " + shipPrices.get(s) + "cr.");
+   	    			count++;
+   	 			}
+   	 		}
+   	 		
+   	 		weaponNames = sy.getWeaponNames();
+   	 		weaponPrices = sy.getWeaponPrices();
+   	 		if (weaponNames.size() == 0) {
+   	 			if (db.getShip().getWeaponSlots() <= 0) {
+   	 				weaponItem.add("You don't have any extra weapon slots!");
+	 			} else {
+	 				weaponItem.add("You don't have enough money to buy any weapon on this planet!");
+	 			}
+	 		} else {
+	 			int count = 1;
+	 			for (String s : weaponNames) {
+	 				weaponItem.add(count + ". " + s + ": " + weaponPrices.get(s) + "cr.");
+	    			count++;
+	 			}
+	 		}
+	 		
+	 		shieldNames = sy.getShieldNames();
+	 		shieldPrices = sy.getShieldPrices();
+   	 		if (shieldNames.size() == 0) {
+   	 			if (db.getShip().getShieldSlots() <= 0) {
+	 				shieldItem.add("You don't have any extra shield slots!");
+   	 			} else {
+   	 				shieldItem.add("You don't have enough money to buy any shield on this planet!");
+   	 			}
+   	 		} else {
+   	 			int count = 1;
+   	 			for (String s : shieldNames) {
+   	 				shieldItem.add(count + ". " + s + ": " + shieldPrices.get(s) + "cr.");
+   	    			count++;
+   	 			}
+   	 		}
+   	 		
+   	 		gadgetNames = sy.getGadgetNames();
+   	 		gadgetPrices = sy.getGadgetPrices();
+   	 		int techLevel = 0;
+   	 		try {
+				techLevel = db.getSolarSystem().getPlanet().getTechLevel().ordinal();
+				if (techLevel == 6) {
+	   	 			if (gadgetNames.size() == 0) {
+	   	 				if (db.getShip().getGadgetsSlots() <= 0) {
+	   	 					gadgetItem.add("You don't have any extra gadget slots!");
+	   	 				} else {
+	   	 					gadgetItem.add("You don't have enough money to buy any gadget on this planet!");
+	   	 				}
+	   	 			} else {
+	   	 				int count = 1;
+	   	 				for (String s : gadgetNames) {
+	   	 					gadgetItem.add(count + ". " + s + ": " + gadgetPrices.get(s) + "cr.");
+	   	 					count++;
+	   	 				}
+	   	 			}
+	   	 		} else {
+	   	 			gadgetItem.add("Gadgets available only on highest tech");
+	   	 		}
+			} catch (ClassNotFoundException e) {
+				// TODO Auto-generated catch block
+				e.printStackTrace();
+			} catch (SQLException e) {
+				// TODO Auto-generated catch block
+				e.printStackTrace();
+			}
+   	 	}
+   	 	
+   	 	shipListView.setItems(shipItem);
+   	 	weaponListView.setItems(weaponItem);
+   	 	shieldListView.setItems(shieldItem);
+   	 	gadgetListView.setItems(gadgetItem);
     }
-    
+ 
     
     @Override
     public void initialize(URL url, ResourceBundle rb) {
@@ -913,11 +1035,16 @@ public class GameScreenController implements Initializable, ControlledScreen {
 			player = db.getPlayer();
 	        ship = db.getShip();
 	        uni = db.getUniverse();
-	        //uni = new Universe();
-	        realFuel = maxFuel = ship.getBase().getFuel();
+	        maxFuel = ship.getBase().getFuel();
 	        hull = maxPull = ship.getBase().getHullStrength();
 	        solarList = uni.getUniverse();
 	        System.out.println("shipyard exists: " + sy.isYardExist());
+	        
+	        shipTab.setId("shipTab");
+	        weaponTab.setId("weaponTab");
+	        shieldTab.setId("shieldTab");
+	        gadgetTab.setId("gadgetTab");
+	        
 	        showShipNames(sy);
 	        
 		} catch (ClassNotFoundException e) {
@@ -1013,7 +1140,7 @@ public class GameScreenController implements Initializable, ControlledScreen {
     public void mess(List<String> toBuyList, Map<String, Integer> toBuyMap, List<String> toSellList, Map<String, Integer> toSellMap, MarketPlace mp) {
         int maxAmount1;
         int maxAmount2;
-        maxAmount1 = db.getShip().getBase().getCargoBay() - mp.getCargo().size();
+        maxAmount1 = db.getShip().getCargoSpace() - mp.getCargo().size();
         for (String s : toBuyList) {
             if (s.equals("Water")) {
                 waterPrice2.setText("" + toBuyMap.get("Water"));
