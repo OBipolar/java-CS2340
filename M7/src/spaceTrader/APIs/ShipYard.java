@@ -74,19 +74,22 @@ public class ShipYard {
 
 			for (Ship s : ships) {
 				if (player.getMoney() >= s.getPrice()
-				        && ship.getCargoSpace() <= s.getCargoBay()) {
+				        && ship.getCargoSpace() <= s.getCargoBay() 
+				        && planet.getTechLevel().ordinal() >= s.getMinTechLevel()) {
 					shipNames.add(s.getName());
 					shipPrices.put(s.getName(), s.getPrice());
 				}
 			}
 			for (Weapon w : weapons) {
-			    if (player.getMoney() >= w.getPrice() && ship.getWeaponSlots() > 0) {
+			    if (player.getMoney() >= w.getPrice() && ship.getWeaponSlots() > 0
+			            && planet.getTechLevel().ordinal() >= w.getMinTechLevel()) {
                     weaponNames.add(w.getName());
                     weaponPrices.put(w.getName(), w.getPrice());
                 }
 			}
 	        for (Shield s : shields) {
-                if (player.getMoney() >= s.getPrice() && ship.getShieldSlots() > 0) {
+                if (player.getMoney() >= s.getPrice() && ship.getShieldSlots() > 0
+                        && planet.getTechLevel().ordinal() >= s.getMinTechLevel()) {
                     shieldNames.add(s.getName());
                     shieldPrices.put(s.getName(), s.getPrice());
                 }
