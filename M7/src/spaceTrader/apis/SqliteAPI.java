@@ -1,4 +1,4 @@
-package spaceTrader.APIs;
+package spaceTrader.apis;
 
 import java.io.File;
 import java.sql.Connection;

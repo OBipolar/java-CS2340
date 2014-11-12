@@ -10,8 +10,6 @@ import java.util.List;
 import org.junit.Before;
 import org.junit.Test;
 
-import spaceTrader.APIs.SqliteAPI;
-import spaceTrader.APIs.Travel;
 import spaceTrader.Goods.Good;
 import spaceTrader.Goods.Ore;
 import spaceTrader.Goods.Water;
@@ -19,6 +17,8 @@ import spaceTrader.Planets.GameCharacter;
 import spaceTrader.Planets.SolarSystem;
 import spaceTrader.Planets.Universe;
 import spaceTrader.Ships.PlayerShip;
+import spaceTrader.apis.SqliteAPI;
+import spaceTrader.apis.Travel;
 
 public class SqliteAPITest {
 

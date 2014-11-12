@@ -10,9 +10,9 @@ import java.net.URL;
 import java.sql.SQLException;
 import java.util.ResourceBundle;
 
-import spaceTrader.APIs.SqliteAPI;
 import spaceTrader.Planets.GameCharacter;
 import spaceTrader.Planets.Universe;
+import spaceTrader.apis.SqliteAPI;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.fxml.Initializable;

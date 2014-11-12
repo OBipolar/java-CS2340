@@ -1,4 +1,4 @@
-package spaceTrader.APIs;
+package spaceTrader.apis;
 
 import java.sql.SQLException;
 

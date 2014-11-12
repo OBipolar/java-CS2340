@@ -1,9 +1,15 @@
 package spaceTrader.Tests;
 
+import static org.junit.Assert.assertEquals;
+
+import java.sql.SQLException;
+
 import org.junit.Before;
 import org.junit.Test;
 
-import spaceTrader.APIs.RandomEvent;
+import spaceTrader.Planets.GameCharacter;
+import spaceTrader.apis.RandomEvent;
+import spaceTrader.apis.SqliteAPI;
 
 public class RandomEventTest {
 
@@ -15,8 +21,28 @@ public class RandomEventTest {
     }
 
     @Test
-    public void test() {
-        System.out.println(r.update());
+    public void testUpdate() {
+        try {
+            SqliteAPI db = new SqliteAPI();
+            GameCharacter player = SqliteAPI.getPlayer();
+            r.setMoneyLost(false);
+            String exp = "Nothing special happened this turn";
+            assertEquals(exp, r.update());
+            
+            r.setMoneyLost(true);
+            int amount = player.getMoney() / r.MONEY_LOSS;;
+            int money = player.getMoney() - amount;
+            exp = "A UGA student just stole " +  amount
+                    + " cr of money from you";
+            assertEquals(exp, r.update());
+            assertEquals(money, SqliteAPI.getPlayer().getMoney());
+        } catch (ClassNotFoundException e) {
+            // TODO Auto-generated catch block
+            e.printStackTrace();
+        } catch (SQLException e) {
+            // TODO Auto-generated catch block
+            e.printStackTrace();
+        }
     }
 
 }

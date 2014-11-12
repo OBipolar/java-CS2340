@@ -7,11 +7,11 @@ import java.sql.SQLException;
 import org.junit.Before;
 import org.junit.Test;
 
-import spaceTrader.APIs.SqliteAPI;
-import spaceTrader.APIs.Travel;
 import spaceTrader.Planets.SolarSystem;
 import spaceTrader.Planets.Universe;
 import spaceTrader.Ships.PlayerShip;
+import spaceTrader.apis.SqliteAPI;
+import spaceTrader.apis.Travel;
 
 public class TravelTest {
 

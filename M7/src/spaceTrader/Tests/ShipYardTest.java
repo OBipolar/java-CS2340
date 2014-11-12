@@ -8,8 +8,6 @@ import java.util.List;
 import org.junit.Before;
 import org.junit.Test;
 
-import spaceTrader.APIs.ShipYard;
-import spaceTrader.APIs.SqliteAPI;
 import spaceTrader.Equipment.EquipmentFactory;
 import spaceTrader.Equipment.Shield;
 import spaceTrader.Equipment.Weapon;
@@ -17,6 +15,8 @@ import spaceTrader.Planets.GameCharacter;
 import spaceTrader.Ships.PlayerShip;
 import spaceTrader.Ships.Ship;
 import spaceTrader.Ships.ShipFactory;
+import spaceTrader.apis.ShipYard;
+import spaceTrader.apis.SqliteAPI;
 
 public class ShipYardTest {
 

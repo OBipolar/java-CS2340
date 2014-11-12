@@ -7,8 +7,8 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
-import spaceTrader.APIs.SqliteAPI;
 import spaceTrader.Planets.GameCharacter;
+import spaceTrader.apis.SqliteAPI;
 
 /**
  * Factory for equipments
