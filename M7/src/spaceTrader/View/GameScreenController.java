@@ -7,10 +7,14 @@
 package spaceTrader.View;
 
 import spaceTrader.Planets.GameCharacter;
-import spaceTrader.APIs.MarketPlace;
 import spaceTrader.Ships.PlayerShip;
 import spaceTrader.Ships.Ship;
 import spaceTrader.Ships.ShipFactory;
+import spaceTrader.apis.MarketPlace;
+import spaceTrader.apis.RandomEvent;
+import spaceTrader.apis.ShipYard;
+import spaceTrader.apis.SqliteAPI;
+import spaceTrader.apis.Travel;
 import static java.lang.Double.max;
 import static java.lang.Double.min;
 import static java.lang.Math.pow;
@@ -70,11 +74,6 @@ import spaceTrader.Goods.Trade;
 import spaceTrader.Planets.Capital;
 import spaceTrader.Planets.GameCharacter;
 import javafx.util.converter.IntegerStringConverter;
-import spaceTrader.APIs.MarketPlace;
-import spaceTrader.APIs.RandomEvent;
-import spaceTrader.APIs.ShipYard;
-import spaceTrader.APIs.SqliteAPI;
-import spaceTrader.APIs.Travel;
 import spaceTrader.Goods.Firearms;
 import spaceTrader.Goods.Food;
 import spaceTrader.Goods.Furs;

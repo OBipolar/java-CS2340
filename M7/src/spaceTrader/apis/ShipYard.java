@@ -1,4 +1,4 @@
-package spaceTrader.APIs;
+package spaceTrader.apis;
 
 import java.sql.SQLException;
 import java.util.ArrayList;
@@ -139,7 +139,7 @@ public class ShipYard {
             int loss = cost * (fullFuel - ship.getBase().getFuel());
             int money = player.getMoney() - loss;
             if (money < 0) {
-                return "You don't have enough money to repair";
+                return "You don't have enough money to refuel";
             }
             player.setMoney(money);
             ship.getBase().setFuel(fullFuel);

@@ -1,4 +1,4 @@
-package spaceTrader.APIs;
+package spaceTrader.apis;
 
 import java.sql.SQLException;
 import java.util.List;
@@ -71,18 +71,16 @@ public class MarketPlace {
      */
     private void load() {
 
-            player = SqliteAPI.getPlayer();
-            ship = SqliteAPI.getShip();
+        player = SqliteAPI.getPlayer();
+        ship = SqliteAPI.getShip();
 
-            try {
-                system = SqliteAPI.getSolarSystem();
-            } catch (ClassNotFoundException e) {
-                // TODO Auto-generated catch block
-                e.printStackTrace();
-            } catch (SQLException e) {
-                // TODO Auto-generated catch block
-                e.printStackTrace();
-            }
+        try {
+            system = SqliteAPI.getSolarSystem();
+        } catch (ClassNotFoundException e) {
+            System.out.println(e);
+        } catch (SQLException e) {
+            System.out.println(e);
+        }
 
 
     }

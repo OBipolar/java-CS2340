@@ -8,9 +8,9 @@ import java.util.List;
 import org.junit.Before;
 import org.junit.Test;
 
-import spaceTrader.APIs.MarketPlace;
 import spaceTrader.Goods.Good;
 import spaceTrader.Goods.Water;
+import spaceTrader.apis.MarketPlace;
 
 public class MarketPlaceTest {
 
