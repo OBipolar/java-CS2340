@@ -488,7 +488,8 @@ public class GameScreenController implements Initializable, ControlledScreen {
 			ship = db.getShip();
 			player.setMoney(db.getPlayer().getMoney() - cost);
 			ship.getBase().setFuel(db.getShip().getBase().getFuel() + amount);
-			db.update(ship, player);
+			SqliteAPI.setPlayer(player);
+			SqliteAPI.setShip(ship);
 			setRefuelChoose();
 			// update dock info, redraw long and short range charts
 			showDockInfo(db.getShip(), db.getShip().getBase().getFuel(), db.getShip().getBase().getHullStrength());
@@ -513,7 +514,8 @@ public class GameScreenController implements Initializable, ControlledScreen {
 			ship = db.getShip();
 			player.setMoney(player.getMoney() - cost);
 			ship.getBase().setHullStrength(ship.getBase().getHullStrength() + amount);
-			db.update(ship, player);
+			SqliteAPI.setPlayer(player);
+			SqliteAPI.setShip(ship);
 			setRepairChoose();
 			showDockInfo(ship, ship.getBase().getFuel(), ship.getBase().getHullStrength());
 			updatePlayerInfo();
