@@ -6,13 +6,10 @@
 
 package spacetrader.view;
 
-import java.net.URL;
-import java.sql.SQLException;
-import java.util.ResourceBundle;
-
 import spacetrader.apis.SqliteApi;
 import spacetrader.planets.GameCharacter;
 import spacetrader.planets.Universe;
+
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.fxml.Initializable;
@@ -21,6 +18,10 @@ import javafx.scene.control.Button;
 import javafx.scene.control.Label;
 import javafx.scene.control.TextField;
 import javafx.util.converter.IntegerStringConverter;
+
+import java.net.URL;
+import java.sql.SQLException;
+import java.util.ResourceBundle;
 
 /**
  * FXML Controller class
@@ -103,20 +104,20 @@ public class ConfigurePageController implements Initializable, ControlledScreen 
 
     @FXML
     private void nextButtonFired(ActionEvent event) {
-    		player = new GameCharacter(userName, pilotP, fighterP, traderP,
+            player = new GameCharacter(userName, pilotP, fighterP, traderP,
                 engineerP);
-        	//Sqlite s = new Sqlite();
-    		System.out.println(player.getName());
-        	try {
-				sqlite = new SqliteApi(player);
-				System.out.println(SqliteApi.isDbCreated());
-				System.out.println(player.getName());
-				System.out.println("xpos: " + player.getXpos());
-				myController.loadScreen("gamePage", "GameScreen.fxml");
-			} catch (Exception e) {
-				// TODO Auto-generated catch block
-				e.printStackTrace();
-			}
+            //Sqlite s = new Sqlite();
+            System.out.println(player.getName());
+            try {
+                sqlite = new SqliteApi(player);
+                System.out.println(SqliteApi.isDbCreated());
+                System.out.println(player.getName());
+                System.out.println("xpos: " + player.getXpos());
+                myController.loadScreen("gamePage", "GameScreen.fxml");
+            } catch (Exception e) {
+                // TODO Auto-generated catch block
+                e.printStackTrace();
+            }
             myController.setScreen(Main.screen3ID);
             //Universe universe = new Universe();
             //System.out.println(universe.toString());
@@ -227,8 +228,8 @@ public class ConfigurePageController implements Initializable, ControlledScreen 
         return 16 - (pilotP + fighterP + traderP + engineerP) >= 0;
     }
 
-    private int getPtRemain(int p, int f, int t, int e) {
-        return 16 - (p + f + t + e);
+    private int getPtRemain(int pp, int fp, int tp, int ep) {
+        return 16 - (pp + fp + tp + ep);
     }
 
 }

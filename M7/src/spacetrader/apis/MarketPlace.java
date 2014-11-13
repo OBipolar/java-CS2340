@@ -95,6 +95,8 @@ public class MarketPlace {
      * 
      */
     private void update() {
+        player = trade.getPlayer();
+        ship = trade.getShip();
         SqliteApi.setPlayer(player);
         SqliteApi.setShip(ship);
     }

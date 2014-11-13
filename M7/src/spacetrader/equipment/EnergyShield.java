@@ -13,6 +13,9 @@ public class EnergyShield extends Shield {
     private static final int MIN_TECH_LEVEL = 5;
     private static final int STRENGTH = 50;
     
+    /**
+     * Default Constructor 
+     */
     public EnergyShield() {
         this(NAME, PRICE, MIN_TECH_LEVEL, STRENGTH);
     }

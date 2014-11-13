@@ -56,7 +56,7 @@ public class SqliteApiTest {
     }
 
     @Test
-    public void testListRemove() {
+    public void testListRemove() throws ClassNotFoundException, SQLException {
         Universe uni = SqliteApi.getUniverse();
         System.out.println(uni == null);
         System.out.println(uni.getUniverse().size());

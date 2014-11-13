@@ -26,24 +26,26 @@ public class Travel {
      * 
      * @param planetName
      *            the name of the planet
+     * @throws SQLException 
+     * @throws ClassNotFoundException 
      */
     public void warpTo(String planetName, int travelDist, int hullExhaust) {
         SolarSystem system;
-        try {
-            system = SqliteApi.getSolarSystem(planetName);
-            //updateShip();
-            player.travel(system.getX(), system.getY());
-            ship.getBase().setFuel(ship.getBase().getFuel() - travelDist);
-            ship.getBase().setHullStrength(ship.getBase().getHullStrength() - hullExhaust);
-            update();
+            try {
+                system = SqliteApi.getSolarSystem(planetName);
+                //updateShip();
+                player.travel(system.getX(), system.getY());
+                ship.getBase().setFuel(ship.getBase().getFuel() - travelDist);
+                ship.getBase().setHullStrength(ship.getBase().getHullStrength() - hullExhaust);
+                update();
+            } catch (ClassNotFoundException e) {
+                // TODO Auto-generated catch block
+                e.printStackTrace();
+            } catch (SQLException e) {
+                // TODO Auto-generated catch block
+                e.printStackTrace();
+            }
 
-        } catch (ClassNotFoundException e) {
-            // TODO Auto-generated catch block
-            e.printStackTrace();
-        } catch (SQLException e) {
-            // TODO Auto-generated catch block
-            e.printStackTrace();
-        }
 
     }
 

@@ -15,6 +15,7 @@ public class Firearms extends Good {
      * 
      */
     public Firearms() {
+        super();
         setName("Firearms");
         setMtlp(3);
         setMtlu(1);

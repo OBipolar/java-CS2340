@@ -10,6 +10,9 @@ public enum PriceIncrease {
     DROUGHT(0), COLD(1), CROPFAIL(2), WAR(3), BOREDOM(4), PLAGUE(5),
     LACKOFWORKERS(6);
     
+    /**
+     * number of events that may cause price increase
+     */
     public static final int EVENTS = 7;
     
     @SuppressWarnings("unused")

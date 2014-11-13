@@ -13,6 +13,7 @@ public class Robots extends Good {
      * Constructor thats sets all properties for Robots
      */
     public Robots() {
+        super();
         setName("Robots");
         setMtlp(6);
         setMtlu(4);

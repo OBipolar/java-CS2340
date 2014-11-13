@@ -9,6 +9,9 @@ package spacetrader.equipment;
 public class Weapon extends Equipment {
 
  
+    /**
+     * damage of the weapon 
+     */
     private int damage;
     
     /**

@@ -14,6 +14,7 @@ public class Furs extends Good {
      * Constructor thats sets all properties for Furs
      */
     public Furs() {
+        super();
         setName("Furs");
         setMtlp(0);
         setMtlu(0);
