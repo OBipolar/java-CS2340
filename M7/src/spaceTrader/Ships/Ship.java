@@ -1,6 +1,6 @@
 package spaceTrader.Ships;
 
-import spaceTrader.Equipment.Weapon;
+import spacetrader.equipment.Weapon;
 
 /**
  * Parent class of all ships

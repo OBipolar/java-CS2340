@@ -8,8 +8,8 @@ import org.junit.Before;
 import org.junit.Test;
 
 import spaceTrader.Planets.GameCharacter;
-import spaceTrader.apis.RandomEvent;
-import spaceTrader.apis.SqliteAPI;
+import spacetrader.apis.RandomEvent;
+import spacetrader.apis.SqliteAPI;
 
 public class RandomEventTest {
 

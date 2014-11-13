@@ -10,8 +10,8 @@ import org.junit.Test;
 import spaceTrader.Planets.SolarSystem;
 import spaceTrader.Planets.Universe;
 import spaceTrader.Ships.PlayerShip;
-import spaceTrader.apis.SqliteAPI;
-import spaceTrader.apis.Travel;
+import spacetrader.apis.SqliteAPI;
+import spacetrader.apis.Travel;
 
 public class TravelTest {
 

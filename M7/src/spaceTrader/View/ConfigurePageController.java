@@ -12,7 +12,7 @@ import java.util.ResourceBundle;
 
 import spaceTrader.Planets.GameCharacter;
 import spaceTrader.Planets.Universe;
-import spaceTrader.apis.SqliteAPI;
+import spacetrader.apis.SqliteAPI;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.fxml.Initializable;

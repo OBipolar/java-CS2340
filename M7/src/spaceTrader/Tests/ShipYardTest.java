@@ -8,15 +8,15 @@ import java.util.List;
 import org.junit.Before;
 import org.junit.Test;
 
-import spaceTrader.Equipment.EquipmentFactory;
-import spaceTrader.Equipment.Shield;
-import spaceTrader.Equipment.Weapon;
 import spaceTrader.Planets.GameCharacter;
 import spaceTrader.Ships.PlayerShip;
 import spaceTrader.Ships.Ship;
 import spaceTrader.Ships.ShipFactory;
-import spaceTrader.apis.ShipYard;
-import spaceTrader.apis.SqliteAPI;
+import spacetrader.apis.ShipYard;
+import spacetrader.apis.SqliteAPI;
+import spacetrader.equipment.EquipmentFactory;
+import spacetrader.equipment.Shield;
+import spacetrader.equipment.Weapon;
 
 public class ShipYardTest {
 

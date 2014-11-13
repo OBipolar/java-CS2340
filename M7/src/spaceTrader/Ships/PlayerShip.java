@@ -3,14 +3,14 @@ package spaceTrader.Ships;
 import java.util.ArrayList;
 import java.util.List;
 
-import spaceTrader.Equipment.CargoExpansion;
-import spaceTrader.Equipment.Shield;
-import spaceTrader.Equipment.Weapon;
-import spaceTrader.Goods.Food;
-import spaceTrader.Goods.Furs;
-import spaceTrader.Goods.Good;
-import spaceTrader.Goods.Ore;
-import spaceTrader.Goods.Water;
+import spacetrader.equipment.CargoExpansion;
+import spacetrader.equipment.Shield;
+import spacetrader.equipment.Weapon;
+import spacetrader.goods.Food;
+import spacetrader.goods.Furs;
+import spacetrader.goods.Good;
+import spacetrader.goods.Ore;
+import spacetrader.goods.Water;
 
 public class PlayerShip {
 
