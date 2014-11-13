@@ -2,6 +2,7 @@ package spaceTrader.Tests;
 
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertNotEquals;
+<<<<<<< HEAD
 
 import java.util.ArrayList;
 import java.util.List;
@@ -10,6 +11,13 @@ import spaceTrader.apis.SqliteAPI;
 
 import java.sql.SQLException;
 
+=======
+import java.util.ArrayList;
+import java.util.List;
+import spaceTrader.apis.SqliteAPI;
+import java.sql.SQLException;
+
+>>>>>>> 5aaeac2036eee985819216eaad9be55d341201fa
 import org.junit.Before;
 import org.junit.Test;
 
@@ -33,12 +41,20 @@ public class TradeBuyTest {
     PlayerShip playerShip;
     SolarSystem system;
     Trade trade;
+<<<<<<< HEAD
     GameCharacter player;
+=======
+    
+>>>>>>> 5aaeac2036eee985819216eaad9be55d341201fa
     
     @Before
     public void setUp() throws Exception {
         if (!SqliteAPI.isDBCreated()) {
+<<<<<<< HEAD
             player = new GameCharacter("tempPlayer", 6, 6, 2, 2);
+=======
+            GameCharacter player = new GameCharacter("tempPlayer", 6, 6, 2, 2);
+>>>>>>> 5aaeac2036eee985819216eaad9be55d341201fa
             try {
                 db = new SqliteAPI(player);
                 playerShip = SqliteAPI.getShip();
@@ -56,7 +72,11 @@ public class TradeBuyTest {
             // else load models from database
             try {
                 SqliteAPI db = new SqliteAPI();
+<<<<<<< HEAD
                 player = SqliteAPI.getPlayer();
+=======
+                GameCharacter player = SqliteAPI.getPlayer();
+>>>>>>> 5aaeac2036eee985819216eaad9be55d341201fa
                 playerShip = SqliteAPI.getShip();
                 system = SqliteAPI.getSolarSystem();
                 trade = new Trade(player, playerShip, system);
@@ -73,6 +93,7 @@ public class TradeBuyTest {
     
     @Test
     public void testBuySuccessful() {
+<<<<<<< HEAD
         assertEquals("Can not finish basic buy method", true,trade.buy(new Water()));
     }
 
@@ -99,5 +120,32 @@ public class TradeBuyTest {
         assertNotEquals("Fail to add new gods to the cargo", cargo, playerShip.getCargo());
         assertNotEquals("Fail to update money after buying", oldMoney, player.getMoney());
     }
+=======
+        assertEquals(true,trade.buy(new Water()));
+    }
+
+    @Test
+    public void testBuyFail() {
+        playerShip.setCargoSpace(0);
+        assertEquals(false,trade.buy(new Water()));
+    }   
+    
+    @Test
+    public void testBasicBuy() {
+        List<Good> cargo = new ArrayList<>(playerShip.getCargo());
+        int oldMoney = player.getMoney();
+        trade.buy(new Water());
+        
+        assertNotEquals(cargo, playerShip.getCargo());
+        assertNotEquals(oldMoney, player.getMoney());
+    }
+
+
+    // @Test
+    // public void testSetGoodsToBuy() {
+
+    // }
+>>>>>>> 5aaeac2036eee985819216eaad9be55d341201fa
 
 }
+

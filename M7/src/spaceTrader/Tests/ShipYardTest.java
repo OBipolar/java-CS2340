@@ -20,39 +20,45 @@ import spaceTrader.apis.SqliteAPI;
 
 public class ShipYardTest {
 
-    private ShipYard sY;
-    private SqliteAPI db; 
-    
+    private ShipYard sY; 
+    private SqliteAPI db;
     @Before
     public void setUp() throws Exception {
+    	
+    	db = new SqliteAPI();
         sY = new ShipYard();
-        db = new SqliteAPI();
     }
 
     @Test
     public void testRefuel() {
-    	PlayerShip ship = SqliteAPI.getShip();
-    	int initialFuel = ship.getBase().getFuel();
-    	String statement = sY.refuel();
-    	String expStatement;
-    	GameCharacter player = SqliteAPI.getPlayer();
-    	int fullFuel = (new ShipFactory()).getShip(ship.getBase().getName()).getFuel();
-    	if (ship.getBase().getFuel() >= fullFuel) {
-    		expStatement = "Fuel is full";
-    	} else {
-    		int cost = ship.getBase().getFuelCost();
-    		int loss = cost * (fullFuel - ship.getBase().getFuel());
-    		int money = player.getMoney() - loss;
-    		if (money < 0) {
-    			expStatement = "You don't have enough money to refuel";
-    			assertEquals(initialFuel, ship.getBase().getFuel());
-    		} else {
-    			assertEquals(money, player.getMoney());
-    			assertEquals(fullFuel, ship.getBase().getFuel());
-    			expStatement = "This refuel cost " + loss + " cr";
-    		}
-    	}
+   
+			
+			PlayerShip ship = SqliteAPI.getShip();
+	    	GameCharacter player = SqliteAPI.getPlayer();
+	    	int initialMoney = player.getMoney();
+	    	int initialFuel = ship.getBase().getFuel();
+	    	int fullFuel = (new ShipFactory()).getShip(ship.getBase().getName()).getFuel();
+	    	String statement = sY.refuel();
+	    	String expStatement;
+	    	if (initialFuel >= fullFuel) {
+	    		expStatement = "Fuel is full";
+	    		assertEquals(initialFuel, ship.getBase().getFuel());
+	    	} else {
+	    		int cost = ship.getBase().getFuelCost();
+	    		int loss = cost * (fullFuel - initialFuel);
+	    		int money = initialMoney - loss;
+	    		if (money < 0) {
+	    			expStatement = "You don't have enough money to refuel";
+	    			assertEquals(initialFuel, ship.getBase().getFuel());
+	    		} else {
+	    			assertEquals(money, player.getMoney());
+	    			assertEquals(fullFuel, ship.getBase().getFuel());
+	    			expStatement = "This refuel cost " + loss + " cr";
+	    		}
+	    	}
+	    	
+	    	assertEquals(statement, expStatement);
+
     	
-    	assertEquals(statement, expStatement);
     }
 }

@@ -126,7 +126,7 @@ public class GameScreenController implements Initializable, ControlledScreen {
     private Trade trade;
     private GameCharacter player;
     private List<String> reachablePlanets;
-    private RandomEvent re;
+    private RandomEvent randomEvent;
     ObservableList<String> playerInfo;
     
     private int waterSellPrice;
@@ -161,8 +161,6 @@ public class GameScreenController implements Initializable, ControlledScreen {
     private Canvas canvas;
     @FXML
     private Canvas canvas2;
-    @FXML
-    private TextField selectShip;
     @FXML
     private AnchorPane cargoChart;
     @FXML
@@ -375,19 +373,19 @@ public class GameScreenController implements Initializable, ControlledScreen {
         travel = new Travel();
         if (!targetSystem.getName().equals(solarSystem.getName())) {
         	travel.warpTo(targetSystem.getName(), travelDist, 1);
-        	re = new RandomEvent();
-        	s = re.update();
+        	randomEvent = new RandomEvent();
+        	s = randomEvent.update();
         }
         	
         int range = 0;
 		ship = db.getShip();
-		System.out.println("travelling ship: " + ship.getBase().getName());
+		//System.out.println("travelling ship: " + ship.getBase().getName());
 		range = ship.getBase().getFuel();
 		hull = ship.getBase().getHullStrength();
-		System.out.println("updated ship fuel: " + range);
+		//System.out.println("updated ship fuel: " + range);
 			
-		System.out.println("dist: " + travelDist);
-		System.out.println("range: " + range);
+		//System.out.println("dist: " + travelDist);
+		//System.out.println("range: " + range);
 		solarSystem = targetSystem;
 		trade = new Trade(player, ship, solarSystem);
 		toBuyList = trade.getGoodsToBuy();
@@ -407,7 +405,7 @@ public class GameScreenController implements Initializable, ControlledScreen {
 		
 		player = db.getPlayer();
 	     
-		System.out.println("random event: " + s);
+		//System.out.println("random event: " + s);
 		ObservableList<String> randomInfo = FXCollections.observableArrayList(s, "");
 		travelInfoListView.setItems(randomInfo);
 		updatePlayerInfo();
@@ -487,7 +485,8 @@ public class GameScreenController implements Initializable, ControlledScreen {
 			ship = db.getShip();
 			player.setMoney(db.getPlayer().getMoney() - cost);
 			ship.getBase().setFuel(db.getShip().getBase().getFuel() + amount);
-			db.update(ship, player);
+			SqliteAPI.setPlayer(player);
+			SqliteAPI.setShip(ship);
 			setRefuelChoose();
 			// update dock info, redraw long and short range charts
 			showDockInfo(db.getShip(), db.getShip().getBase().getFuel(), db.getShip().getBase().getHullStrength());
@@ -503,8 +502,6 @@ public class GameScreenController implements Initializable, ControlledScreen {
     
     @FXML
     private void repairFired(ActionEvent event) {
-    	
-			
 			int perCost = db.getShip().getBase().getRepairCost();
 			int amount = converter.fromString(repairChoose.getValue().toString());
 			int cost = amount * perCost;
@@ -512,7 +509,8 @@ public class GameScreenController implements Initializable, ControlledScreen {
 			ship = db.getShip();
 			player.setMoney(player.getMoney() - cost);
 			ship.getBase().setHullStrength(ship.getBase().getHullStrength() + amount);
-			db.update(ship, player);
+			SqliteAPI.setPlayer(player);
+			SqliteAPI.setShip(ship);
 			setRepairChoose();
 			showDockInfo(ship, ship.getBase().getFuel(), ship.getBase().getHullStrength());
 			updatePlayerInfo();
@@ -529,7 +527,7 @@ public class GameScreenController implements Initializable, ControlledScreen {
     				int index = shipListView.getSelectionModel().getSelectedIndex();
         			
         	    	sy.playerBuyShip(shipNames.get(index));
-        	    	System.out.println("player's current ship: " + db.getShip().getBase().getName());
+        	    	//System.out.println("player's current ship: " + db.getShip().getBase().getName());
         	    	updatePlayerInfo();
         	    	showDockInfo(db.getShip(), db.getShip().getBase().getFuel(), db.getShip().getBase().getHullStrength());
         			gc = canvas.getGraphicsContext2D();
@@ -706,7 +704,6 @@ public class GameScreenController implements Initializable, ControlledScreen {
                 mp.playerSell(new Machines());
             }
             mess(toBuyList, toBuyMap, toSellList, toSellMap, mp);
-            //updateDatabase(db.getPlayer(), db.getShip());
             updatePlayerInfo();
             sy = new ShipYard();
             showShipNames(sy);
@@ -1013,7 +1010,7 @@ public class GameScreenController implements Initializable, ControlledScreen {
 	        maxFuel = ship.getBase().getFuel();
 	        hull = maxPull = ship.getBase().getHullStrength();
 	        solarList = uni.getUniverse();
-	        System.out.println("shipyard exists: " + sy.isYardExist());
+	        //System.out.println("shipyard exists: " + sy.isYardExist());
 	        
 	        shipTab.setId("shipTab");
 	        weaponTab.setId("weaponTab");
@@ -1101,24 +1098,13 @@ public class GameScreenController implements Initializable, ControlledScreen {
         return count;
     }
     
-//    private void updateDatabase(GameCharacter player, PlayerShip ship) {
-//        try {
-//            db.openConnection();
-//            db.update();
-//            db.closeConnection();
-//        } catch (SQLException | ClassNotFoundException e) {
-//            // TODO Auto-generated catch block
-//            e.printStackTrace();
-//        }
-//    }
-    
     public void mess(List<String> toBuyList, Map<String, Integer> toBuyMap, List<String> toSellList, Map<String, Integer> toSellMap, MarketPlace mp) {
         int maxAmount1;
         int maxAmount2;
         maxAmount1 = db.getShip().getCargoSpace() - mp.getCargo().size();
         for (String s : toBuyList) {
             if (s.equals("Water")) {
-                waterPrice2.setText("" + toBuyMap.get("Water"));
+                waterPrice2.setText(Integer.toString(toBuyMap.get("Water")));
                 maxAmount2 = mp.getPlayerMoney() / toBuyMap.get("Water");
                 int maxBuy = Math.min(maxAmount1,maxAmount2);
                 ObservableList<String> buyChoice = FXCollections.observableArrayList();
@@ -1127,7 +1113,7 @@ public class GameScreenController implements Initializable, ControlledScreen {
                 }
                 waterChoose2.setItems(buyChoice);
             } else if (s.equals("Furs")) {
-                fursPrice2.setText("" + toBuyMap.get("Furs"));
+                fursPrice2.setText(Integer.toString(toBuyMap.get("Furs")));
                 maxAmount2 = mp.getPlayerMoney() / toBuyMap.get("Furs");
                 int maxBuy = Math.min(maxAmount1,maxAmount2);
                 ObservableList<String> buyChoice = FXCollections.observableArrayList ();
@@ -1136,7 +1122,7 @@ public class GameScreenController implements Initializable, ControlledScreen {
                 }
                 fursChoose2.setItems(buyChoice);
             } else if (s.equals("Food")) {
-                foodPrice2.setText("" + toBuyMap.get("Food"));
+                foodPrice2.setText(Integer.toString(toBuyMap.get("Food")));
                 maxAmount2 = mp.getPlayerMoney() / toBuyMap.get("Food");  
                 int maxBuy = Math.min(maxAmount1,maxAmount2);
                 ObservableList<String> buyChoice = FXCollections.observableArrayList ();
@@ -1145,7 +1131,7 @@ public class GameScreenController implements Initializable, ControlledScreen {
                 }
                 foodChoose2.setItems(buyChoice);
             } else if (s.equals("Ore")) {
-                orePrice2.setText("" + toBuyMap.get("Ore"));
+                orePrice2.setText(Integer.toString(toBuyMap.get("Ore")));
                 maxAmount2 = mp.getPlayerMoney() / toBuyMap.get("Ore"); 
                 int maxBuy = Math.min(maxAmount1,maxAmount2);
                 ObservableList<String> buyChoice = FXCollections.observableArrayList ();
@@ -1154,7 +1140,7 @@ public class GameScreenController implements Initializable, ControlledScreen {
                 }
                 oreChoose2.setItems(buyChoice);
             } else if (s.equals("Games")) {
-                gamesPrice2.setText("" + toBuyMap.get("Games"));
+                gamesPrice2.setText(Integer.toString(toBuyMap.get("Games")));
                 maxAmount2 = mp.getPlayerMoney() / toBuyMap.get("Games");
                 int maxBuy = Math.min(maxAmount1,maxAmount2);
                 ObservableList<String> buyChoice = FXCollections.observableArrayList ();
@@ -1163,7 +1149,7 @@ public class GameScreenController implements Initializable, ControlledScreen {
                 }
                 gamesChoose2.setItems(buyChoice);
             } else if (s.equals("Firearms")) {
-                firearmsPrice2.setText("" + toBuyMap.get("Firearms"));
+                firearmsPrice2.setText(Integer.toString(toBuyMap.get("Firearms")));
                 maxAmount2 = mp.getPlayerMoney() / toBuyMap.get("Firearms");
                 int maxBuy = Math.min(maxAmount1,maxAmount2);
                 ObservableList<String> buyChoice = FXCollections.observableArrayList ();
@@ -1172,30 +1158,30 @@ public class GameScreenController implements Initializable, ControlledScreen {
                 }
                 firearmsChoose2.setItems(buyChoice);
             } else if (s.equals("Medicines")) {
-                medicinesPrice2.setText("" + toBuyMap.get("Medicines"));
+                medicinesPrice2.setText(Integer.toString(toBuyMap.get("Medicines")));
                 maxAmount2 = mp.getPlayerMoney() / toBuyMap.get("Medicines");
                 int maxBuy = Math.min(maxAmount1,maxAmount2);
                 ObservableList<String> buyChoice = FXCollections.observableArrayList ();
                 for (int i = maxBuy; i >= 0;i--) {
-                    buyChoice.add("" + i);
+                    buyChoice.add(Integer.toString(i));
                 }
                 medicinesChoose2.setItems(buyChoice);
             } else if (s.equals("Narcotics")) {
-                narcoticsPrice2.setText("" + toBuyMap.get("Narcotics"));
+                narcoticsPrice2.setText(Integer.toString(toBuyMap.get("Narcotics")));
                 maxAmount2 = mp.getPlayerMoney() / toBuyMap.get("Narcotics");
                 int maxBuy = Math.min(maxAmount1,maxAmount2);
                 ObservableList<String> buyChoice = FXCollections.observableArrayList ();
                 for (int i = maxBuy; i >= 0;i--) {
-                    buyChoice.add("" + i);
+                	buyChoice.add(Integer.toString(i));
                 }
                 narcoticsChoose2.setItems(buyChoice);
             } else if (s.equals("Machines")) {
-                machinesPrice2.setText("" + toBuyMap.get("water"));
+                machinesPrice2.setText(Integer.toString(toBuyMap.get("water")));
                 maxAmount2 = mp.getPlayerMoney() / toBuyMap.get("Machines");
                 int maxBuy = Math.min(maxAmount1,maxAmount2);
                 ObservableList<String> buyChoice = FXCollections.observableArrayList ();
                 for (int i = maxBuy; i >= 0;i--) {
-                    buyChoice.add("" + i);
+                	buyChoice.add(Integer.toString(i));
                 }
                 machinesChoose2.setItems(buyChoice);
             } 
@@ -1204,93 +1190,93 @@ public class GameScreenController implements Initializable, ControlledScreen {
         for (String s : toSellList) {
             if (s.equals("Water")) {
                 waterSellPrice = toSellMap.get("Water");
-                waterPrice.setText("" + waterSellPrice);
+                waterPrice.setText(Integer.toString(waterSellPrice));
                 maxSell = countNumOfGood(mp.getCargo(), "Water");
                 //System.out.println("maxsell: " + maxSell);
                 ObservableList<String> choices =FXCollections.observableArrayList ();
                 for (int i = maxSell; i >= 0; i--) {
-                    choices.add("" + i);
+                    choices.add(Integer.toString(i));
                 }
                 waterChoose.setItems(choices);
                 waterChoose.show();
                 
             } else if (s.equals("Furs")) {
                 fursSellPrice = toSellMap.get("Furs");
-                fursPrice.setText("" + fursSellPrice);
+                fursPrice.setText(Integer.toString(fursSellPrice));
                 maxSell = countNumOfGood(mp.getCargo(), "Furs");
                 ObservableList<String> choices =FXCollections.observableArrayList ();
                 for (int i = maxSell; i >= 0; i--) {
-                    choices.add("" + i);
+                	choices.add(Integer.toString(i));
                 }
                 fursChoose.setItems(choices);
                 fursChoose.show();
             } else if (s.equals("Food")) {
                 foodSellPrice = toSellMap.get("Food");
-                foodPrice.setText("" + foodSellPrice);
+                foodPrice.setText(Integer.toString(foodSellPrice));
                 maxSell = countNumOfGood(mp.getCargo(), "Food");
                 ObservableList<String> choices =FXCollections.observableArrayList ();
                 for (int i = maxSell; i >= 0; i--) {
-                    choices.add("" + i);
+                	choices.add(Integer.toString(i));
                 }
                 foodChoose.setItems(choices);
                 foodChoose.show();
             } else if (s.equals("Ore")) {
                 oreSellPrice = toSellMap.get("Ore");
-                orePrice.setText("" + oreSellPrice);
+                orePrice.setText(Integer.toString(oreSellPrice));
                 maxSell = countNumOfGood(mp.getCargo(), "Ore");
                 ObservableList<String> choices =FXCollections.observableArrayList ();
                 for (int i = maxSell; i >= 0; i--) {
-                    choices.add("" + i);
+                	choices.add(Integer.toString(i));
                 }
                 oreChoose.setItems(choices);
                 oreChoose.show();
             } else if (s.equals("Games")) {
                 gamesSellPrice = toSellMap.get("Games");
-                gamesPrice.setText("" + gamesSellPrice);
+                gamesPrice.setText(Integer.toString(gamesSellPrice));
                 maxSell = countNumOfGood(mp.getCargo(), "Games");
                 ObservableList<String> choices =FXCollections.observableArrayList ();
                 for (int i = maxSell; i >= 0; i--) {
-                    choices.add("" + i);
+                	choices.add(Integer.toString(i));
                 }
                 gamesChoose.setItems(choices);
                 gamesChoose.show();
             } else if (s.equals("Firearms")) {
                 firearmsSellPrice = toSellMap.get("Firearms");
-                firearmsPrice.setText("" + firearmsSellPrice);
+                firearmsPrice.setText(Integer.toString(firearmsSellPrice));
                 maxSell = countNumOfGood(mp.getCargo(), "Firearms");
                 ObservableList<String> choices =FXCollections.observableArrayList ();
                 for (int i = maxSell; i >= 0; i--) {
-                    choices.add("" + i);
+                	choices.add(Integer.toString(i));
                 }
                 firearmsChoose.setItems(choices);
                 firearmsChoose.show();
             } else if (s.equals("Medicines")) {
                 medicinesSellPrice = toSellMap.get("Medicines");
-                medicinesPrice.setText("" + medicinesSellPrice);
+                medicinesPrice.setText(Integer.toString(medicinesSellPrice));
                 maxSell = countNumOfGood(mp.getCargo(), "Medicines");
                 ObservableList<String> choices =FXCollections.observableArrayList ();
                 for (int i = maxSell; i >= 0; i--) {
-                    choices.add("" + i);
+                	choices.add(Integer.toString(i));
                 }
                 medicinesChoose.setItems(choices);
                 medicinesChoose.show();
             } else if (s.equals("Narcotics")) {
                 narcoticsSellPrice = toSellMap.get("Narcotics");
-                narcoticsPrice.setText("" + narcoticsSellPrice);
+                narcoticsPrice.setText(Integer.toString(narcoticsSellPrice));
                 maxSell = countNumOfGood(mp.getCargo(), "Narcotics");
                 ObservableList<String> choices =FXCollections.observableArrayList ();
                 for (int i = maxSell; i >= 0; i--) {
-                    choices.add("" + i);
+                	choices.add(Integer.toString(i));
                 }
                 narcoticsChoose.setItems(choices);
                 narcoticsChoose.show();
             } else if (s.equals("Machines")) {
                 machinesSellPrice = toSellMap.get("Machines");
-                machinesPrice.setText("" + machinesSellPrice);
+                machinesPrice.setText(Integer.toString(machinesSellPrice));
                 maxSell = countNumOfGood(mp.getCargo(), "Machines");
                 ObservableList<String> choices =FXCollections.observableArrayList ();
                 for (int i = maxSell; i >= 0; i--) {
-                    choices.add("" + i);
+                	choices.add(Integer.toString(i));
                 }
                 machinesChoose.setItems(choices);
                 machinesChoose.show();
