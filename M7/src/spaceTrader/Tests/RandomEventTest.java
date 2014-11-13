@@ -1,7 +1,7 @@
 package spaceTrader.Tests;
 
 import static org.junit.Assert.assertEquals;
-
+import static org.junit.Assert.assertNotEquals;
 import java.sql.SQLException;
 
 import org.junit.Before;
@@ -20,22 +20,20 @@ public class RandomEventTest {
         r = new RandomEvent();
     }
 
+
     @Test
-    public void testUpdate() {
-        try {
+    public void noMoneyStolenTest() {
+         try {
             SqliteAPI db = new SqliteAPI();
             GameCharacter player = SqliteAPI.getPlayer();
             r.setMoneyLost(false);
-            String exp = "Nothing special happened this turn";
-            assertEquals(exp, r.update());
+            int current = player.getMoney();
+            String str = "Nothing special happened this turn";
+            //check string
+            assertEquals(str, r.update());
+            //check money
+            assertEquals(current,SqliteAPI.getPlayer().getMoney());
             
-            r.setMoneyLost(true);
-            int amount = player.getMoney() / r.MONEY_LOSS;;
-            int money = player.getMoney() - amount;
-            exp = "A UGA student just stole " +  amount
-                    + " cr of money from you";
-            assertEquals(exp, r.update());
-            assertEquals(money, SqliteAPI.getPlayer().getMoney());
         } catch (ClassNotFoundException e) {
             // TODO Auto-generated catch block
             e.printStackTrace();
@@ -43,6 +41,32 @@ public class RandomEventTest {
             // TODO Auto-generated catch block
             e.printStackTrace();
         }
+    
     }
 
+    
+    @Test
+    public void MoneyStolenTest() {
+    	try{
+	        SqliteAPI db = new SqliteAPI();
+            GameCharacter player = SqliteAPI.getPlayer();
+            int origin = player.getMoney();
+            r.setMoneyLost(true);
+            int amount = player.getMoney() / r.MONEY_LOSS;;
+            int money = player.getMoney() - amount;
+            String str = "A UGA student just stole " +  amount
+                    + " cr of money from you";
+            assertEquals(str, r.update());
+            assertNotEquals(origin,SqliteAPI.getPlayer().getMoney());
+            assertEquals(money, SqliteAPI.getPlayer().getMoney());
+    	
+    	} catch (ClassNotFoundException e) {
+            // TODO Auto-generated catch block
+            e.printStackTrace();
+        } catch (SQLException e) {
+            // TODO Auto-generated catch block
+            e.printStackTrace();
+        }
+
+    }
 }
