@@ -1,7 +1,6 @@
 package spacetrader.tests;
 
 import static org.junit.Assert.assertEquals;
-import static org.junit.Assert.assertNotEquals;
 
 import org.junit.Before;
 import org.junit.Test;
@@ -34,17 +33,19 @@ public class RandomEventTest {
              @SuppressWarnings("unused")
             SqliteApi db = new SqliteApi();
              GameCharacter player = SqliteApi.getPlayer();
+             int money = player.getMoney();
              rand.setMoneyLost(false);
              String exp = "Nothing special happened this turn";
              assertEquals(exp, rand.update());
+             assertEquals(money, SqliteApi.getPlayer().getMoney());
              
              rand.setMoneyLost(true);
              int amount = player.getMoney() / RandomEvent.MONEY_LOSS;;
-             int money = player.getMoney() - amount;
+             int newMoney = player.getMoney() - amount;
              exp = "A UGA student just stole " + amount
                        + " cr of money from you";
              assertEquals(exp, rand.update());
-             assertEquals(money, SqliteApi.getPlayer().getMoney());
+             assertEquals(newMoney, SqliteApi.getPlayer().getMoney());
          } catch (ClassNotFoundException e) {
              // TODO Auto-generated catch block
              e.printStackTrace();

@@ -3,10 +3,6 @@ package spacetrader.tests;
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertNotEquals;
 
-import java.sql.SQLException;
-import java.util.ArrayList;
-import java.util.List;
-
 import org.junit.Before;
 import org.junit.Test;
 
@@ -20,8 +16,13 @@ import spacetrader.planets.SolarSystem;
 import spacetrader.planets.Universe;
 import spacetrader.ships.PlayerShip;
 
-public class SqliteAPITest {
+import java.sql.SQLException;
+import java.util.ArrayList;
+import java.util.List;
 
+public class SqliteApiTest {
+
+    @SuppressWarnings("unused")
     private SqliteApi api;
 
     @Before
@@ -56,18 +57,19 @@ public class SqliteAPITest {
 
     @Test
     public void testListRemove() {
-        Universe u = SqliteApi.getUniverse();
-        System.out.println(u == null);
-        System.out.println(u.getUniverse().size());
-        SolarSystem s = u.getUniverse().get(5);
+        Universe uni = SqliteApi.getUniverse();
+        System.out.println(uni == null);
+        System.out.println(uni.getUniverse().size());
+        SolarSystem sys = uni.getUniverse().get(5);
         PlayerShip ship = SqliteApi.getShip();
+     
+        Travel api = new Travel();
+        api.warpTo(sys.getName(), 20 , 1);
         int fuel = ship.getBase().getFuel();
         int hullStrength = ship.getBase().getHullStrength();
-        
-        Travel api = new Travel();
-        api.warpTo(s.getName(), 20 , 1);
         ship = SqliteApi.getShip();
-        System.out.println("in junit now after travel, ship has fuel: " + ship.getBase().getFuel());
+        //System.out.println("in junit now after travel, ship has fuel: " 
+        //+ ship.getBase().getFuel());
         int newFuel = ship.getBase().getFuel();
         int newHullStrength = ship.getBase().getHullStrength();
         assertNotEquals(fuel, newFuel);
@@ -77,22 +79,8 @@ public class SqliteAPITest {
         list.add(new Water());
         list.add(new Ore());
         list.remove(new Water());
-        /*
-         * Iterator<Good> it = list.iterator(); while (it.hasNext()) { if
-         * (it.next().equals(new Water())) { it.remove(); }
-         * 
-         * }
-         */
-        // System.out.println(list.contains(new Water()));
-        // list.remove(new Water());
         assertEquals(1, list.size());
         assertEquals(new Ore(), list.get(0));
     }
 
-    /*
-     * @Test public void testPlayerShipRemove() { PlayerShip ship =
-     * api.getShip(); List<Good> cargo = new ArrayList<>(ship.getCargo());
-     * System.out.println(cargo); ship.remove(new Water());
-     * System.out.println(cargo); assertNotEquals(cargo, ship.getCargo()); }
-     */
 }

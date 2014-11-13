@@ -93,9 +93,9 @@ public class TradeBuyTest {
     
     @Test
     public void testBuyFail2() {
-    	player.setMoney(0);
-    	trade = new Trade(player, playerShip, system);
-    	assertEquals("fail to restric the money", false, trade.buy(new Water()));
+        player.setMoney(0);
+        trade = new Trade(player, playerShip, system);
+        assertEquals("fail to restric the money", false, trade.buy(new Water()));
     }
     
     @Test

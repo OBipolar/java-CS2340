@@ -19,34 +19,39 @@ import spacetrader.ships.PlayerShip;
  */
 public class TravelTest {
 
-	private Travel api;
-	
-	@Before
-	public void setUp() throws Exception {
-		api = new Travel();
-	}
+    private SqliteApi db;
+    private Travel api;
+     
+    
+    @Before
+    public void setUp() throws Exception {
+        db = new SqliteApi();
+        api = new Travel();
+    }
 
-	@Test
-	public void test() {
-		
-		
-		// find a random solar system to warp to 
-	    Universe u = SqliteApi.getUniverse();
-	    System.out.println(u == null);
-	    System.out.println(u.getUniverse().size());
-		SolarSystem s = u.getUniverse().get(5);
-		PlayerShip ship = SqliteApi.getShip();
-		int fuel = ship.getBase().getFuel();
-		int hullStrength = ship.getBase().getHullStrength();
-		
-		api.warpTo(s.getName(), 20 , 1);
-		ship = SqliteApi.getShip();
-		System.out.println("in junit now after travel, ship has fuel: " + ship.getBase().getFuel());
-		int newFuel = ship.getBase().getFuel();
-		int newHullStrength = ship.getBase().getHullStrength();
-		assertNotEquals(fuel, newFuel);
-		assertNotEquals(hullStrength, newHullStrength);
-		
-	}
+    @Test
+    public void test() {
+        
+        
+        // find a random solar system to warp to 
+        Universe u = SqliteApi.getUniverse();
+        System.out.println(u == null);
+        System.out.println(u.getUniverse().size());
+        SolarSystem s = u.getUniverse().get(5);
+        PlayerShip ship = SqliteApi.getShip();
+        int fuel = ship.getBase().getFuel();
+        int hullStrength = ship.getBase().getHullStrength();
+        
+        api.warpTo(s.getName(), 20 , 1);
+        ship = SqliteApi.getShip();
+        //System.out.println("in junit now after travel, ship has fuel: " + ship.getBase().getFuel());
+        int newFuel = ship.getBase().getFuel();
+        int newHullStrength = ship.getBase().getHullStrength();
+        assertNotEquals(fuel, newFuel);
+        assertEquals(newFuel, fuel - 20);
+        assertNotEquals(hullStrength, newHullStrength);
+        assertEquals(newHullStrength, hullStrength - 1);
+        
+    }
 
 }
