@@ -12,6 +12,12 @@ import spacetrader.planets.GameCharacter;
 
 import java.sql.SQLException;
 
+/**
+ * Junit test for RandomEvent 
+ * 
+ * @author Menghang Li
+ *
+ */
 public class RandomEventTest {
 
     private RandomEvent rand;

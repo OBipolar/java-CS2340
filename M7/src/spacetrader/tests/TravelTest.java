@@ -13,6 +13,10 @@ import spacetrader.planets.SolarSystem;
 import spacetrader.planets.Universe;
 import spacetrader.ships.PlayerShip;
 
+/**
+ * @author Sicong Chen
+ *
+ */
 public class TravelTest {
 
 	private Travel api;
