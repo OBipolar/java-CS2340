@@ -1,6 +1,6 @@
 package spacetrader.goods;
 
-import spaceTrader.Planets.ResourcesLevel;
+import spacetrader.planets.ResourcesLevel;
 
 /**
  * Child of Good, Firearms
@@ -16,11 +16,11 @@ public class Firearms extends Good {
      */
     public Firearms() {
         setName("Firearms");
-        setMTLP(3);
-        setMTLU(1);
-        setTTP(5);
+        setMtlp(3);
+        setMtlu(1);
+        setTtp(5);
         setBasePrice(1250);
-        setIPL(-75);
+        setIpl(-75);
         setVar(100);
         setPriceIncrease(PriceIncrease.WAR.ordinal());
         setPriceLowCase(ResourcesLevel.WARLIKE.ordinal());

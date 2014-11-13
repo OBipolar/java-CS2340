@@ -1,6 +1,3 @@
-/**
- * 
- */
 package spacetrader.equipment;
 
 /**
@@ -11,10 +8,10 @@ package spacetrader.equipment;
  */
 public class BeamLaser extends Weapon {
     
-    public final static String NAME = "Beam Laser";
-    private final static int PRICE = 2000;
-    private final static int DAMAGE = 15;
-    private final static int MIN_TECH_LEVEL = 5;
+    public static final String NAME = "Beam Laser";
+    private static final int PRICE = 2000;
+    private static final int DAMAGE = 15;
+    private static final int MIN_TECH_LEVEL = 5;
     
     
     

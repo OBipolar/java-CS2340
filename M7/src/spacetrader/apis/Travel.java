@@ -1,10 +1,10 @@
 package spacetrader.apis;
 
-import java.sql.SQLException;
+import spacetrader.planets.GameCharacter;
+import spacetrader.planets.SolarSystem;
+import spacetrader.ships.PlayerShip;
 
-import spaceTrader.Planets.GameCharacter;
-import spaceTrader.Planets.SolarSystem;
-import spaceTrader.Ships.PlayerShip;
+import java.sql.SQLException;
 
 /**
  * API for player to travel to another planet
@@ -13,7 +13,7 @@ import spaceTrader.Ships.PlayerShip;
  *
  */
 public class Travel {
-	
+    
     private GameCharacter player;
     private PlayerShip ship;
 
@@ -30,7 +30,7 @@ public class Travel {
     public void warpTo(String planetName, int travelDist, int hullExhaust) {
         SolarSystem system;
         try {
-            system = SqliteAPI.getSolarSystem(planetName);
+            system = SqliteApi.getSolarSystem(planetName);
             //updateShip();
             player.travel(system.getX(), system.getY());
             ship.getBase().setFuel(ship.getBase().getFuel() - travelDist);
@@ -53,8 +53,8 @@ public class Travel {
      */
     private void load() {
 
-        player = SqliteAPI.getPlayer();
-        ship = SqliteAPI.getShip();
+        player = SqliteApi.getPlayer();
+        ship = SqliteApi.getShip();
 
     }
 
@@ -63,8 +63,8 @@ public class Travel {
      * 
      */
     private void update() {
-        SqliteAPI.setPlayer(player);
-        SqliteAPI.setShip(ship);
+        SqliteApi.setPlayer(player);
+        SqliteApi.setShip(ship);
     }
     
     /**
@@ -72,15 +72,16 @@ public class Travel {
      * coordinates
      * 
      */
+    @SuppressWarnings("unused")
     private void updateShip() {
-    	int fuel = ship.getBase().getFuel();
-    	int fuelLoss = ship.getBase().getFuelCost();
-    	ship.getBase().setFuel(fuel - fuelLoss);
-    	System.out.println("new fuel is " + (fuel - fuelLoss));
-    	int hullStrength = ship.getBase().getHullStrength();
-    	hullStrength--;
-    	ship.getBase().setHullStrength(hullStrength);
-    	
+        int fuel = ship.getBase().getFuel();
+        int fuelLoss = ship.getBase().getFuelCost();
+        ship.getBase().setFuel(fuel - fuelLoss);
+        System.out.println("new fuel is " + (fuel - fuelLoss));
+        int hullStrength = ship.getBase().getHullStrength();
+        hullStrength--;
+        ship.getBase().setHullStrength(hullStrength);
+        
     }
 
 }

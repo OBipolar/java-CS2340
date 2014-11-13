@@ -1,6 +1,6 @@
 package spacetrader.goods;
 
-import spaceTrader.Planets.ResourcesLevel;
+import spacetrader.planets.ResourcesLevel;
 
 /**
  * Child of Good, Games
@@ -15,11 +15,11 @@ public class Games extends Good {
      */
     public Games() {
         setName("Games");
-        setMTLP(3);
-        setMTLU(1);
-        setTTP(6);
+        setMtlp(3);
+        setMtlu(1);
+        setTtp(6);
         setBasePrice(250);
-        setIPL(-10);
+        setIpl(-10);
         setVar(5);
         setPriceIncrease(PriceIncrease.BOREDOM.ordinal());
         setPriceLowCase(ResourcesLevel.ARTISTIC.ordinal());

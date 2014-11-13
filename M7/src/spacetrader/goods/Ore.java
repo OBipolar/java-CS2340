@@ -1,6 +1,6 @@
 package spacetrader.goods;
 
-import spaceTrader.Planets.ResourcesLevel;
+import spacetrader.planets.ResourcesLevel;
 
 /**
  * Child of Good, Ore
@@ -15,11 +15,11 @@ public class Ore extends Good {
      */
     public Ore() {
         setName("Ore");
-        setMTLP(2);
-        setMTLU(2);
-        setTTP(3);
+        setMtlp(2);
+        setMtlu(2);
+        setTtp(3);
         setBasePrice(350);
-        setIPL(20);
+        setIpl(20);
         setVar(10);
         setPriceIncrease(PriceIncrease.WAR.ordinal());
         setPriceLowCase(ResourcesLevel.MINERALRICH.ordinal());

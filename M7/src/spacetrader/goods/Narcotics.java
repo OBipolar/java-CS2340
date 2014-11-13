@@ -1,6 +1,6 @@
 package spacetrader.goods;
 
-import spaceTrader.Planets.ResourcesLevel;
+import spacetrader.planets.ResourcesLevel;
 
 /**
  * Child of Good, Narcotics
@@ -13,13 +13,13 @@ public class Narcotics extends Good {
     /**
      * Constructor thats sets all properties for Narcotics
      */
-    public Narcotics () {
+    public Narcotics() {
         setName("Narcotics");
-        setMTLP(5);
-        setMTLU(0);
-        setTTP(5);
+        setMtlp(5);
+        setMtlu(0);
+        setTtp(5);
         setBasePrice(3500);
-        setIPL(-125);
+        setIpl(-125);
         setVar(150);
         setPriceIncrease(PriceIncrease.BOREDOM.ordinal());
         setPriceLowCase(ResourcesLevel.WEIRDMUSHROOMS.ordinal());

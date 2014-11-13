@@ -1,14 +1,13 @@
 package spacetrader.equipment;
 
-import java.sql.SQLException;
+
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
-import spaceTrader.Planets.GameCharacter;
-import spacetrader.apis.SqliteAPI;
+
 
 /**
  * Factory for equipments
@@ -41,14 +40,24 @@ public class EquipmentFactory {
      * @return
      */
     public List<Weapon> getWeapon(int techLevel) {
-        List<Weapon> w = new ArrayList<>();
-        Collection<Weapon> c = weapons.values();
-        for (Weapon weapon : c) {
+        List<Weapon> wlist = new ArrayList<>();
+        Collection<Weapon> col = weapons.values();
+        for (Weapon weapon : col) {
             if (weapon.getMinTechLevel() <= techLevel) {
-                w.add(weapon);
+                wlist.add(weapon);
             }
         }
-        return w;
+        return wlist;
+    }
+    
+    /**
+     * Return a Weapon given its name
+     * 
+     * @param name the name of the weapon
+     * @return a Weapon
+     */
+    public Weapon getWeapon(String name) {
+        return weapons.get(name);
     }
     
     /**
@@ -59,27 +68,14 @@ public class EquipmentFactory {
      * @return
      */
     public List<Shield> getShield(int techLevel) {
-        List<Shield> s = new ArrayList<>();
-        Collection<Shield> c = shields.values();
-        for (Shield shield : c) {
+        List<Shield> slist = new ArrayList<>();
+        Collection<Shield> col = shields.values();
+        for (Shield shield : col) {
             if (shield.getMinTechLevel() <= techLevel) {
-                s.add(shield);
+                slist.add(shield);
             }
         }
-        return s;
-    }
-    
-    
-    
-    
-    /**
-     * Return a Weapon given its name
-     * 
-     * @param name the name of the weapon
-     * @return a Weapon
-     */
-    public Weapon getWeapon(String name) {
-        return weapons.get(name);
+        return slist;
     }
     
     /**

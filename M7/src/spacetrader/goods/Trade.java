@@ -1,14 +1,16 @@
 package spacetrader.goods;
 
+import spacetrader.planets.GameCharacter;
+import spacetrader.planets.SolarSystem;
+import spacetrader.ships.PlayerShip;
+
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 import java.util.Random;
 
-import spaceTrader.Planets.GameCharacter;
-import spaceTrader.Planets.SolarSystem;
-import spaceTrader.Ships.PlayerShip;
+
 
 /**
  * Class that does trade
@@ -99,7 +101,7 @@ public class Trade {
         // System.out.println("cargo is empty: " + cargo.isEmpty());
         for (Good good : cargo) {
             // System.out.println("MTLU " + good.getMTLU());
-            if (good.getMTLU() <= techLevel) {
+            if (good.getMtlu() <= techLevel) {
                 goodsToSell.add(good.getName());
                 pricesToSell.put(good.getName(), calcPrice(good, techLevel));
                 // System.out.println(good.getName() + calcPrice(good,
@@ -107,6 +109,10 @@ public class Trade {
             }
         }
 
+    }
+    
+    public void setGoodsToSell(List<String> goodsToSell) {
+        this.goodsToSell = goodsToSell;
     }
 
     /**
@@ -129,12 +135,16 @@ public class Trade {
         goods.add(new Robots());
 
         for (Good good : goods) {
-            if (good.getMTLP() <= techLevel) {
+            if (good.getMtlp() <= techLevel) {
                 goodsToBuy.add(good.getName());
                 pricesToBuy.put(good.getName(), calcPrice(good, techLevel));
             }
         }
 
+    }
+    
+    public void setGoodsToBuy(List<String> goodsToBuy) {
+        this.goodsToBuy = goodsToBuy;
     }
 
     /**
@@ -150,7 +160,7 @@ public class Trade {
      */
     private int calcPrice(Good good, int techLevel) {
         return good.getBasePrice() * (1 + getRandomNum(good.getVar() / 10))
-                + good.getIPL() * (techLevel - good.getMTLP());
+                + good.getIpl() * (techLevel - good.getMtlp());
     }
 
     /**
@@ -176,17 +186,13 @@ public class Trade {
         return goodsToSell;
     }
 
-    public void setGoodsToSell(List<String> goodsToSell) {
-        this.goodsToSell = goodsToSell;
-    }
+
 
     public List<String> getGoodsToBuy() {
         return goodsToBuy;
     }
 
-    public void setGoodsToBuy(List<String> goodsToBuy) {
-        this.goodsToBuy = goodsToBuy;
-    }
+
 
     public PlayerShip getShip() {
         // TODO Auto-generated method stub

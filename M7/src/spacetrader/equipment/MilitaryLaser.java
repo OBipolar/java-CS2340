@@ -1,6 +1,3 @@
-/**
- * 
- */
 package spacetrader.equipment;
 
 /**
@@ -11,10 +8,10 @@ package spacetrader.equipment;
  */
 public class MilitaryLaser extends Weapon {
 
-    public final static String NAME = "Military Laser";
-    private final static int PRICE = 3000;
-    private final static int DAMAGE = 50;
-    private final static int MIN_TECH_LEVEL = 6;
+    public static final String NAME = "Military Laser";
+    private static final int PRICE = 3000;
+    private static final int DAMAGE = 50;
+    private static final int MIN_TECH_LEVEL = 6;
     
     
     

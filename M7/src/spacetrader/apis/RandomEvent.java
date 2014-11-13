@@ -1,8 +1,10 @@
 package spacetrader.apis;
 
+import spacetrader.planets.GameCharacter;
+
 import java.util.Random;
 
-import spaceTrader.Planets.GameCharacter;
+
 
 /**
  * Class that does random event when the player travels to a planet
@@ -12,8 +14,8 @@ import spaceTrader.Planets.GameCharacter;
  */
 public class RandomEvent {
 
-    private final static int BOUND = 2;
-    public final static int MONEY_LOSS = 20;
+    private static final int BOUND = 2;
+    public static final int MONEY_LOSS = 20;
     private boolean moneyLost = false;
 
     /**
@@ -23,19 +25,19 @@ public class RandomEvent {
      */
     public String update() {
 
-        String s = "";
-        GameCharacter player = SqliteAPI.getPlayer();
+        String str = "";
+        GameCharacter player = SqliteApi.getPlayer();
         if (moneyLost) {
-        	int amount = (player.getMoney() / MONEY_LOSS);
+            int amount = (player.getMoney() / MONEY_LOSS);
             player.setMoney(player.getMoney() - amount);
-            s = "A UGA student just stole " + amount
+            str = "A UGA student just stole " + amount
                     + " cr of money from you";
         } else {
-            s = "Nothing special happened this turn";
+            str = "Nothing special happened this turn";
         }
         //System.out.println("money after stolen: " + player.getMoney());
-        SqliteAPI.setPlayer(player);
-        return s;
+        SqliteApi.setPlayer(player);
+        return str;
 
     }
 
@@ -44,6 +46,7 @@ public class RandomEvent {
      * 
      * @return true if money is about to be stolen by UGA student
      */
+    @SuppressWarnings("unused")
     private boolean isMoneyLost() {
         if (getRandomNum(BOUND) != 0) {
             return false;
@@ -67,6 +70,7 @@ public class RandomEvent {
     public void setMoneyLost(boolean moneyLost) {
         this.moneyLost = moneyLost;
     }
+    
     public boolean getMoneyLost() {
         return moneyLost;
     }

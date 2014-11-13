@@ -1,6 +1,3 @@
-/**
- * 
- */
 package spacetrader.equipment;
 
 /**
@@ -35,8 +32,8 @@ public class Equipment {
      * 
      * @param e
      */
-    public Equipment(Equipment e) {
-        this(e.getName(), e.getPrice(), e.getMinTechLevel());
+    public Equipment(Equipment eq) {
+        this(eq.getName(), eq.getPrice(), eq.getMinTechLevel());
     }
     
     public String getName() {
@@ -46,9 +43,11 @@ public class Equipment {
     public void setName(String name) {
         this.name = name;
     }
+    
     public int getPrice() {
         return price;
     }
+    
     public void setPrice(int price) {
         this.price = price;
     }

@@ -1,6 +1,6 @@
 package spacetrader.goods;
 
-import spaceTrader.Planets.ResourcesLevel;
+import spacetrader.planets.ResourcesLevel;
 
 /**
  * Child of Good, Medicine
@@ -15,11 +15,11 @@ public class Medicine extends Good {
      */
     public Medicine() {
         setName("Medicine");
-        setMTLP(4);
-        setMTLU(1);
-        setTTP(6);
+        setMtlp(4);
+        setMtlu(1);
+        setTtp(6);
         setBasePrice(650);
-        setIPL(-20);
+        setIpl(-20);
         setVar(10);
         setPriceIncrease(PriceIncrease.PLAGUE.ordinal());
         setPriceLowCase(ResourcesLevel.LOTSOFHERBS.ordinal());

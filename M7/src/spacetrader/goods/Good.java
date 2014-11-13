@@ -11,22 +11,23 @@ public class Good {
     public static final int NUM_OF_GOODS = 10;
 
     private String name;
-    private int MTLP;
+    private int mtlp;
     // MTLP = Minimum Tech Level to Produce this resource
     // (You can't buy on planets below this level)
-    private int MTLU;
+    @SuppressWarnings("unused")
+    private int mtlu;
     // MTLU = Minimum Tech Level to Use this resource
     // (You can't sell on planets below this level)
-    private int TTP;
+    private int ttp;
     // TTP = Tech Level which produces the most of this item
     private int basePrice;
     // Price increase per tech level
-    private int IPL;
+    private int ipl;
 
     private int var;
-    private int PriceIncrease;
-    private int PriceLowCase;
-    private int PriceHighCase;
+    private int priceIncrease;
+    private int priceLowCase;
+    private int priceHighCase;
     private int minPriceWithTrader;
     private int maxPriceWithTrader;
 
@@ -36,15 +37,15 @@ public class Good {
     }
 
     @Override
-    public boolean equals(Object o) {
-        if (!(o instanceof Good)) {
+    public boolean equals(Object object) {
+        if (!(object instanceof Good)) {
             return false;
         } else {
-            Good g = (Good) o;
-            if (g.basePrice == this.basePrice && g.IPL == this.IPL
-                    && g.maxPriceWithTrader == this.maxPriceWithTrader
-                    && g.minPriceWithTrader == g.minPriceWithTrader
-                    && g.MTLP == this.MTLP) {
+            Good good = (Good) object;
+            if (good.basePrice == this.basePrice && good.ipl == this.ipl
+                    && good.maxPriceWithTrader == this.maxPriceWithTrader
+                    && good.minPriceWithTrader == good.minPriceWithTrader
+                    && good.mtlp == this.mtlp) {
                 return true;
             }
             return false;
@@ -59,28 +60,28 @@ public class Good {
         this.name = name;
     }
 
-    public int getMTLP() {
-        return MTLP;
+    public int getMtlp() {
+        return mtlp;
     }
 
-    public void setMTLP(int mTLP) {
-        MTLP = mTLP;
+    public void setMtlp(int mtlp) {
+        this.mtlp = mtlp;
     }
 
-    public int getMTLU() {
-        return MTLU;
+    public int getMtlu() {
+        return mtlp;
     }
 
-    public void setMTLU(int mTLU) {
-        MTLU = mTLU;
+    public void setMtlu(int mtlu) {
+        this.mtlu = mtlu;
     }
 
-    public int getTTP() {
-        return TTP;
+    public int getTtp() {
+        return ttp;
     }
 
-    public void setTTP(int tTP) {
-        TTP = tTP;
+    public void setTtp(int ttp) {
+        this.ttp = ttp;
     }
 
     public int getBasePrice() {
@@ -91,12 +92,12 @@ public class Good {
         this.basePrice = basePrice;
     }
 
-    public int getIPL() {
-        return IPL;
+    public int getIpl() {
+        return ipl;
     }
 
-    public void setIPL(int iPL) {
-        IPL = iPL;
+    public void setIpl(int ipl) {
+        this.ipl = ipl;
     }
 
     public int getVar() {
@@ -108,27 +109,27 @@ public class Good {
     }
 
     public int getPriceIncrease() {
-        return PriceIncrease;
+        return priceIncrease;
     }
 
     public void setPriceIncrease(int priceIncrease) {
-        PriceIncrease = priceIncrease;
+        this.priceIncrease = priceIncrease;
     }
 
     public int getPriceLowCase() {
-        return PriceLowCase;
+        return priceLowCase;
     }
 
     public void setPriceLowCase(int priceLowCase) {
-        PriceLowCase = priceLowCase;
+        this.priceLowCase = priceLowCase;
     }
 
     public int getPriceHighCase() {
-        return PriceHighCase;
+        return priceHighCase;
     }
 
     public void setPriceHighCase(int priceHighCase) {
-        PriceHighCase = priceHighCase;
+        this.priceHighCase = priceHighCase;
     }
 
     public int getMinPriceWithTrader() {

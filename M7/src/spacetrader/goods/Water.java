@@ -1,6 +1,6 @@
 package spacetrader.goods;
 
-import spaceTrader.Planets.ResourcesLevel;
+import spacetrader.planets.ResourcesLevel;
 
 /**
  * Child of Good, water
@@ -17,11 +17,11 @@ public class Water extends Good {
      */
     public Water() {
         setName("Water");
-        setMTLP(0);
-        setMTLU(0);
-        setTTP(2);
+        setMtlp(0);
+        setMtlu(0);
+        setTtp(2);
         setBasePrice(30);
-        setIPL(3);
+        setIpl(3);
         setVar(4);
         setPriceIncrease(PriceIncrease.DROUGHT.ordinal());
         setPriceLowCase(ResourcesLevel.LOTSOFWAR.ordinal());

@@ -1,6 +1,3 @@
-/**
- * 
- */
 package spacetrader.equipment;
 
 /**
@@ -12,10 +9,10 @@ package spacetrader.equipment;
 public class CargoExpansion extends Equipment {
     
     
-    public final static String NAME = "Cargo Expansoin";
-    private final static int PRICE = 1000;
-    private final static int MIN_TECH_LEVEL = 4;
-    private final static int EXPANSION = 5;
+    public static final String NAME = "Cargo Expansoin";
+    private static final int PRICE = 1000;
+    private static final int MIN_TECH_LEVEL = 4;
+    private static final int EXPANSION = 5;
     
     private int expansion;
 
@@ -43,9 +40,9 @@ public class CargoExpansion extends Equipment {
      * 
      * @param e a CargoExpansion to be copied
      */
-    public CargoExpansion(CargoExpansion e) {
-        super(e);
-        setExpansion(e.getExpansion());
+    public CargoExpansion(CargoExpansion cargoExp) {
+        super(cargoExp);
+        setExpansion(cargoExp.getExpansion());
     }
 
     public int getExpansion() {

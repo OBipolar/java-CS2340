@@ -29,9 +29,9 @@ public class Shield extends Equipment {
      * 
      * @param s a Shield
      */
-    public Shield(Shield s) {
-        super(s);
-        setStrength(s.getStrength());
+    public Shield(Shield sh) {
+        super(sh);
+        setStrength(sh.getStrength());
     }
 
     public int getStrength() {

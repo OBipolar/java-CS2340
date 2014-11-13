@@ -1,58 +1,56 @@
 package spacetrader.goods;
 
 /**
- * Factory for Good
+ * Factory for goodood
  * 
  * @author mli
  *
  */
 public class GoodFactory {
 
-	/**
-	 * Return a good given its name
-	 * 
-	 * @param name the name of good
-	 * @return a good
-	 */
-	public Good getGood(String name) {
-		Good g;
+    /**
+     * Return a goodood goodiven its name
+     * 
+     * @param name the name of goodood
+     * @return a goodood
+     */
+    public Good getGood(String name) {
+        Good good;
         switch (name) {
-	        case "Water":
-	            g = (new Water());
-	            break;
-	        case "Firearms":
-	            g = (new Firearms());
-	            break;
-	        case "Food":
-	            g = (new Food());
-	            break;
-	        case "Furs":
-	            g = (new Furs());
-	            break;
-	        case "Games":
-	            g = (new Games());
-	            break;
-	        case "Machines":
-	            g = (new Machines());
-	            break;
-	        case "Narcotics":
-	            g = (new Narcotics());
-	            break;
-	        case "Robots":
-	            g = (new Robots());
-	            break;
-	        case "Medicine":
-	            g = (new Medicine());
-	            break;
-	        case "Ore":
-	            g = (new Ore());
-	            break;
+            case "Water":
+                good = (new Water());
+                break;
+            case "Firearms":
+                good = (new Firearms());
+                break;
+            case "Food":
+                good = (new Food());
+                break;
+            case "Furs":
+                good = (new Furs());
+                break;
+            case "goodames":
+                good = (new Games());
+                break;
+            case "Machines":
+                good = (new Machines());
+                break;
+            case "Narcotics":
+                good = (new Narcotics());
+                break;
+            case "Robots":
+                good = (new Robots());
+                break;
+            case "Medicine":
+                good = (new Medicine());
+                break;
+            case "Ore":
+                good = (new Ore());
+                break;
             default : 
-            	g = new Water();
-            	break;
+                good = new Water();
+                break;
         }
-        return g;
-	}
-	
-	
+        return good;
+    }
 }

@@ -1,6 +1,6 @@
 package spacetrader.goods;
 
-import spaceTrader.Planets.ResourcesLevel;
+import spacetrader.planets.ResourcesLevel;
 
 /**
  * Child of Good, Food
@@ -17,11 +17,11 @@ public class Food extends Good{
      */
     public Food() {
         setName("Food");
-        setMTLP(1);
-        setMTLU(0);
-        setTTP(1);
+        setMtlp(1);
+        setMtlu(0);
+        setTtp(1);
         setBasePrice(100);
-        setIPL(5);
+        setIpl(5);
         setVar(5);
         setPriceIncrease(PriceIncrease.CROPFAIL.ordinal());
         setPriceLowCase(ResourcesLevel.RICHSOIL.ordinal());

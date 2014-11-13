@@ -1,6 +1,3 @@
-/**
- * 
- */
 package spacetrader.equipment;
 
 /**
@@ -11,10 +8,10 @@ package spacetrader.equipment;
  */
 public class ReflectiveShield extends Shield {
     
-    public final static String NAME = "Flective Shield";
-    private final static int PRICE = 8000;
-    private final static int MIN_TECH_LEVEL = 6;
-    private final static int STRENGTH = 100;
+    public static final String NAME = "Flective Shield";
+    private static final int PRICE = 8000;
+    private static final int MIN_TECH_LEVEL = 6;
+    private static final int STRENGTH = 100;
     
     public ReflectiveShield() {
         this(NAME, PRICE, MIN_TECH_LEVEL, STRENGTH);
@@ -35,8 +32,8 @@ public class ReflectiveShield extends Shield {
     /**
      * @param s
      */
-    public ReflectiveShield(Shield s) {
-        super(s);
+    public ReflectiveShield(Shield shield) {
+        super(shield);
         // TODO Auto-generated constructor stub
     }
 

@@ -1,13 +1,15 @@
 package spacetrader.apis;
 
+import spacetrader.goods.Good;
+import spacetrader.goods.Trade;
+import spacetrader.planets.GameCharacter;
+import spacetrader.planets.SolarSystem;
+import spacetrader.ships.PlayerShip;
+
 import java.sql.SQLException;
 import java.util.List;
 
-import spaceTrader.Planets.GameCharacter;
-import spaceTrader.Planets.SolarSystem;
-import spaceTrader.Ships.PlayerShip;
-import spacetrader.goods.Good;
-import spacetrader.goods.Trade;
+
 
 /**
  * API for the player to buy and sell goods
@@ -74,11 +76,11 @@ public class MarketPlace {
      */
     private void load() {
 
-        player = SqliteAPI.getPlayer();
-        ship = SqliteAPI.getShip();
+        player = SqliteApi.getPlayer();
+        ship = SqliteApi.getShip();
 
         try {
-            system = SqliteAPI.getSolarSystem();
+            system = SqliteApi.getSolarSystem();
         } catch (ClassNotFoundException e) {
            e.printStackTrace();
         } catch (SQLException e) {
@@ -93,8 +95,8 @@ public class MarketPlace {
      * 
      */
     private void update() {
-        SqliteAPI.setPlayer(player);
-        SqliteAPI.setShip(ship);
+        SqliteApi.setPlayer(player);
+        SqliteApi.setShip(ship);
     }
 
 }

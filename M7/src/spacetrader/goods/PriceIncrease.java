@@ -12,9 +12,10 @@ public enum PriceIncrease {
     
     public static final int EVENTS = 7;
     
+    @SuppressWarnings("unused")
     private int num;
     
-    PriceIncrease (int num) {
+    PriceIncrease(int num) {
         this.num = num;
     }
      

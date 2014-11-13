@@ -1,8 +1,3 @@
-/*
- * To change this license header, choose License Headers in Project Properties.
- * To change this template file, choose Tools | Templates
- * and open the template in the editor.
- */
 package spacetrader.goods;
 
 /**
@@ -15,11 +10,11 @@ public class Machines extends Good {
      */
     public Machines() {
         setName("Machines");
-        setMTLP(4);
-        setMTLU(3);
-        setTTP(5);
+        setMtlp(4);
+        setMtlu(3);
+        setTtp(5);
         setBasePrice(900);
-        setIPL(-30);
+        setIpl(-30);
         setVar(5);
         setPriceIncrease(PriceIncrease.LACKOFWORKERS.ordinal());
         setPriceLowCase(-1);
