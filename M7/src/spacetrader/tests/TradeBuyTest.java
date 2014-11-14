@@ -3,28 +3,21 @@ package spacetrader.tests;
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertNotEquals;
 
-import java.util.ArrayList;
-import java.util.List;
 
-import spacetrader.apis.SqliteApi;
-
-import java.sql.SQLException;
-import java.util.ArrayList;
 import org.junit.Before;
 import org.junit.Test;
 
 import spacetrader.apis.SqliteApi;
 import spacetrader.goods.Good;
-import spacetrader.goods.Water;
 import spacetrader.goods.Trade;
-import spacetrader.planets.Capital;
+import spacetrader.goods.Water;
+
+
 import spacetrader.planets.GameCharacter;
-import spacetrader.planets.Planet;
 import spacetrader.planets.SolarSystem;
 import spacetrader.ships.PlayerShip;
-import spacetrader.apis.MarketPlace;
 
-import java.sql.SQLException;
+import java.util.ArrayList;
 import java.util.List;
 
 
