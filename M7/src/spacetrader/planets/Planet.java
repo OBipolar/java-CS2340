@@ -8,12 +8,33 @@ package spacetrader.planets;
  */
 public class Planet {
 
+    /**
+     * The plolitical system of the planet
+     */
     private PoliticalSystem politicalSystem;
+    /**
+     * The resources level of the planet
+     */
     private ResourcesLevel resourcesLevel;
+    /**
+     * the name of the solar system the player is on
+     */
     private String solarSystem;
+    /**
+     * the tech level of the planet
+     */
     private TechLevels techLevel;
+    /**
+     * the pirate level of the planet
+     */
     private Pirates pirate;
+    /**
+     * the police level of the planet
+     */
     private Polices police;
+    /**
+     * the name of the planet
+     */
     private String name;
 
     /**
@@ -44,10 +65,14 @@ public class Planet {
         setPolice(police);
 
     }
-
+    
+    /**
+     * Default constructor
+     */
     public Planet() {
-
+        
     }
+
 
     @Override
     public String toString() {

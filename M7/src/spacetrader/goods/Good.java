@@ -21,6 +21,7 @@ public class Good {
     /**
      * Minimum Tech Level to Use this resource
      */
+    @SuppressWarnings("unused")
     private int mtlu;
 
     /**
@@ -47,6 +48,7 @@ public class Good {
         return getName();
     }
 
+    
     @Override
     public boolean equals(final Object object) {
         if (!(object instanceof Good)) {

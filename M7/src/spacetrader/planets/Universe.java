@@ -118,11 +118,11 @@ public class Universe {
 
     @Override
     public String toString() {
-        String out = "";
+        StringBuffer buffer = new StringBuffer();
         for (SolarSystem s : universe) {
-            out += s.toString();
+            buffer.append(" " + s.toString());
         }
-        return out;
+        return buffer.toString();
     }
 
     /**
@@ -200,7 +200,7 @@ public class Universe {
      * @return Returns an random integer between 0 and limit (exclusive)
      */
     private int getRandomNum(int limit) {
-        return (new Random()).nextInt(limit);
+        return new Random().nextInt(limit);
     }
 
     public List<SolarSystem> getUniverse() {

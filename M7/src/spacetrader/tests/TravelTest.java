@@ -1,8 +1,8 @@
 package spacetrader.tests;
 
-import static org.junit.Assert.*;
+import static org.junit.Assert.assertEquals;
+import static org.junit.Assert.assertNotEquals;
 
-import java.sql.SQLException;
 
 import org.junit.Before;
 import org.junit.Test;
@@ -13,19 +13,20 @@ import spacetrader.planets.SolarSystem;
 import spacetrader.planets.Universe;
 import spacetrader.ships.PlayerShip;
 
+import java.sql.SQLException;
+
 /**
  * @author Sicong Chen
  *
  */
 public class TravelTest {
-
-    private SqliteApi db;
+    
     private Travel api;
      
     
     @Before
     public void setUp() throws Exception {
-        db = new SqliteApi();
+        SqliteApi.start();
         api = new Travel();
     }
     @Test
@@ -59,8 +60,6 @@ public class TravelTest {
         
         // find a random solar system to warp to 
         Universe u = SqliteApi.getUniverse();
-        //System.out.println(u == null);
-        //System.out.println(u.getUniverse().size());
         SolarSystem s = u.getUniverse().get(5);
         PlayerShip ship = SqliteApi.getShip();
         int fuel = ship.getBase().getFuel();

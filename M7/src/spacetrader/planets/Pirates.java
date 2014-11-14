@@ -9,6 +9,9 @@ package spacetrader.planets;
 public enum Pirates {
     ASKFORMONEY(0), FIREONSIGHT(1), RECRUTER(2), KILLONSIGHT(3);
 
+    /**
+     * Number of different pirates
+     */
     public static final int KINDS_OF_PIRATES = 4;
 
     @SuppressWarnings("unused")

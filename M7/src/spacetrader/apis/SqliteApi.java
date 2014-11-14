@@ -34,15 +34,39 @@ public class SqliteApi {
 
     private static final Logger LOGGER = 
             Logger.getLogger(MarketPlace.class.getName()); 
+
     private static Connection connection;
     private static Statement statement;
     private static ResultSet resultSet;
+    /**
+     * SQL query statement
+     */
     private static String query;
+    /**
+     * SQL update statement
+     */
     private static String update;
+    /**
+     * player model
+     */
     private static GameCharacter player;
+    /**
+     * player ship model
+     */
     private static PlayerShip ship;
+    /**
+     * the universe
+     */
     private static Universe universe;
 
+    
+    /**
+     * Private constructor to prevent instantiation
+     */
+    private SqliteApi() {
+        
+    }
+    
     /**
      * Delete tables based on given string
      * 
@@ -72,7 +96,7 @@ public class SqliteApi {
      * @throws SQLException
      * @throws ClassNotFoundException
      */
-    public static void start (GameCharacter player) throws ClassNotFoundException,
+    public static void start(GameCharacter player) throws ClassNotFoundException,
             SQLException {
         SqliteApi.player = player;
         SqliteApi.universe = new Universe();

@@ -13,13 +13,38 @@ package spacetrader.planets;
  */
 public class GameCharacter {
 
+    /**
+     * Player name
+     */
     private String name = "";
+    /**
+     * pilot skill of player 
+     */
     private int pilotP; 
+    /**
+     * fighter skill of player 
+     */
     private int fighterP; 
+    /**
+     * trader skill of player 
+     */
     private int traderP; 
-    private int engineerP;
+    /**
+     * engineer skill of player 
+     */
+    private int engineerP;   
+    /**
+     * Money player has
+     */
     private int money;
+    /**
+     * x coordinate of player position
+     */
     private int xpos;
+    
+    /**
+     * y coordinate of player position
+     */
     private int ypos;
 
     private static final int START_MONEY = 100000;
@@ -51,9 +76,11 @@ public class GameCharacter {
 
     }
 
-    public GameCharacter() {
 
+    public GameCharacter() {
+        
     }
+
 
     @Override
     public String toString() {

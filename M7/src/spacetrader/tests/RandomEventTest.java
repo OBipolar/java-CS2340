@@ -30,8 +30,7 @@ public class RandomEventTest {
     @Test   
     public void testUpdate() throws ClassNotFoundException, SQLException {
 
-             @SuppressWarnings("unused")
-             SqliteApi db = new SqliteApi();
+             SqliteApi.start();
              GameCharacter player = SqliteApi.getPlayer();
              int money = player.getMoney();
              rand.setMoneyLost(false);

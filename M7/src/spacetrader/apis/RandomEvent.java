@@ -47,7 +47,7 @@ public class RandomEvent {
      * @return true if money is about to be stolen by UGA student
      */
     @SuppressWarnings("unused")
-    private boolean isMoneyLost() {
+    private boolean askMoneyLost() {
         if (getRandomNum(BOUND) != 0) {
             return false;
         } 
@@ -81,7 +81,7 @@ public class RandomEvent {
      * 
      * @return
      */
-    public boolean getMoneyLost() {
+    public boolean isMoneyLost() {
         return moneyLost;
     }
 }
