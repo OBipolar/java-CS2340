@@ -16,7 +16,7 @@ public class RandomEvent {
 
     private static final int BOUND = 2;
     public static final int MONEY_LOSS = 20;
-    private boolean moneyLost = false;
+    private boolean moneyLost;
 
     /**
      * Returns the result of the random event in string format

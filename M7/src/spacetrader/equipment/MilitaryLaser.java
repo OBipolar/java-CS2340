@@ -15,6 +15,9 @@ public class MilitaryLaser extends Weapon {
     
     
     
+    /**
+     * Default Constructor 
+     */
     public MilitaryLaser() {
         this(NAME, PRICE, DAMAGE, MIN_TECH_LEVEL);
     }

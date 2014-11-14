@@ -21,6 +21,9 @@ public class Travel {
     private GameCharacter player;
     private PlayerShip ship;
 
+    /**
+     * Default constructor that loads in variable 
+     */
     public Travel() {
         load();
     }

@@ -36,7 +36,11 @@ public class Good {
      * Price increase per tech level
      */
     private int ipl;
+    /**
+     * the maximum percentage that the price can vary above or below the base 
+     */
     private int var;
+    
     private int priceIncrease;
     private int priceLowCase;
     private int priceHighCase;

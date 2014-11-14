@@ -14,7 +14,9 @@ public class PulseLaser extends Weapon {
     private static final int MIN_TECH_LEVEL = 4;
     
     
-    
+    /**
+     * Default Constructor 
+     */
     public PulseLaser() {
         this(NAME, PRICE, DAMAGE, MIN_TECH_LEVEL);
     }

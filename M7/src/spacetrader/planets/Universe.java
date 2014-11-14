@@ -12,6 +12,9 @@ import java.util.Random;
  */
 public class Universe {
 
+    /**
+     * All the system names in the game
+     */
     public static final String[] SYSTEMSNAMES = {
             "Acamar",
             "Adahn", // The alternate personality for The Nameless One in
@@ -96,10 +99,22 @@ public class Universe {
             "Zalkon", "Zuul" // From the first Ghostbusters movie
     };
 
+    /**
+     * the max x coordinate a solar system can have
+     */
     public static final int XPOSMAX = 200;
+    /**
+     * the max y coordinate a solar system can have
+     */
     public static final int YPOSMAX = 200;
 
+    /**
+     * number of solar systems in the game
+     */
     private int numOfSystems;
+    /**
+     * A list of all solar systems in the game
+     */
     private List<SolarSystem> universe;
 
     /**
@@ -111,6 +126,11 @@ public class Universe {
         initialize();
     }
 
+    /**
+     * Constuctor that takes in systems
+     * 
+     * @param systems
+     */
     public Universe(List<SolarSystem> systems) {
         universe = systems;
         numOfSystems = SYSTEMSNAMES.length;
@@ -120,7 +140,8 @@ public class Universe {
     public String toString() {
         StringBuffer buffer = new StringBuffer();
         for (SolarSystem s : universe) {
-            buffer.append(" " + s.toString());
+            buffer.append(" ");
+            buffer.append(s.toString());
         }
         return buffer.toString();
     }
@@ -203,6 +224,11 @@ public class Universe {
         return new Random().nextInt(limit);
     }
 
+    /**
+     * Return all solar systems in a list
+     * 
+     * @return all solar systems in a list
+     */
     public List<SolarSystem> getUniverse() {
         return universe;
     }

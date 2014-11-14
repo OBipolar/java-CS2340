@@ -30,11 +30,10 @@ import java.util.logging.Logger;
  * @author Menghang Li
  *
  */
-public class SqliteApi {
+public final class SqliteApi {
 
     private static final Logger LOGGER = 
             Logger.getLogger(MarketPlace.class.getName()); 
-
     private static Connection connection;
     private static Statement statement;
     private static ResultSet resultSet;
@@ -314,11 +313,10 @@ public class SqliteApi {
     private static void loadUniverse() throws SQLException, ClassNotFoundException {
         String query = "SELECT * from universe";
         execQuery(query);
-        Capital capital;
+        Capital capital = new Capital();
         SolarSystem system;
         List<SolarSystem> systems = new ArrayList<>();
         while (resultSet.next()) {
-            capital = new Capital();
             capital.setName(resultSet.getString("name"));
             capital.setSolarSystem(capital.getName());
             capital.setPoliticalSystem(resultSet.getInt("PoliticalSystem"));
