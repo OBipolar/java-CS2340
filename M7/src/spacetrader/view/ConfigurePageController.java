@@ -109,7 +109,7 @@ public class ConfigurePageController implements Initializable, ControlledScreen 
             //Sqlite s = new Sqlite();
             System.out.println(player.getName());
             try {
-                sqlite = new SqliteApi(player);
+                SqliteApi.start(player);
                 System.out.println(SqliteApi.isDbCreated());
                 System.out.println(player.getName());
                 System.out.println("xpos: " + player.getXpos());

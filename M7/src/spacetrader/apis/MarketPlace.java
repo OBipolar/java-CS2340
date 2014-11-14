@@ -8,7 +8,8 @@ import spacetrader.ships.PlayerShip;
 
 import java.sql.SQLException;
 import java.util.List;
-
+import java.util.logging.Level;
+import java.util.logging.Logger;
 
 
 /**
@@ -19,6 +20,8 @@ import java.util.List;
  */
 public class MarketPlace {
 
+    private static final Logger LOGGER = 
+            Logger.getLogger(MarketPlace.class.getName()); 
     private GameCharacter player;
     private PlayerShip ship;
     private Trade trade;
@@ -82,9 +85,9 @@ public class MarketPlace {
         try {
             system = SqliteApi.getSolarSystem();
         } catch (ClassNotFoundException e) {
-           e.printStackTrace();
+            LOGGER.log(Level.SEVERE, e.getMessage());
         } catch (SQLException e) {
-            System.out.println(e);
+            LOGGER.log(Level.SEVERE, e.getMessage());
         }
 
 

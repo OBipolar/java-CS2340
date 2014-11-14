@@ -16,6 +16,8 @@ import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 
 /**
  * API for player to buy ship at a planet
@@ -25,17 +27,43 @@ import java.util.Map;
  */
 public class ShipYard {
     
+    private static final Logger LOGGER = 
+            Logger.getLogger(MarketPlace.class.getName()); 
     private SolarSystem system;
     private Planet planet;
     private GameCharacter player;
     private PlayerShip ship;
+    /**
+     * A list of names of avaliable ships
+     */
     private List<String> shipNames;
+    /**
+     * A list of names of avaliable weapons
+     */
     private List<String> weaponNames;
+    /**
+     * A list of names of avaliable shields
+     */
     private List<String> shieldNames;
+    /**
+     * A list of names of avaliable gadgets
+     */
     private List<String> gadgetNames;
+    /**
+     * A map that has the name of ship as key and its price as value
+     */
     private Map<String, Integer> shipPrices;
+    /**
+     * A map that has the name of weapon as key and its price as value
+     */
     private Map<String, Integer> weaponPrices;
+    /**
+     * A map that has the name of shield as key and its price as value
+     */
     private Map<String, Integer> shieldPrices;
+    /**
+     * A map that has the name of gadget as key and its price as value
+     */
     private Map<String, Integer> gadgetPrices;
     
     
@@ -101,10 +129,10 @@ public class ShipYard {
             }        
         } catch (ClassNotFoundException e) {
             // TODO Auto-generated catch block
-            e.printStackTrace();
+            LOGGER.log(Level.SEVERE, e.getMessage());
         } catch (SQLException e) {
             // TODO Auto-generated catch block
-            e.printStackTrace();
+            LOGGER.log(Level.SEVERE, e.getMessage());
         }
         
     }
@@ -205,7 +233,7 @@ public class ShipYard {
         CargoExpansion cargoExp = ef.getCargoExpansion();
         player = SqliteApi.getPlayer();
         ship = SqliteApi.getShip();
-        ship.addCargoExpansoin(cargoExp);;
+        ship.addCargoExpansoin(cargoExp);
         player.setMoney(player.getMoney() - cargoExp.getPrice());
         SqliteApi.setShip(ship);
     }

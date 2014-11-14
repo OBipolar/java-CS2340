@@ -1001,7 +1001,7 @@ public class GameScreenController implements Initializable, ControlledScreen {
     @Override
     public void initialize(URL url, ResourceBundle rb) {
     	try {
-			db = new SqliteApi();
+			SqliteApi.start();
 			sy = new ShipYard();
 			player = db.getPlayer();
 	        ship = db.getShip();
