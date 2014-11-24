@@ -3,31 +3,26 @@ package spacetrader.tests;
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertNotEquals;
 
-import java.util.ArrayList;
-import java.util.List;
-
-import spacetrader.apis.SqliteApi;
-
-import java.sql.SQLException;
-import java.util.ArrayList;
-import java.util.List;
-
-import spacetrader.apis.SqliteApi;
-
-import java.sql.SQLException;
 
 import org.junit.Before;
 import org.junit.Test;
 
+import spacetrader.apis.SqliteApi;
 import spacetrader.goods.Good;
-import spacetrader.goods.Water;
 import spacetrader.goods.Trade;
-import spacetrader.planets.Capital;
+import spacetrader.goods.Water;
+
+
 import spacetrader.planets.GameCharacter;
-import spacetrader.planets.Planet;
 import spacetrader.planets.SolarSystem;
 import spacetrader.ships.PlayerShip;
-import spacetrader.apis.MarketPlace;
+
+import java.util.ArrayList;
+import java.util.List;
+
+
+
+
 
 /**
  * Trade buy related Junit tests
@@ -35,7 +30,6 @@ import spacetrader.apis.MarketPlace;
  * @version 1.0
  */
 public class TradeBuyTest {
-    SqliteApi db;
     PlayerShip playerShip;
     SolarSystem system;
     Trade trade;
@@ -46,35 +40,18 @@ public class TradeBuyTest {
         if (!SqliteApi.isDbCreated()) {
             player = new GameCharacter("tempPlayer", 6, 6, 2, 2);
             GameCharacter player = new GameCharacter("tempPlayer", 6, 6, 2, 2);
-            try {
-                db = new SqliteApi(player);
-                playerShip = SqliteApi.getShip();
-                system = SqliteApi.getSolarSystem();
-                trade = new Trade(player, playerShip, system);
-            } catch (ClassNotFoundException e) {
-                // TODO Auto-generated catch block
-                e.printStackTrace();
-            } catch (SQLException e) {
-                // TODO Auto-generated catch block
-                e.printStackTrace();
-            }
+            SqliteApi.start(player);
+            playerShip = SqliteApi.getShip();
+            system = SqliteApi.getSolarSystem();
+            trade = new Trade(player, playerShip, system);
 
         } else {
-            // else load models from database
-            try {
-                SqliteApi db = new SqliteApi();
-                player = SqliteApi.getPlayer();
-                GameCharacter player = SqliteApi.getPlayer();
-                playerShip = SqliteApi.getShip();
-                system = SqliteApi.getSolarSystem();
-                trade = new Trade(player, playerShip, system);
-            } catch (ClassNotFoundException e) {
-                // TODO Auto-generated catch block
-                e.printStackTrace();
-            } catch (SQLException e) {
-                // TODO Auto-generated catch block
-                e.printStackTrace();
-            }
+            SqliteApi.start();
+            player = SqliteApi.getPlayer();
+            GameCharacter player = SqliteApi.getPlayer();
+            playerShip = SqliteApi.getShip();
+            system = SqliteApi.getSolarSystem();
+            trade = new Trade(player, playerShip, system);
         }
     }
 

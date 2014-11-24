@@ -14,38 +14,38 @@ public class GoodFactory {
      * @param name the name of goodood
      * @return a goodood
      */
-    public Good getGood(String name) {
+    public Good getGood(final String name) {
         Good good;
         switch (name) {
             case "Water":
-                good = (new Water());
+                good = new Water();
                 break;
             case "Firearms":
-                good = (new Firearms());
+                good = new Firearms();
                 break;
             case "Food":
-                good = (new Food());
+                good = new Food();
                 break;
             case "Furs":
-                good = (new Furs());
+                good = new Furs();
                 break;
             case "goodames":
-                good = (new Games());
+                good = new Games();
                 break;
             case "Machines":
-                good = (new Machines());
+                good = new Machines();
                 break;
             case "Narcotics":
-                good = (new Narcotics());
+                good = new Narcotics();
                 break;
             case "Robots":
-                good = (new Robots());
+                good = new Robots();
                 break;
             case "Medicine":
-                good = (new Medicine());
+                good = new Medicine();
                 break;
             case "Ore":
-                good = (new Ore());
+                good = new Ore();
                 break;
             default : 
                 good = new Water();

@@ -14,9 +14,15 @@ public class CargoExpansion extends Equipment {
     private static final int MIN_TECH_LEVEL = 4;
     private static final int EXPANSION = 5;
     
+    /**
+     * the extra slots a ship can have 
+     */
     private int expansion;
 
     
+    /**
+     * Default constructor
+     */
     public CargoExpansion() {
         this(NAME, PRICE, MIN_TECH_LEVEL, EXPANSION);
     }
@@ -45,10 +51,20 @@ public class CargoExpansion extends Equipment {
         setExpansion(cargoExp.getExpansion());
     }
 
+    /**
+     * Return expansion
+     * 
+     * @return
+     */
     public int getExpansion() {
         return expansion;
     }
 
+    /**
+     * Set expansion
+     * 
+     * @param expansion 
+     */
     public void setExpansion(int expansion) {
         this.expansion = expansion;
     }

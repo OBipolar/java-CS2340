@@ -27,11 +27,10 @@ public class RandomEventTest {
     }
 
 
-    @Test
-    public void testUpdate() {
-         try {
-             @SuppressWarnings("unused")
-            SqliteApi db = new SqliteApi();
+    @Test   
+    public void testUpdate() throws ClassNotFoundException, SQLException {
+
+             SqliteApi.start();
              GameCharacter player = SqliteApi.getPlayer();
              int money = player.getMoney();
              rand.setMoneyLost(false);
@@ -46,12 +45,5 @@ public class RandomEventTest {
                        + " cr of money from you";
              assertEquals(exp, rand.update());
              assertEquals(newMoney, SqliteApi.getPlayer().getMoney());
-         } catch (ClassNotFoundException e) {
-             // TODO Auto-generated catch block
-             e.printStackTrace();
-         } catch (SQLException e) {
-             // TODO Auto-generated catch block
-             e.printStackTrace();
-         }
      }
 }

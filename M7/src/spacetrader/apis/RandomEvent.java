@@ -16,7 +16,7 @@ public class RandomEvent {
 
     private static final int BOUND = 2;
     public static final int MONEY_LOSS = 20;
-    private boolean moneyLost = false;
+    private boolean moneyLost;
 
     /**
      * Returns the result of the random event in string format
@@ -28,7 +28,7 @@ public class RandomEvent {
         String str = "";
         GameCharacter player = SqliteApi.getPlayer();
         if (moneyLost) {
-            int amount = (player.getMoney() / MONEY_LOSS);
+            int amount = player.getMoney() / MONEY_LOSS;
             player.setMoney(player.getMoney() - amount);
             str = "A UGA student just stole " + amount
                     + " cr of money from you";
@@ -47,12 +47,12 @@ public class RandomEvent {
      * @return true if money is about to be stolen by UGA student
      */
     @SuppressWarnings("unused")
-    private boolean isMoneyLost() {
+    private boolean askMoneyLost() {
         if (getRandomNum(BOUND) != 0) {
             return false;
-        } else {
-            return true;
-        }
+        } 
+        return true;
+
 
     }
 
@@ -64,14 +64,24 @@ public class RandomEvent {
      * @return Returns an random integer between 0 and limit (exclusive)
      */
     private int getRandomNum(int limit) {
-        return (new Random()).nextInt(limit);
+        return new Random().nextInt(limit);
     }
 
+    /**
+     * Set moneyLost to be true if money is lost, false otherwise
+     * 
+     * @param moneyLost
+     */
     public void setMoneyLost(boolean moneyLost) {
         this.moneyLost = moneyLost;
     }
     
-    public boolean getMoneyLost() {
+    /**
+     * Return true if the money is lost, false otherwise
+     * 
+     * @return
+     */
+    public boolean isMoneyLost() {
         return moneyLost;
     }
 }

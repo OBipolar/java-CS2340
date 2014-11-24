@@ -6,6 +6,7 @@
 
 package spacetrader.view;
 
+<<<<<<< HEAD
 import java.net.URL;
 import java.sql.SQLException;
 import java.util.ResourceBundle;
@@ -15,12 +16,22 @@ import java.util.logging.Logger;
 import spacetrader.apis.SqliteApi;
 import spacetrader.planets.GameCharacter;
 import javafx.beans.property.StringProperty;
+=======
+import spacetrader.apis.SqliteApi;
+import spacetrader.planets.GameCharacter;
+import spacetrader.planets.Universe;
+
+>>>>>>> 82ce6dab095a0b150338020e4cb45855700a15aa
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.fxml.Initializable;
 import javafx.scene.control.Label;
 import javafx.scene.control.TextField;
 import javafx.util.converter.IntegerStringConverter;
+
+import java.net.URL;
+import java.sql.SQLException;
+import java.util.ResourceBundle;
 
 /**
  * FXML Controller class
@@ -111,6 +122,7 @@ public class ConfigurePageController implements Initializable, ControlledScreen 
     private void nextButtonFired(ActionEvent event) {
             player = new GameCharacter(userName, pilotP, fighterP, traderP,
                 engineerP);
+<<<<<<< HEAD
             try {
                 sqlite = new SqliteApi(player);
                 myController.loadScreen("gamePage", "GameScreen.fxml");
@@ -120,6 +132,19 @@ public class ConfigurePageController implements Initializable, ControlledScreen 
             } catch (SQLException e) {
                 // TODO Auto-generated catch block
                 logger.log(Level.SEVERE, npe.getMessage(), npe);
+=======
+            //Sqlite s = new Sqlite();
+            System.out.println(player.getName());
+            try {
+                SqliteApi.start(player);
+                System.out.println(SqliteApi.isDbCreated());
+                System.out.println(player.getName());
+                System.out.println("xpos: " + player.getXpos());
+                myController.loadScreen("gamePage", "GameScreen.fxml");
+            } catch (Exception e) {
+                // TODO Auto-generated catch block
+                e.printStackTrace();
+>>>>>>> 82ce6dab095a0b150338020e4cb45855700a15aa
             }
             myController.setScreen(Main.screen3ID);
     }
@@ -225,9 +250,14 @@ public class ConfigurePageController implements Initializable, ControlledScreen 
         return 16 - (pilotP + fighterP + traderP + engineerP) >= 0;
     }
 
+<<<<<<< HEAD
     private int getPtRemain(final int pilot, final int fighter,
           final int trader, final int engineer) {
         return 16 - (pilot + fighter + trader + engineer);
+=======
+    private int getPtRemain(int pp, int fp, int tp, int ep) {
+        return 16 - (pp + fp + tp + ep);
+>>>>>>> 82ce6dab095a0b150338020e4cb45855700a15aa
     }
 
 }

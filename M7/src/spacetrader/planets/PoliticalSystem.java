@@ -15,6 +15,9 @@ public enum PoliticalSystem {
     @SuppressWarnings("unused")
     private int num;
 
+    /**
+     * number of political systems
+     */
     public static final int NUM_OF_POLITICAL_SYSTEM = 16;
 
     PoliticalSystem(int num) {

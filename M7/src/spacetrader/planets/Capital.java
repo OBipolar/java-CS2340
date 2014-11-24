@@ -24,8 +24,13 @@ public class Capital extends Planet {
 
     }
 
+    /**
+     * Default constructor
+     */
     public Capital() {
-
+        super();
     }
+
+
 
 }

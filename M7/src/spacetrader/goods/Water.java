@@ -16,6 +16,7 @@ public class Water extends Good {
      * 
      */
     public Water() {
+        super();
         setName("Water");
         setMtlp(0);
         setMtlu(0);

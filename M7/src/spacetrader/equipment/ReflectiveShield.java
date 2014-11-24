@@ -13,6 +13,9 @@ public class ReflectiveShield extends Shield {
     private static final int MIN_TECH_LEVEL = 6;
     private static final int STRENGTH = 100;
     
+    /**
+     * Default Constructor 
+     */
     public ReflectiveShield() {
         this(NAME, PRICE, MIN_TECH_LEVEL, STRENGTH);
     }

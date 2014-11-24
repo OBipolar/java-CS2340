@@ -14,6 +14,7 @@ public class Games extends Good {
      * Constructor thats sets all properties for Games
      */
     public Games() {
+        super();
         setName("Games");
         setMtlp(3);
         setMtlu(1);

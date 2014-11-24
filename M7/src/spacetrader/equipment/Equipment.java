@@ -8,8 +8,17 @@ package spacetrader.equipment;
  */
 public class Equipment {
 
+    /**
+     * name of this Equippment
+     */
     private String name;
+    /**
+     * the price
+     */
     private int price;
+    /**
+     * The minimum tech level to produce this equippment
+     */
     private int minTechLevel;
     
     

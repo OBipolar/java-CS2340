@@ -15,6 +15,9 @@ public class BeamLaser extends Weapon {
     
     
     
+    /**
+     * Default constructor
+     */
     public BeamLaser() {
         this(NAME, PRICE, DAMAGE, MIN_TECH_LEVEL);
     }

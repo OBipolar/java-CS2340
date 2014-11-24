@@ -22,41 +22,20 @@ import java.util.List;
 
 public class SqliteApiTest {
 
-    @SuppressWarnings("unused")
-    private SqliteApi api;
 
     @Before
     public void setUp() throws Exception {
         if (!SqliteApi.isDbCreated()) {
             GameCharacter player = new GameCharacter("Tester1", 6, 6, 2, 2);
-
-            try {
-                api = new SqliteApi(player);
-            } catch (ClassNotFoundException e) {
-                // TODO Auto-generated catch block
-                e.printStackTrace();
-            } catch (SQLException e) {
-                // TODO Auto-generated catch block
-                e.printStackTrace();
-            }
-
+            SqliteApi.start(player);
         } else {
-            // else load models from database
-            try {
-                api = new SqliteApi();
-                // System.out.println(api.getSolarSystem());
-            } catch (ClassNotFoundException e) {
-                // TODO Auto-generated catch block
-                e.printStackTrace();
-            } catch (SQLException e) {
-                // TODO Auto-generated catch block
-                e.printStackTrace();
-            }
+             SqliteApi.start();
+
         }
     }
 
     @Test
-    public void testListRemove() {
+    public void testListRemove() throws ClassNotFoundException, SQLException {
         Universe uni = SqliteApi.getUniverse();
         System.out.println(uni == null);
         System.out.println(uni.getUniverse().size());

@@ -8,6 +8,9 @@ package spacetrader.equipment;
  */
 public class Shield extends Equipment {
     
+    /**
+     * The amount of damage the shield can absorb
+     */
     private int strength;
     
     

@@ -5,6 +5,8 @@ import spacetrader.planets.SolarSystem;
 import spacetrader.ships.PlayerShip;
 
 import java.sql.SQLException;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 
 /**
  * API for player to travel to another planet
@@ -14,9 +16,14 @@ import java.sql.SQLException;
  */
 public class Travel {
     
+    private static final Logger LOGGER = 
+            Logger.getLogger(MarketPlace.class.getName()); 
     private GameCharacter player;
     private PlayerShip ship;
 
+    /**
+     * Default constructor that loads in variable 
+     */
     public Travel() {
         load();
     }
@@ -26,24 +33,26 @@ public class Travel {
      * 
      * @param planetName
      *            the name of the planet
+     * @throws SQLException 
+     * @throws ClassNotFoundException 
      */
     public void warpTo(String planetName, int travelDist, int hullExhaust) {
         SolarSystem system;
-        try {
-            system = SqliteApi.getSolarSystem(planetName);
-            //updateShip();
-            player.travel(system.getX(), system.getY());
-            ship.getBase().setFuel(ship.getBase().getFuel() - travelDist);
-            ship.getBase().setHullStrength(ship.getBase().getHullStrength() - hullExhaust);
-            update();
+            try {
+                system = SqliteApi.getSolarSystem(planetName);
+                //updateShip();
+                player.travel(system.getX(), system.getY());
+                ship.getBase().setFuel(ship.getBase().getFuel() - travelDist);
+                ship.getBase().setHullStrength(ship.getBase().getHullStrength() - hullExhaust);
+                update();
+            } catch (ClassNotFoundException e) {
+                // TODO Auto-generated catch block
+                LOGGER.log(Level.SEVERE, e.getMessage());
+            } catch (SQLException e) {
+                // TODO Auto-generated catch block
+                LOGGER.log(Level.SEVERE, e.getMessage());
+            }
 
-        } catch (ClassNotFoundException e) {
-            // TODO Auto-generated catch block
-            e.printStackTrace();
-        } catch (SQLException e) {
-            // TODO Auto-generated catch block
-            e.printStackTrace();
-        }
 
     }
 
@@ -77,7 +86,7 @@ public class Travel {
         int fuel = ship.getBase().getFuel();
         int fuelLoss = ship.getBase().getFuelCost();
         ship.getBase().setFuel(fuel - fuelLoss);
-        System.out.println("new fuel is " + (fuel - fuelLoss));
+        //System.out.println("new fuel is " + (fuel - fuelLoss));
         int hullStrength = ship.getBase().getHullStrength();
         hullStrength--;
         ship.getBase().setHullStrength(hullStrength);

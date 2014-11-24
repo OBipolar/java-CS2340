@@ -20,12 +20,35 @@ import java.util.Random;
  */
 public class Trade {
 
+    /**
+     * The player model
+     */
     private GameCharacter player;
+    /**
+     * The playership model
+     */
     private PlayerShip playerShip;
+    /**
+     * The solar system the player is on
+     */
     private SolarSystem system;
+    /**
+     * A list of names of goods the player can sell
+     */
     private List<String> goodsToSell;
+    /**
+     * A list of names of goods player can buy 
+     */
     private List<String> goodsToBuy;
+    /**
+     * A map that has the name of a good that the player can sell
+     * as a key and the price as the value
+     */
     private Map<String, Integer> pricesToSell;
+    /**
+     * A map that has the name of a good that the player can nuy
+     * as a key and the price as the value
+     */
     private Map<String, Integer> pricesToBuy;
 
     /**
@@ -48,8 +71,8 @@ public class Trade {
         setGoodsToBuy(new ArrayList<String>());
         pricesToSell = new HashMap<String, Integer>();
         pricesToBuy = new HashMap<String, Integer>();
-        setGoodsToSell();
-        setGoodsToBuy();
+        setupGoodsToSell();
+        setupGoodsToBuy();
     }
 
     /**
@@ -93,7 +116,7 @@ public class Trade {
      * Sets the goods player can sell on a particular planet depending on the
      * planet's tech level
      */
-    public void setGoodsToSell() {
+    public void setupGoodsToSell() {
 
         int techLevel = system.getPlanet().getTechLevel().ordinal();
         // System.out.println("techlevel: " + techLevel);
@@ -111,6 +134,11 @@ public class Trade {
 
     }
     
+    /**
+     * Sets goodsToSell
+     * 
+     * @param goodsToSell a goodsToSell
+     */
     public void setGoodsToSell(List<String> goodsToSell) {
         this.goodsToSell = goodsToSell;
     }
@@ -119,7 +147,7 @@ public class Trade {
      * Sets the goods player can buy on a particular planet depending on the
      * planet's tech level
      */
-    public void setGoodsToBuy() {
+    public void setupGoodsToBuy() {
 
         int techLevel = system.getPlanet().getTechLevel().ordinal();
         List<Good> goods = new ArrayList<Good>();
@@ -143,6 +171,11 @@ public class Trade {
 
     }
     
+    /**
+     * Sets goodsToBuy
+     * 
+     * @param goodsToBuy a goodsToBuy
+     */
     public void setGoodsToBuy(List<String> goodsToBuy) {
         this.goodsToBuy = goodsToBuy;
     }
@@ -171,34 +204,64 @@ public class Trade {
      * @return Returns an random integer between 0 and limit (inclusive)
      */
     private int getRandomNum(int limit) {
-        return (new Random()).nextInt(limit + 1);
+        return new Random().nextInt(limit + 1);
     }
 
+    /**
+     * Returns pricesToSell
+     * 
+     * @return pricesToSell
+     */
     public Map<String, Integer> getPricesToSell() {
         return pricesToSell;
     }
 
+    /**
+     * Retuns pricesToBuy
+     * 
+     * @return pricesToBuy
+     */
     public Map<String, Integer> getPricesToBuy() {
         return pricesToBuy;
     }
 
+    /**
+     * Returns goodsToSell
+     * 
+     * @return goodsToSell
+     */
     public List<String> getGoodsToSell() {
         return goodsToSell;
     }
 
 
 
+    /**
+     * Returns goodsToBuy
+     * 
+     * @return goodsToBuy
+     */
     public List<String> getGoodsToBuy() {
         return goodsToBuy;
     }
 
 
 
+    /**
+     * Get the ship in trade
+     * 
+     * @return the ship in trade;
+     */
     public PlayerShip getShip() {
         // TODO Auto-generated method stub
         return playerShip;
     }
 
+    /**
+     * Get the player in trade
+     * 
+     * @return the player in trade
+     */
     public GameCharacter getPlayer() {
         // TODO Auto-generated method stub
         return player;

@@ -14,13 +14,11 @@ import spacetrader.ships.ShipFactory;
 public class ShipYardTest {
 
     private ShipYard sy; 
-    @SuppressWarnings("unused")
-    private SqliteApi db;
     
     @Before
     public void setUp() throws Exception {
         
-        db = new SqliteApi();
+        SqliteApi.start();
         sy = new ShipYard();
     }
 

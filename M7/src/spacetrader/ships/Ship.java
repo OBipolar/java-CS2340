@@ -9,25 +9,85 @@ package spacetrader.ships;
  */
 public class Ship {
 
+    /**
+     * name of the ship
+     */
     private String name;
+    /**
+     * cargo capacity
+     */
     private int cargoBay;
+    /**
+     * weapon slots
+     */
     private int weaponSlots;
+    /**
+     * shield slots
+     */
     private int shieldSlots;
+    /**
+     * gadget slots
+     */
     private int gadgetSlots;
+    /**
+     * number of crews on the ship
+     */
     private int crew;
+    /**
+     * fuel amount
+     */
     private int fuel;
+    /**
+     * minimum tech level to use the ship
+     */
     private int minTechLevel;
+    /**
+     * cost to refill the fule per unit
+     */
     private int fuelCost;
+    /**
+     * price of the ship
+     */
     private int price;
+    /**
+     * tbd
+     */
     private int bounty;
+    /**
+     * tbd
+     */
     private int occurrence;
+    /**
+     * hull strength
+     */
     private int hullStrength;
+    /**
+     * the ability to attract police
+     */
     private int police;
+    /**
+     * the ability to attract pirate
+     */
     private int pirate;
+    /**
+     * the ability to attract trader
+     */
     private int trader;
+    /**
+     * cost to repair per hull strength
+     */
     private int repairCost;
+    /**
+     * size of the ship
+     */
     private int size;
+    /**
+     * attack attribute
+     */
     private int attack;
+    /**
+     * shield attribute
+     */
     private int shield;
     
   

@@ -1179,6 +1179,7 @@ public class GameScreenController implements Initializable, ControlledScreen {
      * initialize the game screen view
      */
     @Override
+<<<<<<< HEAD
     public void initialize(final URL url, final ResourceBundle rb) {
     	//SIXFINAL = 6;
     	
@@ -1207,6 +1208,34 @@ public class GameScreenController implements Initializable, ControlledScreen {
             // TODO Auto-generated catch block
         	LOGGER.log(Level.SEVERE, npe.getMessage(), npe);
         }
+=======
+    public void initialize(URL url, ResourceBundle rb) {
+    	try {
+			SqliteApi.start();
+			sy = new ShipYard();
+			player = db.getPlayer();
+	        ship = db.getShip();
+	        uni = db.getUniverse();
+	        maxFuel = ship.getBase().getFuel();
+	        hull = maxPull = ship.getBase().getHullStrength();
+	        solarList = uni.getUniverse();
+	        //System.out.println("shipyard exists: " + sy.isYardExist());
+	        
+	        shipTab.setId("shipTab");
+	        weaponTab.setId("weaponTab");
+	        shieldTab.setId("shieldTab");
+	        gadgetTab.setId("gadgetTab");
+	        
+	        showShipNames(sy);
+	        
+		} catch (ClassNotFoundException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		} catch (SQLException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+>>>>>>> 82ce6dab095a0b150338020e4cb45855700a15aa
 
         graphicsContext = canvas.getGraphicsContext2D();
         // draw map

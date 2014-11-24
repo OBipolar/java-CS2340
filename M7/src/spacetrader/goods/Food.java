@@ -16,6 +16,7 @@ public class Food extends Good{
      * 
      */
     public Food() {
+        super();
         setName("Food");
         setMtlp(1);
         setMtlu(0);
