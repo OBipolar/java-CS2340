@@ -9,10 +9,6 @@ package spacetrader.view;
  *
  * @author zixiangzhu
  */
-public interface ControlledScreen {
-	/**
-	 * set the parent of screenPage
-	 * @param screenPage
-	 */
-    public void setScreenParent(ScreensController screenPage);
+public class Medicines {
+    
 }

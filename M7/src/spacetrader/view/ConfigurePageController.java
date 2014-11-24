@@ -9,15 +9,15 @@ package spacetrader.view;
 import java.net.URL;
 import java.sql.SQLException;
 import java.util.ResourceBundle;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 
 import spacetrader.apis.SqliteApi;
 import spacetrader.planets.GameCharacter;
-import spacetrader.planets.Universe;
+import javafx.beans.property.StringProperty;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.fxml.Initializable;
-import javafx.scene.control.Button;
-//import SpaceTrader.Model.GameCharacter;
 import javafx.scene.control.Label;
 import javafx.scene.control.TextField;
 import javafx.util.converter.IntegerStringConverter;
@@ -32,38 +32,46 @@ public class ConfigurePageController implements Initializable, ControlledScreen 
      * Initializes the controller class.
      */
 
-    ScreensController myController;
-    private String userName;
-    private int pilotP, fighterP, traderP, engineerP;
-    private GameCharacter player;
-    private SqliteApi sqlite;
+    static ScreensController myController;
+    private transient String userName;
+    private transient int pilotP;
+    private transient int fighterP;
+    private transient int traderP;
+    private transient int engineerP;
+    private transient GameCharacter player;
+    private transient String sixteenPt;
 
     @FXML
-    private TextField userNameInput;
+    private transient TextField userNameInput;
 
     @FXML
-    private TextField pilotPt;
+    private transient TextField pilotPt;
 
     @FXML
-    private TextField fighterPt;
+    private transient TextField fighterPt;
 
     @FXML
-    private TextField traderPt;
+    private transient TextField traderPt;
 
     @FXML
-    private TextField engineerPt;
+    private transient TextField engineerPt;
 
     @FXML
-    private Label ptRecord;
+    private transient Label ptRecord;
 
     @FXML
-    private Button cancelButton;
-
-    @FXML
-    private Button okButton;
-
-    @FXML
-    private Label messageLabel;
+    private transient Label messageLabel;
+    private transient StringProperty userNameProperty;
+    private transient IntegerStringConverter converter;
+    private transient StringProperty pilotProperty;
+    private transient StringProperty fighterProperty;
+    private transient StringProperty traderProperty;
+    private transient StringProperty engineerProperty;
+    private transient SqliteApi sqlite;
+    private static Logger logger;
+    private static Throwable npe;
+    private static Class<ConfigurePageController> myClass;
+    private transient String myClassName;
 
     @Override
     public void setScreenParent(ScreensController screenParent) {
@@ -81,12 +89,11 @@ public class ConfigurePageController implements Initializable, ControlledScreen 
 
     @FXML
     private void okButtonFired(ActionEvent event) {
-        System.out.println("ok fired");
-        if (pilotP + fighterP + traderP + engineerP == 16 && userName != "") {
+        if (pilotP + fighterP + traderP + engineerP == 16 && !userName.isEmpty()) {
             
             messageLabel.setText("Profile Successfully Created!");
             
-        } else if (userName == "") {
+        } else if (userName.isEmpty()) {
             messageLabel.setText("Username Required!");
         } else {
             messageLabel.setText("Needs to allocate all skill points!");
@@ -96,30 +103,25 @@ public class ConfigurePageController implements Initializable, ControlledScreen 
 
     @FXML
     private void cancelButtonFired(ActionEvent event) {
-        System.out.println("cancel fired");
         myController.setScreen(Main.screen1ID);
         clear();
     }
 
     @FXML
     private void nextButtonFired(ActionEvent event) {
-    		player = new GameCharacter(userName, pilotP, fighterP, traderP,
+            player = new GameCharacter(userName, pilotP, fighterP, traderP,
                 engineerP);
-        	//Sqlite s = new Sqlite();
-    		System.out.println(player.getName());
-        	try {
-				sqlite = new SqliteApi(player);
-				System.out.println(SqliteApi.isDbCreated());
-				System.out.println(player.getName());
-				System.out.println("xpos: " + player.getXpos());
-				myController.loadScreen("gamePage", "GameScreen.fxml");
-			} catch (Exception e) {
-				// TODO Auto-generated catch block
-				e.printStackTrace();
-			}
+            try {
+                sqlite = new SqliteApi(player);
+                myController.loadScreen("gamePage", "GameScreen.fxml");
+            } catch (ClassNotFoundException e) {
+                // TODO Auto-generated catch block
+                logger.log(Level.SEVERE, npe.getMessage(), npe);
+            } catch (SQLException e) {
+                // TODO Auto-generated catch block
+                logger.log(Level.SEVERE, npe.getMessage(), npe);
+            }
             myController.setScreen(Main.screen3ID);
-            //Universe universe = new Universe();
-            //System.out.println(universe.toString());
     }
 
     @Override
@@ -132,94 +134,90 @@ public class ConfigurePageController implements Initializable, ControlledScreen 
         fighterPt.setText("0");
         traderPt.setText("0");
         engineerPt.setText("0");
-        player = null;
+        sixteenPt = "/16 points remaining";
+        myClass = ConfigurePageController.class;
+        myClassName = myClass.getName();
+        logger = Logger.getLogger(myClassName);
 
-        userNameInput.textProperty().addListener(
-                (observable, oldValue, newValue) -> {
-                    userName = newValue;
+        userNameProperty = userNameInput.textProperty();
+        userNameProperty.addListener(
+            (observable, oldValue, newValue) -> {
+            userName = newValue;
+        });
+        converter = new IntegerStringConverter();
+        
+        pilotProperty = pilotPt.textProperty();
+        pilotProperty.addListener(
+            (observable, oldValue, newValue) -> {
+                if (newValue.isEmpty()) {
+                    pilotP = 0;
+                } else {
+                    pilotP = converter.fromString(newValue);
+                }
+                if (!checkOk()) {
+                    pilotP = 16 - fighterP - traderP - engineerP;
+                    pilotPt.replaceText(0, newValue.length(), Integer.toString(pilotP));
+                            ptRecord.setText(0 + sixteenPt);
+                }
+                ptRecord.setText(getPtRemain(pilotP, fighterP, traderP, engineerP)
+                          + sixteenPt);
                 });
 
-        pilotPt.textProperty()
-                .addListener(
+        fighterProperty = fighterPt.textProperty();
+        fighterProperty.addListener(
                         (observable, oldValue, newValue) -> {
-                            System.out.println(oldValue);
-                            IntegerStringConverter converter = new IntegerStringConverter();
-                            if (newValue.equals("")) {
-                                pilotP = 0;
-                            } else {
-                                pilotP = converter.fromString(newValue);
-                            }
-                            if (!checkOk()) {
-                                pilotP = 16 - fighterP - traderP - engineerP;
-                                pilotPt.replaceText(0, newValue.length(), ""
-                                        + pilotP);
-                                ptRecord.setText(0 + "/16 points remaining");
-                            }
-                            ptRecord.setText(getPtRemain(pilotP, fighterP,
-                                    traderP, engineerP)
-                                    + "/16 points remaining");
-                        });
-
-        fighterPt
-                .textProperty()
-                .addListener(
-                        (observable, oldValue, newValue) -> {
-                            IntegerStringConverter converter = new IntegerStringConverter();
-                            if (newValue.equals("")) {
+                            if (newValue.isEmpty()) {
                                 fighterP = 0;
                             } else {
                                 fighterP = converter.fromString(newValue);
                             }
                             if (!checkOk()) {
                                 fighterP = 16 - pilotP - traderP - engineerP;
-                                fighterPt.replaceText(0, newValue.length(), ""
-                                        + fighterP);
-                                ptRecord.setText(0 + "/16 points remaining");
+                                fighterPt.replaceText(0, newValue.length(),
+                                          Integer.toString(fighterP));
+                                ptRecord.setText(0 + sixteenPt);
                             }
                             ptRecord.setText(getPtRemain(pilotP, fighterP,
                                     traderP, engineerP)
-                                    + "/16 points remaining");
+                                    + sixteenPt);
                         });
 
-        traderPt.textProperty()
-                .addListener(
+        traderProperty = traderPt.textProperty();
+        traderProperty.addListener(
                         (observable, oldValue, newValue) -> {
-                            IntegerStringConverter converter = new IntegerStringConverter();
-                            if (newValue.equals("")) {
+                            if (newValue.isEmpty()) {
                                 traderP = 0;
                             } else {
                                 traderP = converter.fromString(newValue);
                             }
                             if (!checkOk()) {
                                 traderP = 16 - fighterP - pilotP - engineerP;
-                                traderPt.replaceText(0, newValue.length(), ""
-                                        + traderP);
-                                ptRecord.setText(0 + "/16 points remaining");
+                                traderPt.replaceText(0, newValue.length(),
+                                         Integer.toString(traderP));
+                                ptRecord.setText(0 + sixteenPt);
                             }
                             ptRecord.setText(getPtRemain(pilotP, fighterP,
                                     traderP, engineerP)
-                                    + "/16 points remaining");
+                                    + sixteenPt);
                         });
 
-        engineerPt
-                .textProperty()
-                .addListener(
+        engineerProperty = engineerPt.textProperty();
+        engineerProperty.addListener(
                         (observable, oldValue, newValue) -> {
-                            IntegerStringConverter converter = new IntegerStringConverter();
-                            if (newValue.equals("")) {
+                            if (newValue.isEmpty()) {
                                 engineerP = 0;
                             } else {
                                 engineerP = converter.fromString(newValue);
                             }
                             if (!checkOk()) {
                                 engineerP = 16 - fighterP - traderP - pilotP;
-                                engineerPt.replaceText(0, newValue.length(), ""
-                                        + engineerP);
-                                ptRecord.setText(0 + "/16 points remaining");
+                                engineerPt.replaceText(0, newValue.length(),
+                                           Integer.toString(engineerP));
+                                ptRecord.setText(0 + sixteenPt);
                             }
                             ptRecord.setText(getPtRemain(pilotP, fighterP,
                                     traderP, engineerP)
-                                    + "/16 points remaining");
+                                    + sixteenPt);
                         });
     }
 
@@ -227,8 +225,9 @@ public class ConfigurePageController implements Initializable, ControlledScreen 
         return 16 - (pilotP + fighterP + traderP + engineerP) >= 0;
     }
 
-    private int getPtRemain(int p, int f, int t, int e) {
-        return 16 - (p + f + t + e);
+    private int getPtRemain(final int pilot, final int fighter,
+          final int trader, final int engineer) {
+        return 16 - (pilot + fighter + trader + engineer);
     }
 
 }

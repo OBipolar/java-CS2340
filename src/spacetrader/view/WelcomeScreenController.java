@@ -20,12 +20,12 @@ import javafx.scene.control.Button;
  */
 public class WelcomeScreenController implements Initializable, ControlledScreen {
 
-    static ScreensController myController;
+    ScreensController myController;
 
     @FXML
-    private transient Button newGame;
+    private Button newGame;
     @FXML
-    private transient Button loadGame;
+    private Button loadGame;
 
     @Override
     public void setScreenParent(ScreensController screenParent) {

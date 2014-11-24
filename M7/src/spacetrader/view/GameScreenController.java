@@ -6,65 +6,11 @@
 
 package spacetrader.view;
 
-import static java.lang.Double.max;
-import static java.lang.Double.min;
-import static java.lang.Math.pow;
-import static java.lang.Math.sqrt;
-
-import java.net.URL;
-import java.sql.SQLException;
-import java.util.ArrayList;
-import java.util.ResourceBundle;
-import java.util.List;
-import java.util.Map;
-
-import javafx.scene.control.Label;
-import javafx.scene.control.MenuBar;
-import javafx.scene.control.RadioButton;
-import javafx.scene.control.Tab;
-import javafx.scene.control.TabPane;
-import javafx.scene.control.TextField;
-import javafx.scene.control.Button;
-import javafx.scene.control.Toggle;
-import javafx.scene.control.ToggleGroup;
-import javafx.event.ActionEvent;
-import javafx.fxml.FXML;
-import javafx.fxml.Initializable;
-import javafx.scene.control.TitledPane;
-import javafx.scene.layout.AnchorPane;
-import javafx.util.converter.IntegerStringConverter;
-import javafx.scene.shape.*;
-import javafx.scene.paint.Color;
-import javafx.scene.canvas.Canvas;
-import javafx.scene.canvas.GraphicsContext;
-import javafx.beans.value.ChangeListener;
-import javafx.beans.value.ObservableValue;
-
-import java.util.Random;
-import java.util.logging.Level;
-import java.util.logging.Logger;
-
-import javafx.beans.value.ChangeListener;
-import javafx.beans.value.ObservableValue;
-import javafx.collections.FXCollections;
-import javafx.collections.ObservableList;
-import javafx.geometry.Insets;
-import javafx.geometry.Pos;
-import javafx.scene.Scene;
-import javafx.scene.control.ChoiceBox;
-import javafx.scene.control.Dialogs;
-import javafx.scene.control.ListView;
-import javafx.scene.layout.VBox;
-import javafx.scene.text.Text;
-import javafx.stage.Modality;
-import javafx.stage.Stage;
-import javafx.util.converter.IntegerStringConverter;
-import spacetrader.apis.MarketPlace;
+import spacetrader.goods.Trade;
 import spacetrader.apis.RandomEvent;
 import spacetrader.apis.ShipYard;
 import spacetrader.apis.SqliteApi;
 import spacetrader.apis.Travel;
-import spacetrader.equipment.Weapon;
 import spacetrader.goods.Firearms;
 import spacetrader.goods.Food;
 import spacetrader.goods.Furs;
@@ -74,15 +20,57 @@ import spacetrader.goods.Machines;
 import spacetrader.goods.Medicine;
 import spacetrader.goods.Narcotics;
 import spacetrader.goods.Ore;
-import spacetrader.goods.Trade;
 import spacetrader.goods.Water;
-import spacetrader.planets.Capital;
+import spacetrader.apis.MarketPlace;
 import spacetrader.planets.GameCharacter;
+import spacetrader.planets.Planet;
 import spacetrader.planets.SolarSystem;
+import spacetrader.planets.TechLevels;
 import spacetrader.planets.Universe;
+import javafx.beans.property.StringProperty;
 import spacetrader.ships.PlayerShip;
 import spacetrader.ships.Ship;
 import spacetrader.ships.ShipFactory;
+
+
+
+
+
+import static java.lang.Double.min;
+import static java.lang.Math.pow;
+import static java.lang.Math.sqrt;
+
+import java.net.URL;
+import java.sql.SQLException;
+import java.util.ArrayList;
+import java.util.List;
+import java.util.Locale;
+import java.util.ResourceBundle;
+import java.util.Map;
+import java.util.logging.Level;
+import java.util.logging.Logger;
+
+import javafx.event.ActionEvent;
+import javafx.scene.control.Button;
+import javafx.scene.control.Label;
+import javafx.scene.control.MenuBar;
+import javafx.scene.control.MultipleSelectionModel;
+import javafx.scene.control.Tab;
+import javafx.scene.control.TabPane;
+import javafx.scene.control.TextField;
+import javafx.fxml.FXML;
+import javafx.fxml.Initializable;
+import javafx.scene.control.TitledPane;
+import javafx.scene.layout.AnchorPane;
+import javafx.util.converter.IntegerStringConverter;
+import javafx.scene.canvas.Canvas;
+import javafx.scene.canvas.GraphicsContext;
+import javafx.collections.FXCollections;
+import javafx.collections.ObservableList;
+import javafx.scene.control.ChoiceBox;
+import javafx.scene.control.ListView;
+
+
 /**
  * FXML Controller class
  *
@@ -90,191 +78,285 @@ import spacetrader.ships.ShipFactory;
  */
 public class GameScreenController implements Initializable, ControlledScreen {
     
-    ScreensController myController;
-    private IntegerStringConverter converter;
-    private Universe uni;
-    private List<SolarSystem> solarList;
-    private List<String> toBuyList;
-    private List<String> toSellList;
-    private List<String> shipNames;
-    private List<String> weaponNames;
-    private List<String> shieldNames;
-    private List<String> gadgetNames;
-    private Map<String, Integer> shipPrices;
-	private Map<String, Integer> weaponPrices;
-	private Map<String, Integer> shieldPrices;
-	private Map<String, Integer> gadgetPrices;
-    private Map<String, Integer> toSellMap;
-    private Map<String, Integer> toBuyMap;
-    private MarketPlace mp;
-    private SqliteApi db;
-    private ShipYard sy;
-    private int currX;
-    private int currY;
-    private int maxFuel;
-    private int maxPull;
-    private int hull;
-    private GraphicsContext gc;
-    private GraphicsContext gc2;
-    private Travel travel;
-    private IntegerStringConverter isConvert;
-    private String tempShipName;
-    private SolarSystem solarSystem;
-    private SolarSystem targetSystem;
-    private PlayerShip ship;
-    private Trade trade;
-    private GameCharacter player;
-    private List<String> reachablePlanets;
-    private RandomEvent randomEvent;
-    ObservableList<String> playerInfo;
+    private static ScreensController myController;
+    private transient IntegerStringConverter converter;
+    private transient Universe uni;
+    private transient List<SolarSystem> solarList;
+    private transient List<String> toBuyList;
+    private transient List<String> toSellList;
+    private transient List<String> shipNames;
+    private transient List<String> weaponNames;
+    private transient List<String> shieldNames;
+    private transient List<String> gadgetNames;
+    private transient Map<String, Integer> shipPrices;
+    private transient Map<String, Integer> weaponPrices;
+    private transient Map<String, Integer> shieldPrices;
+    private transient Map<String, Integer> gadgetPrices;
+    private transient Map<String, Integer> toSellMap;
+    private transient Map<String, Integer> toBuyMap;
+    private transient MarketPlace mp;
+    private transient SqliteApi db;
+    private transient String lowTechmsg;
+    private transient ShipYard shipYard;
+    private transient String cantbuy;
+    private transient String cantsell;
+    private transient int currX;
+    private transient int currY;
+    private transient int maxFuel;
+    private transient int maxPull;
+    private transient int hull;
+    private transient GraphicsContext gc;
+    private transient GraphicsContext gc2;
+    private transient Travel travel;
+    private transient IntegerStringConverter isConvert;
+    private transient String tempShipName;
+    private transient SolarSystem solarSystem;
+    private transient SolarSystem targetSystem;
+    private transient PlayerShip ship;
+    private transient Ship base;
+    private transient Planet planet;
+    private transient Trade trade;
+    private transient GameCharacter player;
+    private transient List<String> reachablePlanets;
+    private transient RandomEvent re;
+    private transient ObservableList<String> playerInfo;
+    private transient String creditStr;
     
-    private int waterSellPrice;
-    private int fursSellPrice;
-    private int foodSellPrice;
-    private int oreSellPrice;
-    private int gamesSellPrice;
-    private int firearmsSellPrice;
-    private int medicinesSellPrice;
-    private int machinesSellPrice;
-    private int narcoticsSellPrice;
+    private transient int waterSellPrice;
+    private transient int fursSellPrice;
+    private transient int foodSellPrice;
+    private transient int oreSellPrice;
+    private transient int gamesSellPrice;
+    private transient int firearmsSellPrice;
+    private transient int medicinesSellPrice;
+    private transient int machinesSellPrice;
+    private transient int narcoticsSellPrice;
 
     @FXML
-    private TitledPane galaChart;
+    private transient TitledPane galaChart;
     @FXML
-    private TitledPane srChart;
+    private transient TitledPane srChart;
     @FXML
-    private TitledPane systemInfo;
+    private transient TitledPane systemInfo;
     @FXML
-    private TitledPane targetInfo;
+    private transient TitledPane targetInfo;
     @FXML
-    private AnchorPane shipyard;
+    private transient AnchorPane shipyard;
     @FXML
-    private AnchorPane dock;
+    private transient AnchorPane dock;
     @FXML
-    private TabPane shipyardPane;
+    private transient TabPane shipyardPane;
     @FXML
-    private ListView targetListView;
+    private transient ListView targetListView;
     @FXML
-    private ListView dockListView;
+    private transient ListView dockListView;
     @FXML
-    private Canvas canvas;
+    private transient Canvas canvas;
     @FXML
-    private Canvas canvas2;
+    private transient Canvas canvas2;
     @FXML
-    private AnchorPane cargoChart;
+    private transient TextField selectShip;
     @FXML
-    private Button findPlanet;
+    private transient AnchorPane cargoChart;
+    @FXML
+    private transient Button findPlanet;
 
     @FXML
-    private ListView systemListView;
+    private transient ListView systemListView;
     @FXML
-    private ListView playerListView;
+    private transient ListView playerListView;
     @FXML
-    private ListView travelInfoListView;
+    private transient ListView travelInfoListView;
     @FXML
-    private ListView shipListView;
+    private transient ListView shipListView;
     @FXML
-    private ListView weaponListView;
+    private transient ListView weaponListView;
     @FXML
-    private ListView shieldListView;
+    private transient ListView shieldListView;
     @FXML
-    private ListView gadgetListView;
+    private transient ListView gadgetListView;
     @FXML
-    private Tab shipTab;
+    private transient Tab shipTab;
     @FXML
-    private Tab weaponTab;
+    private transient Tab weaponTab;
     @FXML
-    private Tab shieldTab;
+    private transient Tab shieldTab;
     @FXML
-    private Tab gadgetTab;
+    private transient Tab gadgetTab;
     
     
     @FXML
-    private ChoiceBox waterChoose;
+    private transient ChoiceBox waterChoose;
     @FXML
-    private ChoiceBox fursChoose;
+    private transient ChoiceBox fursChoose;
     @FXML
-    private ChoiceBox foodChoose;
+    private transient ChoiceBox foodChoose;
     @FXML
-    private ChoiceBox oreChoose;
+    private transient ChoiceBox oreChoose;
     @FXML
-    private ChoiceBox gamesChoose;
+    private transient ChoiceBox gamesChoose;
     @FXML
-    private ChoiceBox firearmsChoose;
+    private transient ChoiceBox firearmsChoose;
     @FXML
-    private ChoiceBox medicinesChoose;
+    private transient ChoiceBox medicinesChoose;
     @FXML
-    private ChoiceBox machinesChoose;
+    private transient ChoiceBox machinesChoose;
     @FXML
-    private ChoiceBox narcoticsChoose;
+    private transient ChoiceBox narcoticsChoose;
+    private transient ObservableList<String> shipItem;
+    private transient ObservableList<String> weaponItem;
+    private transient ObservableList<String> shieldItem;
+    private transient ObservableList<String> gadgetItem;
     
     @FXML
-    private ChoiceBox waterChoose2;
+    private transient ChoiceBox waterChoose2;
     @FXML
-    private ChoiceBox fursChoose2;
+    private transient ChoiceBox fursChoose2;
     @FXML
-    private ChoiceBox foodChoose2;
+    private transient ChoiceBox foodChoose2;
     @FXML
-    private ChoiceBox oreChoose2;
+    private transient ChoiceBox oreChoose2;
     @FXML
-    private ChoiceBox gamesChoose2;
+    private transient ChoiceBox gamesChoose2;
     @FXML
-    private ChoiceBox firearmsChoose2;
+    private transient ChoiceBox firearmsChoose2;
     @FXML
-    private ChoiceBox medicinesChoose2;
+    private transient ChoiceBox medicinesChoose2;
     @FXML
-    private ChoiceBox machinesChoose2;
+    private transient ChoiceBox machinesChoose2;
     @FXML
-    private ChoiceBox narcoticsChoose2;
+    private transient ChoiceBox narcoticsChoose2;
     @FXML
-    private ChoiceBox refuelChoose;
+    private transient ChoiceBox refuelChoose;
     @FXML
-    private ChoiceBox repairChoose;
+    private transient ChoiceBox repairChoose;
 
     @FXML
-    private Label waterPrice2;
+    private transient Label waterPrice2;
     @FXML
-     private Label fursPrice2;
+     private transient Label fursPrice2;
     @FXML
-     private Label foodPrice2;
+     private transient Label foodPrice2;
     @FXML
-     private Label orePrice2;
+     private transient Label orePrice2;
     @FXML
-     private Label gamesPrice2;
+     private transient Label gamesPrice2;
     @FXML
-     private Label firearmsPrice2;
+     private transient Label firearmsPrice2;
     @FXML
-     private Label medicinesPrice2;
+     private transient Label medicinesPrice2;
     @FXML
-     private Label machinesPrice2;
+     private transient Label machinesPrice2;
     @FXML
-     private Label narcoticsPrice2;
+     private transient Label narcoticsPrice2;
     @FXML
-     private Label waterPrice;
+     private transient Label waterPrice;
     @FXML
-     private Label fursPrice;
+     private transient Label fursPrice;
     @FXML
-     private Label foodPrice;
+     private transient Label foodPrice;
     @FXML
-     private Label orePrice;
+     private transient Label orePrice;
     @FXML
-     private Label gamesPrice;
+     private transient Label gamesPrice;
     @FXML
-     private Label firearmsPrice;
+     private transient Label firearmsPrice;
     @FXML
-     private Label medicinesPrice;
+     private transient Label medicinesPrice;
     @FXML
-     private Label machinesPrice;
+     private transient Label machinesPrice;
     @FXML
-     private Label narcoticsPrice;
+     private transient Label narcoticsPrice;
     @FXML
-    private TextField findPlanetField;
+    private transient TextField findPlanetField;
     @FXML
-    private TextField upgradeTextField;
+    private transient TextField upgradeTextField;
     @FXML
-    private MenuBar menuBar;
+    private transient MenuBar menuBar;
+    private transient String planetName;
+    private transient int count;
+    private transient int techLevel;
+    private transient TechLevels techLevels;
+    private static final int SIXFINAL = 6;
+    private transient List<Good> cargoList;
+    private transient int shipCargoSpace;
+    private transient ObservableList<Object> buyChoice;
+    private transient ObservableList<Object> choices;
+    private transient int maxBuy;
+    private transient GraphicsContext graphicsContext;
+    private transient double ratio;
+    private transient Integer amount;
+    private transient Object rawChoose;
+    private transient String amountStr;
+    private transient int index;
+    private transient MultipleSelectionModel selectionMode;
+    private transient String id;
+    private transient int perCost;
+    private transient int cost;
+    private transient Object repairChooseRaw;
+    private transient Object refuelChooseRaw;
+    private transient int currStre;
+    private transient Ship modelShip;
+    private transient ShipFactory shipfactory;
+    private transient int maxRepair;
+    private transient int currFuel;
+    private transient int maxRefuel;
+    private transient String cashmsg;
+    private transient String shipmsg;
+    private transient String attackmsg;
+    private transient String remWeaponmsg;
+    private transient String remShieldmsg;
+    private transient String remGadgetmsg;
+    private transient String remCargomsg;
+    private transient List<Good> cargo;
+    private transient ObservableList<String> randomInfo;
+    private transient int range;
+    private transient String targetName;
+    private transient String solarName;
+    private transient String myString;
+    private transient int targetX;
+    private transient int targetY;
+    private transient double travelSqr;
+    private transient int travelDist;
+    private transient ObservableList<String> dockInfo;
+    private transient String info1;
+    private transient String info2;
+    private transient String info3;
+    private transient String info4;
+    private transient ObservableList<String> items2;
+    private transient String currTechLevel;
+    private transient String currGovernment;
+    private transient String currResource;
+    private transient String currPolice;
+    private transient String currPirate;
+    private transient ObservableList<String> items;
+    private transient String currName;
+    private transient String targetGovernment;
+    private transient String targetTechLevel;
+    private transient String targetResource;
+    private transient String targetPolice;
+    private transient String targetPirate;
+    private transient StringProperty stringProperty;
+    private transient boolean found;
+    private transient String temp1;
+    private transient StringProperty findFieldProperty;
+    private transient String temp2;
+    private transient SolarSystem sys;
+    private transient String gadgetName;
+    private transient String itemName;
+    private transient String itemName2;
+    //private transient int maxAmount1;
+    private transient int maxAmount2;
+	private static final Class<GameScreenController> MYCLASS = GameScreenController.class;
+	private static final String MYCLASSNAME = MYCLASS.getName();
+	private static final Logger LOGGER = Logger.getLogger(MYCLASSNAME);
+	private transient Throwable npe;
+	private String water;
+	
    
-    
+    /**
+     * set the controller to the parent screen
+     */
     @Override
     public void setScreenParent(ScreensController screenParent) {
         myController = screenParent;
@@ -283,18 +365,26 @@ public class GameScreenController implements Initializable, ControlledScreen {
     
     @FXML
     private void saveButtonFired(ActionEvent event) {
-    	db.update();
+        db.update();
     }
     
     @FXML
     private void findPlanetFired(ActionEvent event) {
-        String planetName = findPlanetField.textProperty().get().toLowerCase();
-        boolean found = false;
-        for (String s : reachablePlanets) {
-            String temp1 = s.toLowerCase();
-            if (temp1.equals(planetName) && (!planetName.equals(solarSystem.getName().toLowerCase()))) {
-                for (SolarSystem sys : uni.getUniverse()) {
-                    if (sys.getName().equals(s)) {
+        stringProperty = findPlanetField.textProperty();
+        planetName = stringProperty.get();
+        found = false;
+        for (int i = 0; i < reachablePlanets.size(); i++) {
+            temp1 = reachablePlanets.get(i);
+            temp1 = temp1.toLowerCase(Locale.ENGLISH);
+            temp2 = solarSystem.getName();
+            temp2 = temp2.toLowerCase(Locale.ENGLISH);
+            if (temp1.equals(planetName) && !planetName.equals(temp2)) {
+                solarList = uni.getUniverse();
+                for (int j = 0; j < solarList.size(); j++) {
+                    sys = solarList.get(j);
+                    targetName = sys.getName();
+                    targetName = targetName.toLowerCase(Locale.ENGLISH);
+                    if (targetName.equals(temp1)) {
                         targetSystem = sys;
                         found = true;
                         loadTargetInfo();
@@ -303,295 +393,327 @@ public class GameScreenController implements Initializable, ControlledScreen {
             }
         }
         if (!found) {
-            findPlanetField.textProperty().set("");
+            findFieldProperty = findPlanetField.textProperty();
+            findFieldProperty.set("");
         }
         
     }
     
     private void loadTargetInfo() {
+        planet = solarSystem.getPlanet();
          //target system
-        String targetName = "Name:  " + targetSystem.getPlanet().getName();
+        targetName = "Name:  " + planet.getName();
         //String capSize = "Name  " + cap.get
-        String targetTechLevel = "Tech Level:  " + targetSystem.getPlanet().getTechLevel();
-        String targetGovernment = "Government:  " + targetSystem.getPlanet().getPoliticalSystem();
-        String targetResource = "Resource:  " + targetSystem.getPlanet().getResourcesLevel();
-        String targetPolice = "Police:  " + targetSystem.getPlanet().getPolice();
-        String targetPirate = "Pirate:  " + targetSystem.getPlanet().getPirate();
-        ObservableList<String> items =FXCollections.observableArrayList (
+        targetTechLevel = "Tech Level:  " + planet.getTechLevel();
+        targetGovernment = "Government:  " + planet.getPoliticalSystem();
+        targetResource = "Resource:  " + planet.getResourcesLevel();
+        targetPolice = "Police:  " + planet.getPolice();
+        targetPirate = "Pirate:  " + planet.getPirate();
+        items = FXCollections.observableArrayList(
         targetName, targetTechLevel, targetGovernment, targetResource, targetPolice, targetPirate);
         targetListView.setItems(items);
     }
     
     private void loadCurrentInfo() {
+        
+        planet = solarSystem.getPlanet();
          //target system
-        String currName = "Name:  " + solarSystem.getPlanet().getName();
+        currName = "Name:  " + planet.getName();
         //String capSize = "Name  " + cap.get
-        String currTechLevel = "Tech Level:  " + solarSystem.getPlanet().getTechLevel();
-        String currGovernment = "Government:  " + solarSystem.getPlanet().getPoliticalSystem();
-        String currResource = "Resource:  " + solarSystem.getPlanet().getResourcesLevel();
-        String currPolice = "Police:  " + solarSystem.getPlanet().getPolice();
-        String currPirate = "Pirate:  " + solarSystem.getPlanet().getPirate();
-        ObservableList<String> items =FXCollections.observableArrayList (
+        currTechLevel = "Tech Level:  " + planet.getTechLevel();
+        currGovernment = "Government:  " + planet.getPoliticalSystem();
+        currResource = "Resource:  " + planet.getResourcesLevel();
+        currPolice = "Police:  " + planet.getPolice();
+        currPirate = "Pirate:  " + planet.getPirate();
+        items = FXCollections.observableArrayList (
         currName, currTechLevel, currGovernment, currResource, currPolice, currPirate);
         systemListView.setItems(items);
     }
     
     private void clearTargetListView() {
-        ObservableList<String> items2 = FXCollections.observableArrayList(
+        items2 = FXCollections.observableArrayList(
         "Name: ", "Tech Level: ", "Government: ", "Resource: ", "Police: ", "Pirate: ");
         targetListView.setItems(items2);
     }
     
-    private void showDockInfo(PlayerShip ship, int actFuel, int actPull) {
-        String info1 = "You have fuel to fly " + actFuel + " parsecs";
-        String info2;
+    private void showDockInfo(final PlayerShip ship, final int actFuel, final int actPull) {
+        base = ship.getBase();
+        info1 = "You have fuel to fly " + actFuel + " parsecs";
         if (actFuel == maxFuel) {
             info2 = "Your tank is full";
         } else {
-            info2 = "Fuel cost per unit: " + ship.getBase().getFuelCost() + " cr";
+            info2 = "Fuel cost per unit: " + base.getFuelCost() + " cr";
         }
-        String info3 = "Your hull strength is " + actPull;
-        String info4;
+        info3 = "Your hull strength is " + actPull;
         if (actPull == maxPull) {
             info4 = "No repairs needed";
         } else {
-            info4 = "Repairm Cost per hull strength: " + ship.getBase().getRepairCost() + " cr";
+            info4 = "Repairm Cost per hull strength: " + base.getRepairCost() + " cr";
         }
-        ObservableList<String> dockInfo = FXCollections.observableArrayList(
+        dockInfo = FXCollections.observableArrayList(
         info1, info2, info3, info4);
         dockListView.setItems(dockInfo);
     }
     
     @FXML
     private void warpFired(ActionEvent event) {
-    	int targetX = targetSystem.getX();
-        int targetY = targetSystem.getY();
-        double travelSqr = pow(targetX - solarSystem.getX(), 2) + pow(targetY - solarSystem.getY(), 2);
-        int travelDist = (int)(sqrt(travelSqr));
-        String s = "";
+        targetX = targetSystem.getX();
+        targetY = targetSystem.getY();
+        travelSqr = pow(targetX - solarSystem.getX(), 2) + pow(targetY - solarSystem.getY(), 2);
+        travelDist = (int)(sqrt(travelSqr));
+        myString = "";
         travel = new Travel();
-        if (!targetSystem.getName().equals(solarSystem.getName())) {
-        	travel.warpTo(targetSystem.getName(), travelDist, 1);
-        	randomEvent = new RandomEvent();
-        	s = randomEvent.update();
+        targetName = targetSystem.getName();
+        solarName = solarSystem.getName();
+        if (!targetName.equals(solarName)) {
+            travel.warpTo(targetSystem.getName(), travelDist, 1);
+            re = new RandomEvent();
+            myString = re.update();
         }
-        	
-        int range = 0;
-		ship = db.getShip();
-		//System.out.println("travelling ship: " + ship.getBase().getName());
-		range = ship.getBase().getFuel();
-		hull = ship.getBase().getHullStrength();
-		//System.out.println("updated ship fuel: " + range);
-			
-		//System.out.println("dist: " + travelDist);
-		//System.out.println("range: " + range);
-		solarSystem = targetSystem;
-		trade = new Trade(player, ship, solarSystem);
-		toBuyList = trade.getGoodsToBuy();
-		toBuyMap = trade.getPricesToBuy();
-		toSellList = trade.getGoodsToSell();
-		toSellMap = trade.getPricesToSell();
-		mp = new MarketPlace();
-		mess(toBuyList, toBuyMap, toSellList, toSellMap, mp);
-		        
-		showDockInfo(ship, range, hull);
-		gc = canvas.getGraphicsContext2D();
-		drawLongRange(targetX, targetY, range, gc);
-		gc2 = canvas2.getGraphicsContext2D();
-		drawShortRange(targetX, targetY, range, gc2);
-		loadCurrentInfo();
-		clearTargetListView();
-		
-		player = db.getPlayer();
-	     
-		//System.out.println("random event: " + s);
-		ObservableList<String> randomInfo = FXCollections.observableArrayList(s, "");
-		travelInfoListView.setItems(randomInfo);
-		updatePlayerInfo();
-		setRefuelChoose();
-		setRepairChoose();
-		sy = new ShipYard();
-		showShipNames(sy); 
+            
+        range = 0;
+        ship = db.getShip();
+        base = ship.getBase();
+        range = base.getFuel();
+        hull = base.getHullStrength();
+            
+        solarSystem = targetSystem;
+        trade = new Trade(player, ship, solarSystem);
+        toBuyList = trade.getGoodsToBuy();
+        toBuyMap = trade.getPricesToBuy();
+        toSellList = trade.getGoodsToSell();
+        toSellMap = trade.getPricesToSell();
+        mp = new MarketPlace();
+        mess(toBuyList, toBuyMap, toSellList, toSellMap, mp);
+                
+        showDockInfo(ship, range, hull);
+        gc = canvas.getGraphicsContext2D();
+        drawLongRange(targetX, targetY, range, gc);
+        gc2 = canvas2.getGraphicsContext2D();
+        drawShortRange(targetX, targetY, range, gc2);
+        loadCurrentInfo();
+        clearTargetListView();
+        
+        player = db.getPlayer();
+        randomInfo = FXCollections.observableArrayList(myString, "");
+        travelInfoListView.setItems(randomInfo);
+        updatePlayerInfo();
+        setRefuelChoose();
+        setRepairChoose();
+        shipYard = new ShipYard();
+        showShipNames(shipYard); 
         
     }
     
     private void updatePlayerInfo() {
-			
-			String s1 = "Cash: " + db.getPlayer().getMoney() + " cr";
-			String s2 = "Ship Type: " + db.getShip().getBase().getName();
-	        String s3 = "Attack: " + db.getShip().getAttack() + "  Shield: " + db.getShip().getShield();
-	        String s4 = "Remaining Weapon Slots: " + db.getShip().getWeaponSlots();
-	        String s7 = "Remaining Shield Slots: " + db.getShip().getShieldSlots();
-	        String s5 = "Remaining Gadget Slots: " + db.getShip().getGadgetsSlots();
-	        String s6 = "Cargo Space Remaining: " + (db.getShip().getCargoSpace() - db.getShip().getCargo().size());
-	        playerInfo = FXCollections.observableArrayList(
-	         s1, s2, s3, s4, s7, s5, s6);
-	        
-	        for (Good g : db.getShip().getCargo()) {
-	        	playerInfo.add(g.getName());
-	        }
-	        
-	        playerListView.setItems(playerInfo);
+            player = db.getPlayer();
+            ship = db.getShip();
+            base = ship.getBase();
+            
+            cashmsg = "Cash: " + player.getMoney() + " cr";
+            shipmsg = "Ship Type: " + base.getName();
+            attackmsg = "Attack: " + ship.getAttack() + "  Shield: " + db.getShip().getShield();
+            remWeaponmsg = "Remaining Weapon Slots: " + ship.getWeaponSlots();
+            remShieldmsg = "Remaining Shield Slots: " + ship.getShieldSlots();
+            remGadgetmsg = "Remaining Gadget Slots: " + ship.getGadgetsSlots();
+            cargo = ship.getCargo();
+            remCargomsg = "Cargo Space Remaining: " + (ship.getCargoSpace() - cargo.size());
+            playerInfo = FXCollections.observableArrayList(
+             cashmsg, shipmsg, attackmsg, remWeaponmsg, remShieldmsg, remGadgetmsg, remCargomsg);
+            
+            for (final Good g : ship.getCargo()) {
+                playerInfo.add(g.getName());
+            }
+            
+            playerListView.setItems(playerInfo);
         
     }
     
     private void setRefuelChoose() {
-    	
-			
-			int currFuel = db.getShip().getBase().getFuel();
-			ShipFactory sf = new ShipFactory();
-			Ship modelShip = sf.getShip(db.getShip().getBase().getName());
-			int maxRefuel = modelShip.getFuel() - currFuel;
-			
-			ObservableList<String> choices =FXCollections.observableArrayList ();
+            player = db.getPlayer();
+            ship = db.getShip();
+            base = ship.getBase();
+            currFuel = base.getFuel();
+            shipfactory = new ShipFactory();
+            modelShip = shipfactory.getShip(base.getName());
+            maxRefuel = modelShip.getFuel() - currFuel;
+            
+            choices = FXCollections.observableArrayList();
             for (int i = maxRefuel; i >= 0; i--) {
-                choices.add("" + i);
+                choices.add(Integer.toString(i));
             }
             refuelChoose.setItems(choices);
             //refuelChoose.show();
-			
-    	
+            
+        
     }
     
     
     private void setRepairChoose() {
-    	
-			int currStre = db.getShip().getBase().getHullStrength();
-			ShipFactory sf = new ShipFactory();
-			Ship modelShip = sf.getShip(db.getShip().getBase().getName());
-			int maxRepair = modelShip.getHullStrength() - currStre;
-			
-			ObservableList<String> choices =FXCollections.observableArrayList ();
+            player = db.getPlayer();
+            ship = db.getShip();
+            base = ship.getBase();
+            currStre = base.getHullStrength();
+            shipfactory = new ShipFactory();
+            modelShip = shipfactory.getShip(base.getName());
+            maxRepair = modelShip.getHullStrength() - currStre;
+            
+            choices = FXCollections.observableArrayList();
             for (int i = maxRepair; i >= 0; i--) {
-                choices.add("" + i);
+                choices.add(Integer.toString(i));
             }
             repairChoose.setItems(choices);
             //refuelChoose.show();
-			
-		
-    	
+            
+        
+        
     }
 //    
     @FXML
     private void refuelFired(ActionEvent event) {
-      
-			
-			int perCost = db.getShip().getBase().getFuelCost();
-			int amount = converter.fromString(refuelChoose.getValue().toString());
-			int cost = amount * perCost;
-			
-			player = db.getPlayer();
-			ship = db.getShip();
-			player.setMoney(db.getPlayer().getMoney() - cost);
-			ship.getBase().setFuel(db.getShip().getBase().getFuel() + amount);
-			SqliteApi.setPlayer(player);
-			SqliteApi.setShip(ship);
-			setRefuelChoose();
-			// update dock info, redraw long and short range charts
-			showDockInfo(db.getShip(), db.getShip().getBase().getFuel(), db.getShip().getBase().getHullStrength());
-			gc = canvas.getGraphicsContext2D();
-		    drawLongRange(db.getPlayer().getXpos(), db.getPlayer().getYpos(), db.getShip().getBase().getFuel(), gc);
-		    gc2 = canvas2.getGraphicsContext2D();
-		    drawShortRange(db.getPlayer().getXpos(), db.getPlayer().getYpos(), db.getShip().getBase().getFuel(), gc2);
-			
-			
-			updatePlayerInfo();
-		     
+            player = db.getPlayer();
+            ship = db.getShip();
+            base = ship.getBase();
+            
+            perCost = base.getFuelCost();
+            refuelChooseRaw = refuelChoose.getValue();
+            amount = converter.fromString(refuelChooseRaw.toString());
+            cost = amount * perCost;
+            
+            
+            player.setMoney(player.getMoney() - cost);
+            base.setFuel(base.getFuel() + amount);
+            db.update(ship, player);
+            setRefuelChoose();
+            // update dock info, redraw long and short range charts
+            showDockInfo(ship, base.getFuel(), base.getHullStrength());
+            gc = canvas.getGraphicsContext2D();
+            drawLongRange(player.getXpos(), player.getYpos(), base.getFuel(), gc);
+            gc2 = canvas2.getGraphicsContext2D();
+            drawShortRange(player.getXpos(), player.getYpos(), base.getFuel(), gc2);
+            
+            
+            updatePlayerInfo();
+             
     }
     
     @FXML
     private void repairFired(ActionEvent event) {
-			int perCost = db.getShip().getBase().getRepairCost();
-			int amount = converter.fromString(repairChoose.getValue().toString());
-			int cost = amount * perCost;
-			player = db.getPlayer();
-			ship = db.getShip();
-			player.setMoney(player.getMoney() - cost);
-			ship.getBase().setHullStrength(ship.getBase().getHullStrength() + amount);
-			SqliteApi.setPlayer(player);
-			SqliteApi.setShip(ship);
-			setRepairChoose();
-			showDockInfo(ship, ship.getBase().getFuel(), ship.getBase().getHullStrength());
-			updatePlayerInfo();
-		
+            player = db.getPlayer();
+            ship = db.getShip();
+            base = ship.getBase();
+            perCost = base.getRepairCost();
+            repairChooseRaw = repairChoose.getValue();
+            amount = converter.fromString(repairChooseRaw.toString());
+            cost = amount * perCost;
+            
+            player.setMoney(player.getMoney() - cost);
+            base.setHullStrength(base.getHullStrength() + amount);
+            db.update(ship, player);
+            setRepairChoose();
+            showDockInfo(ship, base.getFuel(), base.getHullStrength());
+            updatePlayerInfo();
+        
     }
     
     @FXML
     private void upgradeBuyFired(ActionEvent event) {
-    	for (Tab t : shipyardPane.getTabs()) {
-    		if (t.isSelected() && t.getId().equals("shipTab")) {
-    			sy = new ShipYard();
-    			shipNames = sy.getShipNames();
-    			if (shipNames.size() > 0) {
-    				int index = shipListView.getSelectionModel().getSelectedIndex();
-        			
-        	    	sy.playerBuyShip(shipNames.get(index));
-        	    	//System.out.println("player's current ship: " + db.getShip().getBase().getName());
-        	    	updatePlayerInfo();
-        	    	showDockInfo(db.getShip(), db.getShip().getBase().getFuel(), db.getShip().getBase().getHullStrength());
-        			gc = canvas.getGraphicsContext2D();
-        			drawLongRange(db.getPlayer().getXpos(), db.getPlayer().getYpos(), db.getShip().getBase().getFuel(), gc);
-        			gc2 = canvas2.getGraphicsContext2D();
-        			drawShortRange(db.getPlayer().getXpos(), db.getPlayer().getYpos(), db.getShip().getBase().getFuel(), gc2);
-        			mess(toBuyList, toBuyMap, toSellList, toSellMap, mp);
-        			sy = new ShipYard();
-        			showShipNames(sy);
-    			}
-    			
-    		} else if (t.isSelected() && t.getId().equals("weaponTab")) {
-    			sy = new ShipYard();
-    			weaponNames = sy.getWeaponNames();
-    			if (weaponNames.size() > 0) {
-    				int index = weaponListView.getSelectionModel().getSelectedIndex();
-        			
-        	    	sy.playerBuyWeapon(weaponNames.get(index));
-        	    	
-        	    	updatePlayerInfo();
-        	    	
-        			mess(toBuyList, toBuyMap, toSellList, toSellMap, mp);
-        			sy = new ShipYard();
-        			showShipNames(sy);
-    			}
-    			
-    		} else if (t.isSelected() && t.getId().equals("shieldTab")) {
-    			sy = new ShipYard();
-    			shieldNames = sy.getShieldNames();
-    			if (shieldNames.size() > 0) {
-    				int index = shieldListView.getSelectionModel().getSelectedIndex();
-        			
-        	    	sy.playerBuyShield(shieldNames.get(index));
-        	    	
-        	    	updatePlayerInfo();
-        	    	
-        			mess(toBuyList, toBuyMap, toSellList, toSellMap, mp);
-        			sy = new ShipYard();
-        			showShipNames(sy);
-    			}
-    			
-    		} else if (t.isSelected() && t.getId().equals("gadgetTab")) {
-    			sy = new ShipYard();
-    			gadgetNames = sy.getGadgetNames();
-    			if (gadgetNames.size() > 0) {
-    				int index = gadgetListView.getSelectionModel().getSelectedIndex();
-        			
-        	    	sy.playerBuyCargoExpansion();
-        	    	
-        	    	updatePlayerInfo();
-        	    	
-        			mess(toBuyList, toBuyMap, toSellList, toSellMap, mp);
-        			sy = new ShipYard();
-        			showShipNames(sy);
-    			}
-    			
-    		}
-    	}
-  	
+        for (final Tab t : shipyardPane.getTabs()) {
+            id = t.getId();
+            if (t.isSelected() && id.equals("shipTab")) {
+                showShips();
+            } else if (t.isSelected() && id.equals("weaponTab")) {
+                showWeapons();
+            } else if (t.isSelected() && id.equals("shieldTab")) {      
+                showShields();
+            } else if (t.isSelected() && id.equals("gadgetTab")) {
+                showGadgets();
+            }
+        }
+    
+    }
+    
+    private void showShips() {
+        shipYard = new ShipYard();
+        shipNames = shipYard.getShipNames();
+        if (!shipNames.isEmpty()) {
+            selectionMode = shipListView.getSelectionModel();
+            index = selectionMode.getSelectedIndex();
+            
+            shipYard.playerBuyShip(shipNames.get(index));
+            
+            updatePlayerInfo();
+            ship = db.getShip();
+            player = db.getPlayer();
+            
+            base = ship.getBase();
+            showDockInfo(ship, base.getFuel(), base.getHullStrength());
+            gc = canvas.getGraphicsContext2D();
+            drawLongRange(player.getXpos(), player.getYpos(), base.getFuel(), gc);
+            gc2 = canvas2.getGraphicsContext2D();
+            drawShortRange(player.getXpos(), player.getYpos(), base.getFuel(), gc2);
+            mess(toBuyList, toBuyMap, toSellList, toSellMap, mp);
+            shipYard = new ShipYard();
+            showShipNames(shipYard);
+        }
+    }
+    
+    
+    private void showWeapons() {
+        shipYard = new ShipYard();
+        weaponNames = shipYard.getWeaponNames();
+        if (!weaponNames.isEmpty()) {
+            selectionMode = weaponListView.getSelectionModel();
+            index = selectionMode.getSelectedIndex();
+            shipYard.playerBuyWeapon(weaponNames.get(index));
+            
+            updatePlayerInfo();
+            
+            mess(toBuyList, toBuyMap, toSellList, toSellMap, mp);
+            shipYard = new ShipYard();
+            showShipNames(shipYard);
+        }
+    }
+    
+    private void showShields() {
+        shipYard = new ShipYard();
+        shieldNames = shipYard.getShieldNames();
+        if (!shieldNames.isEmpty()) {
+            selectionMode = shieldListView.getSelectionModel();
+            index = selectionMode.getSelectedIndex();
+            shipYard.playerBuyShield(shieldNames.get(index));
+            
+            updatePlayerInfo();
+            
+            mess(toBuyList, toBuyMap, toSellList, toSellMap, mp);
+            shipYard = new ShipYard();
+            showShipNames(shipYard);
+        }
+    }
+    
+    private void showGadgets() {
+        shipYard = new ShipYard();
+        gadgetNames = shipYard.getGadgetNames();
+        if (!gadgetNames.isEmpty()) {
+            selectionMode = gadgetListView.getSelectionModel();
+            index = selectionMode.getSelectedIndex();
+            
+            shipYard.playerBuyCargoExpansion();
+            
+            updatePlayerInfo();
+            
+            mess(toBuyList, toBuyMap, toSellList, toSellMap, mp);
+            shipYard = new ShipYard();
+            showShipNames(shipYard);
+        }
     }
     
     @FXML    
     private void waterSellFired(ActionEvent event) {
         if (waterChoose.getValue() != null) {
-            int amount = converter.fromString(waterChoose.getValue().toString());
+            rawChoose = waterChoose2.getValue();
+            amountStr = rawChoose.toString();
+            amount = converter.fromString(amountStr);
             mp = new MarketPlace();
             for (int i = 1; i <= amount; i++) {
                 mp.playerSell(new Water());
@@ -599,15 +721,17 @@ public class GameScreenController implements Initializable, ControlledScreen {
             mess(toBuyList, toBuyMap, toSellList, toSellMap, mp);
             //updateDatabase(db.getPlayer(), db.getShip());
             updatePlayerInfo();
-            sy = new ShipYard();
-            showShipNames(sy);
+            shipYard = new ShipYard();
+            showShipNames(shipYard);
        }
     }
     
      @FXML    
      private void fursSellFired(ActionEvent event) {
         if (fursChoose.getValue() != null) {
-            int amount = converter.fromString(fursChoose.getValue().toString());
+            rawChoose = fursChoose2.getValue();
+            amountStr = rawChoose.toString();
+            amount = converter.fromString(amountStr);
             mp = new MarketPlace();
             for (int i = 1; i <= amount; i++) {
                 mp.playerSell(new Furs());
@@ -615,14 +739,17 @@ public class GameScreenController implements Initializable, ControlledScreen {
             mess(toBuyList, toBuyMap, toSellList, toSellMap, mp);
             //updateDatabase(db.getPlayer(), db.getShip());
             updatePlayerInfo();
-            sy = new ShipYard();
-            showShipNames(sy);
+            shipYard = new ShipYard();
+            showShipNames(shipYard);
        } 
     }
+
      @FXML    
      private void foodSellFired(ActionEvent event) {  
         if (foodChoose.getValue() != null) {
-            int amount = converter.fromString(foodChoose.getValue().toString());
+            rawChoose = foodChoose2.getValue();
+            amountStr = rawChoose.toString();
+            amount = converter.fromString(amountStr);
             mp = new MarketPlace();
             for (int i = 1; i <= amount; i++) {
                 mp.playerSell(new Food());
@@ -630,14 +757,17 @@ public class GameScreenController implements Initializable, ControlledScreen {
             mess(toBuyList, toBuyMap, toSellList, toSellMap, mp);
             //updateDatabase(db.getPlayer(), db.getShip());
             updatePlayerInfo();
-            sy = new ShipYard();
-            showShipNames(sy);
+            shipYard = new ShipYard();
+            showShipNames(shipYard);
        }
     }
+
      @FXML    
      private void oreSellFired(ActionEvent event) {   
         if (oreChoose.getValue() != null) {
-            int amount = converter.fromString(oreChoose.getValue().toString());
+            rawChoose = oreChoose2.getValue();
+            amountStr = rawChoose.toString();
+            amount = converter.fromString(amountStr);
             mp = new MarketPlace();
             for (int i = 1; i <= amount; i++) {
                 mp.playerSell(new Ore());
@@ -645,14 +775,17 @@ public class GameScreenController implements Initializable, ControlledScreen {
             mess(toBuyList, toBuyMap, toSellList, toSellMap, mp);
             //updateDatabase(db.getPlayer(), db.getShip());
             updatePlayerInfo();
-            sy = new ShipYard();
-            showShipNames(sy);
+            shipYard = new ShipYard();
+            showShipNames(shipYard);
        }
     }
+
      @FXML    
      private void gamesSellFired(ActionEvent event) { 
         if (gamesChoose.getValue() != null) {
-            int amount = converter.fromString(gamesChoose.getValue().toString());
+            rawChoose = gamesChoose2.getValue();
+            amountStr = rawChoose.toString();
+            amount = converter.fromString(amountStr);
             mp = new MarketPlace();
             for (int i = 1; i <= amount; i++) {
                 mp.playerSell(new Games());
@@ -660,14 +793,17 @@ public class GameScreenController implements Initializable, ControlledScreen {
             mess(toBuyList, toBuyMap, toSellList, toSellMap, mp);
             //updateDatabase(db.getPlayer(), db.getShip());
             updatePlayerInfo();
-            sy = new ShipYard();
-            showShipNames(sy);
+            shipYard = new ShipYard();
+            showShipNames(shipYard);
        }
     }
+
      @FXML    
      private void firearmsSellFired(ActionEvent event) {   
         if (firearmsChoose.getValue() != null) {
-            int amount = converter.fromString(firearmsChoose.getValue().toString());
+            rawChoose = firearmsChoose2.getValue();
+            amountStr = rawChoose.toString();
+            amount = converter.fromString(amountStr);
             mp = new MarketPlace();
             for (int i = 1; i <= amount; i++) {
                 mp.playerSell(new Firearms());
@@ -675,14 +811,17 @@ public class GameScreenController implements Initializable, ControlledScreen {
             mess(toBuyList, toBuyMap, toSellList, toSellMap, mp);
             //updateDatabase(db.getPlayer(), db.getShip());
             updatePlayerInfo();
-            sy = new ShipYard();
-            showShipNames(sy);
+            shipYard = new ShipYard();
+            showShipNames(shipYard);
        }
     }
+
      @FXML    
      private void medicinesSellFired(ActionEvent event) {  
        if (medicinesChoose.getValue() != null) {
-            int amount = converter.fromString(medicinesChoose.getValue().toString());
+            rawChoose = medicinesChoose2.getValue();
+            amountStr = rawChoose.toString();
+            amount = converter.fromString(amountStr);
             mp = new MarketPlace();
             for (int i = 1; i <= amount; i++) {
                 mp.playerSell(new Medicine());
@@ -690,28 +829,35 @@ public class GameScreenController implements Initializable, ControlledScreen {
             mess(toBuyList, toBuyMap, toSellList, toSellMap, mp);
             //updateDatabase(db.getPlayer(), db.getShip());
             updatePlayerInfo();
-            sy = new ShipYard();
-            showShipNames(sy);
+            shipYard = new ShipYard();
+            showShipNames(shipYard);
        }
     }
+
      @FXML    
      private void machinesSellFired(ActionEvent event) { 
         if (machinesChoose.getValue() != null) {
-            int amount = converter.fromString(machinesChoose.getValue().toString());
+            rawChoose = machinesChoose2.getValue();
+            amountStr = rawChoose.toString();
+            amount = converter.fromString(amountStr);
             mp = new MarketPlace();
             for (int i = 1; i <= amount; i++) {
                 mp.playerSell(new Machines());
             }
             mess(toBuyList, toBuyMap, toSellList, toSellMap, mp);
+            //updateDatabase(db.getPlayer(), db.getShip());
             updatePlayerInfo();
-            sy = new ShipYard();
-            showShipNames(sy);
+            shipYard = new ShipYard();
+            showShipNames(shipYard);
        }
     }
+
      @FXML    
      private void narcoticsSellFired(ActionEvent event) { 
         if (narcoticsChoose.getValue() != null) {
-            int amount = converter.fromString(narcoticsChoose.getValue().toString());
+            rawChoose = narcoticsChoose2.getValue();
+            amountStr = rawChoose.toString();
+            amount = converter.fromString(amountStr);
             mp = new MarketPlace();
             for (int i = 1; i <= amount; i++) {
                 mp.playerSell(new Narcotics());
@@ -719,16 +865,17 @@ public class GameScreenController implements Initializable, ControlledScreen {
             mess(toBuyList, toBuyMap, toSellList, toSellMap, mp);
             //updateDatabase(db.getPlayer(), db.getShip());
             updatePlayerInfo();
-            sy = new ShipYard();
-            showShipNames(sy);
+            shipYard = new ShipYard();
+            showShipNames(shipYard);
        }
     }
 
-   
     @FXML    
     private void waterBuyFired(ActionEvent event) {
         if (waterChoose2.getValue() != null) {
-            int amount = converter.fromString(waterChoose2.getValue().toString());
+            rawChoose = waterChoose2.getValue();
+            amountStr = rawChoose.toString();
+            amount = converter.fromString(amountStr);
             mp = new MarketPlace();
             for (int i = 1; i <= amount; i++) {
                 mp.playerBuy(new Water());
@@ -736,15 +883,17 @@ public class GameScreenController implements Initializable, ControlledScreen {
             mess(toBuyList, toBuyMap, toSellList, toSellMap, mp);
             //updateDatabase(db.getPlayer(), db.getShip());
             updatePlayerInfo();
-            sy = new ShipYard();
-            showShipNames(sy);
+            shipYard = new ShipYard();
+            showShipNames(shipYard);
        }
     }
 
     @FXML    
     private void fursBuyFired(ActionEvent event) {   
         if (fursChoose2.getValue() != null) {
-            int amount = converter.fromString(fursChoose2.getValue().toString());
+            rawChoose = fursChoose2.getValue();
+            amountStr = rawChoose.toString();
+            amount = converter.fromString(amountStr);
             mp = new MarketPlace();
             for (int i = 1; i <= amount; i++) {
                 mp.playerBuy(new Furs());
@@ -752,15 +901,17 @@ public class GameScreenController implements Initializable, ControlledScreen {
             mess(toBuyList, toBuyMap, toSellList, toSellMap, mp);
             //updateDatabase(db.getPlayer(), db.getShip());
             updatePlayerInfo();
-            sy = new ShipYard();
-            showShipNames(sy);
+            shipYard = new ShipYard();
+            showShipNames(shipYard);
        }
     }
 
     @FXML    
     private void foodBuyFired(ActionEvent event) {  
         if (foodChoose2.getValue() != null) {
-            int amount = converter.fromString(foodChoose2.getValue().toString());
+            rawChoose = foodChoose2.getValue();
+            amountStr = rawChoose.toString();
+            amount = converter.fromString(amountStr);
             mp = new MarketPlace();
             for (int i = 1; i <= amount; i++) {
                 mp.playerBuy(new Food());
@@ -768,15 +919,17 @@ public class GameScreenController implements Initializable, ControlledScreen {
             mess(toBuyList, toBuyMap, toSellList, toSellMap, mp);
             //updateDatabase(db.getPlayer(), db.getShip());
             updatePlayerInfo();
-            sy = new ShipYard();
-            showShipNames(sy);
+            shipYard = new ShipYard();
+            showShipNames(shipYard);
        }
     }
 
     @FXML    
     private void oreBuyFired(ActionEvent event) {   
         if (oreChoose2.getValue() != null) {
-            int amount = converter.fromString(oreChoose2.getValue().toString());
+            rawChoose = oreChoose2.getValue();
+            amountStr = rawChoose.toString();
+            amount = converter.fromString(amountStr);
             mp = new MarketPlace();
             for (int i = 1; i <= amount; i++) {
                 mp.playerBuy(new Ore());
@@ -784,15 +937,17 @@ public class GameScreenController implements Initializable, ControlledScreen {
             mess(toBuyList, toBuyMap, toSellList, toSellMap, mp);
             //updateDatabase(db.getPlayer(), db.getShip());
             updatePlayerInfo();
-            sy = new ShipYard();
-            showShipNames(sy);
-       }
+            shipYard = new ShipYard();
+            showShipNames(shipYard);
+        }
     }
 
     @FXML    
     private void gamesBuyFired(ActionEvent event) {   
         if (gamesChoose2.getValue() != null) {
-            int amount = converter.fromString(gamesChoose2.getValue().toString());
+            rawChoose = gamesChoose2.getValue();
+            amountStr = rawChoose.toString();
+            amount = converter.fromString(amountStr);
             mp = new MarketPlace();
             for (int i = 1; i <= amount; i++) {
                 mp.playerBuy(new Games());
@@ -800,15 +955,17 @@ public class GameScreenController implements Initializable, ControlledScreen {
             mess(toBuyList, toBuyMap, toSellList, toSellMap, mp);
             //updateDatabase(db.getPlayer(), db.getShip());
             updatePlayerInfo();
-            sy = new ShipYard();
-            showShipNames(sy);
+            shipYard = new ShipYard();
+            showShipNames(shipYard);
        }
     }
 
     @FXML    
     private void firearmsBuyFired(ActionEvent event) {   
         if (firearmsChoose2.getValue() != null) {
-            int amount = converter.fromString(firearmsChoose2.getValue().toString());
+            rawChoose = firearmsChoose2.getValue();
+            amountStr = rawChoose.toString();
+            amount = converter.fromString(amountStr);
             mp = new MarketPlace();
             for (int i = 1; i <= amount; i++) {
                 mp.playerBuy(new Firearms());
@@ -816,15 +973,17 @@ public class GameScreenController implements Initializable, ControlledScreen {
             mess(toBuyList, toBuyMap, toSellList, toSellMap, mp);
             //updateDatabase(db.getPlayer(), db.getShip());
             updatePlayerInfo();
-            sy = new ShipYard();
-            showShipNames(sy);
+            shipYard = new ShipYard();
+            showShipNames(shipYard);
        }
     }
 
     @FXML    
     private void medicinesBuyFired(ActionEvent event) {   
         if (medicinesChoose2.getValue() != null) {
-            int amount = converter.fromString(medicinesChoose2.getValue().toString());
+            rawChoose = medicinesChoose2.getValue();
+            amountStr = rawChoose.toString();
+            amount = converter.fromString(amountStr);
             mp = new MarketPlace();
             for (int i = 1; i <= amount; i++) {
                 mp.playerBuy(new Medicine());
@@ -832,15 +991,17 @@ public class GameScreenController implements Initializable, ControlledScreen {
             mess(toBuyList, toBuyMap, toSellList, toSellMap, mp);
             //updateDatabase(db.getPlayer(), db.getShip());
             updatePlayerInfo();
-            sy = new ShipYard();
-            showShipNames(sy);
+            shipYard = new ShipYard();
+            showShipNames(shipYard);
        }
     }
 
     @FXML    
     private void machinesBuyFired(ActionEvent event) {   
         if (machinesChoose2.getValue() != null) {
-            int amount = converter.fromString(machinesChoose2.getValue().toString());
+            rawChoose = machinesChoose2.getValue();
+            amountStr = rawChoose.toString();
+            amount = converter.fromString(amountStr);
             mp = new MarketPlace();
             for (int i = 1; i <= amount; i++) {
                 mp.playerBuy(new Machines());
@@ -848,15 +1009,17 @@ public class GameScreenController implements Initializable, ControlledScreen {
             mess(toBuyList, toBuyMap, toSellList, toSellMap, mp);
             //updateDatabase(db.getPlayer(), db.getShip());
             updatePlayerInfo();
-            sy = new ShipYard();
-            showShipNames(sy);
+            shipYard = new ShipYard();
+            showShipNames(shipYard);
        }
     }
 
     @FXML    
     private void narcoticsBuyFired(ActionEvent event) {   
         if (narcoticsChoose2.getValue() != null) {
-            int amount = converter.fromString(narcoticsChoose2.getValue().toString());
+            rawChoose = narcoticsChoose2.getValue();
+            amountStr = rawChoose.toString();
+            amount = converter.fromString(amountStr);
             mp = new MarketPlace();
             for (int i = 1; i <= amount; i++) {
                 mp.playerBuy(new Narcotics());
@@ -864,41 +1027,42 @@ public class GameScreenController implements Initializable, ControlledScreen {
             mess(toBuyList, toBuyMap, toSellList, toSellMap, mp);
             //updateDatabase(db.getPlayer(), db.getShip());
             updatePlayerInfo();
-            sy = new ShipYard();
-            showShipNames(sy);
+            shipYard = new ShipYard();
+            showShipNames(shipYard);
        }
     }
     
-    private void drawLongRange(int centerX, int centerY, int range, GraphicsContext gc) {
+    private void drawLongRange(final int centerX, final int centerY, final int range, final GraphicsContext gc) {
         gc.clearRect(0, 0, canvas.getWidth(), canvas.getHeight());
-        for (SolarSystem ss : solarList) {
-            int x = ss.getX();
-            int y = ss.getY();
-            gc.fillOval(x - 1, y - 1, 2, 2);
+        for (final SolarSystem ss : solarList) {
+            final int planetX = ss.getX();
+            final int planetY = ss.getY();
+            gc.fillOval(planetX - 1, planetY - 1, 2, 2);
         }
-        gc.strokeOval(centerX - range, centerY - range, 2*range, 2*range);
+        gc.strokeOval(centerX - range, centerY - range, 2 * range, 2 * range);
     }
     
-    private List<String> drawShortRange(int centerX, int centerY, int range, GraphicsContext gc2) {
+    private List<String> drawShortRange(final int centerX, final int centerY, final int range, final GraphicsContext gc2) {
         gc2.clearRect(0, 0, canvas.getWidth(), canvas.getHeight());
         reachablePlanets = new ArrayList<String>();
-        double h = canvas2.getHeight();
-        double w = canvas2.getWidth();
-        double smallBound = min(h, w);
-        gc2.fillOval(w/2 - 2, h/2 - 2, 4, 4);
-        gc2.strokeOval(w/2 - smallBound/2, h/2 - smallBound/2, smallBound, smallBound);
-        double ratio = (smallBound/2)/range;
-        for (SolarSystem ss : solarList) {
-            int x = ss.getX();
-            int y = ss.getY();
-            double zoomInH = (x - centerX) * ratio;
-            double zoomInV = (y - centerY) * ratio;
-            gc2.fillOval(w/2 + zoomInH - 2, h/2 + zoomInV - 2, 4, 4);
-            double distSqr = pow(zoomInH, 2) + pow(zoomInV, 2);
-            double newRad = ratio * range;
-            double radSqr = pow(newRad, 2);
+        final double height = canvas2.getHeight();
+        final double width = canvas2.getWidth();
+        final double smallBound = min(height, width);
+        gc2.fillOval(width / 2 - 2, height / 2 - 2, 4, 4);
+        gc2.strokeOval(width / 2 - smallBound / 2, height / 2 - smallBound / 2,
+                smallBound, smallBound);
+        ratio = (smallBound / 2) / range;
+        for (final SolarSystem ss : solarList) {
+            final int shortRangeX = ss.getX();
+            final int shortRangeY = ss.getY();
+            final double zoomInH = (shortRangeX - centerX) * ratio;
+            final double zoomInV = (shortRangeY - centerY) * ratio;
+            gc2.fillOval(width / 2 + zoomInH - 2, height / 2 + zoomInV - 2, 4, 4);
+            final double distSqr = pow(zoomInH, 2) + pow(zoomInV, 2);
+            final double newRad = ratio * range;
+            final double radSqr = pow(newRad, 2);
             if (distSqr <= radSqr) {
-                gc2.strokeText(ss.getName(), w/2 + zoomInH - 2, h/2 + zoomInV - 2, 50);
+                gc2.strokeText(ss.getName(), width / 2 + zoomInH - 2, height / 2 + zoomInV - 2, 50);
                 reachablePlanets.add(ss.getName());
             }
         }
@@ -906,146 +1070,162 @@ public class GameScreenController implements Initializable, ControlledScreen {
     }
     
     private void showShipNames(ShipYard sy) {
-    	ObservableList<String> shipItem = FXCollections.observableArrayList();
-    	ObservableList<String> weaponItem = FXCollections.observableArrayList();
-    	ObservableList<String> shieldItem = FXCollections.observableArrayList();
-    	ObservableList<String> gadgetItem = FXCollections.observableArrayList();
-   	 	if (!sy.isYardExist()) {
-   	 		shipItem.add("Tech level on this planet is too low to have a shipyard!");
-   	 		weaponItem.add("Tech level on this planet is too low to have a shipyard!");
-   	 		shieldItem.add("Tech level on this planet is too low to have a shipyard!");
-   	 		gadgetItem.add("Tech level on this planet is too low to have a shipyard!");
-   	 	} else {
-   	 		shipNames = sy.getShipNames();
-   	 		shipPrices = sy.getShipPrices();
-   	 		if (shipNames.size() == 0) {
-   	 			shipItem.add("You don't have enough money to buy any ship on this planet!");
-   	 		} else {
-   	 			int count = 1;
-   	 			for (String s : shipNames) {
-   	 				shipItem.add(count + ". " + s + ": " + shipPrices.get(s) + "cr.");
-   	    			count++;
-   	 			}
-   	 		}
-   	 		
-   	 		weaponNames = sy.getWeaponNames();
-   	 		weaponPrices = sy.getWeaponPrices();
-   	 		if (weaponNames.size() == 0) {
-   	 			if (db.getShip().getWeaponSlots() <= 0) {
-   	 				weaponItem.add("You don't have any extra weapon slots!");
-	 			} else {
-	 				weaponItem.add("You don't have enough money to buy any weapon on this planet!");
-	 			}
-	 		} else {
-	 			int count = 1;
-	 			for (String s : weaponNames) {
-	 				weaponItem.add(count + ". " + s + ": " + weaponPrices.get(s) + "cr.");
-	    			count++;
-	 			}
-	 		}
-	 		
-	 		shieldNames = sy.getShieldNames();
-	 		shieldPrices = sy.getShieldPrices();
-   	 		if (shieldNames.size() == 0) {
-   	 			if (db.getShip().getShieldSlots() <= 0) {
-	 				shieldItem.add("You don't have any extra shield slots!");
-   	 			} else {
-   	 				shieldItem.add("You don't have enough money to buy any shield on this planet!");
-   	 			}
-   	 		} else {
-   	 			int count = 1;
-   	 			for (String s : shieldNames) {
-   	 				shieldItem.add(count + ". " + s + ": " + shieldPrices.get(s) + "cr.");
-   	    			count++;
-   	 			}
-   	 		}
-   	 		
-   	 		gadgetNames = sy.getGadgetNames();
-   	 		gadgetPrices = sy.getGadgetPrices();
-   	 		int techLevel = 0;
-   	 		try {
-				techLevel = db.getSolarSystem().getPlanet().getTechLevel().ordinal();
-				if (techLevel == 6) {
-	   	 			if (gadgetNames.size() == 0) {
-	   	 				if (db.getShip().getGadgetsSlots() <= 0) {
-	   	 					gadgetItem.add("You don't have any extra gadget slots!");
-	   	 				} else {
-	   	 					gadgetItem.add("You don't have enough money to buy any gadget on this planet!");
-	   	 				}
-	   	 			} else {
-	   	 				int count = 1;
-	   	 				for (String s : gadgetNames) {
-	   	 					gadgetItem.add(count + ". " + s + ": " + gadgetPrices.get(s) + "cr.");
-	   	 					count++;
-	   	 				}
-	   	 			}
-	   	 		} else {
-	   	 			gadgetItem.add("Cargo Expansion available only on highest tech");
-	   	 		}
-			} catch (ClassNotFoundException e) {
-				// TODO Auto-generated catch block
-				e.printStackTrace();
-			} catch (SQLException e) {
-				// TODO Auto-generated catch block
-				e.printStackTrace();
-			}
-   	 	}
-   	 	
-   	 	shipListView.setItems(shipItem);
-   	 	weaponListView.setItems(weaponItem);
-   	 	shieldListView.setItems(shieldItem);
-   	 	gadgetListView.setItems(gadgetItem);
+        shipItem = FXCollections.observableArrayList();
+        weaponItem = FXCollections.observableArrayList();
+        shieldItem = FXCollections.observableArrayList();
+        gadgetItem = FXCollections.observableArrayList();
+        lowTechmsg = "Tech level on this planet is too low to have a shipyard!";
+        creditStr = "cr.";
+        if (sy.isYardExist()) {
+            shipNames = sy.getShipNames();
+            shipPrices = sy.getShipPrices();
+            if (shipNames.isEmpty()) {
+                shipItem.add("You don't have enough money to buy any ship on this planet!");
+            } else {
+                count = 1;
+                for (final String s : shipNames) {
+                    shipItem.add(count + ". " + s + ": " + shipPrices.get(s) + creditStr);
+                    count++;
+                }
+            }
+            
+            weaponNames = sy.getWeaponNames();
+            weaponPrices = sy.getWeaponPrices();
+            if (weaponNames.isEmpty()) {
+                ship = db.getShip();
+                if (ship.getWeaponSlots() <= 0) {
+                    weaponItem.add("You don't have any extra weapon slots!");
+                } else {
+                    weaponItem.add("You don't have enough money to buy any weapon on this planet!");
+                }
+            } else {
+                count = 1;
+                for (final String s : weaponNames) {
+                    weaponItem.add(count + ". " + s + ": " + weaponPrices.get(s) + creditStr);
+                    count++;
+                }
+            }
+        
+            shieldNames = sy.getShieldNames();
+            shieldPrices = sy.getShieldPrices();
+            if (shieldNames.isEmpty()) {
+                ship = db.getShip();
+                if (ship.getShieldSlots() <= 0) {
+                    shieldItem.add("You don't have any extra shield slots!");
+                } else {
+                    shieldItem.add("You don't have enough money to buy any shield on this planet!");
+                }
+            } else {
+                count = 1;
+                for (final String s : shieldNames) {
+                    shieldItem.add(count + ". " + s + ": " + shieldPrices.get(s) + creditStr);
+                    count++;
+                }
+            }
+            
+            gadgetNames = sy.getGadgetNames();
+            gadgetPrices = sy.getGadgetPrices();
+        
+            try {
+                solarSystem = db.getSolarSystem();
+                planet = solarSystem.getPlanet();
+                techLevels = planet.getTechLevel();
+                techLevel = techLevels.ordinal();
+                
+                if (techLevel == SIXFINAL) {
+                    if (gadgetNames.isEmpty()) {
+                        ship = db.getShip();
+                        if (ship.getGadgetsSlots() <= 0) {
+                            gadgetItem.add("You don't have any extra gadget slots!");
+                        } else {
+                            gadgetItem.add("You don't have enough"
+                                    + "money to buy any gadget on this planet!");
+                        }
+                    } else {
+                        count = 1;
+                        for (int i = 0; i < gadgetNames.size(); i++) {
+                            gadgetName = gadgetNames.get(i);
+                            gadgetItem.add(count + ". " + gadgetName
+                                    + ": " + gadgetPrices.get(gadgetName) + "cr.");
+                            count++;
+                        }
+                    }
+                } else {
+                    gadgetItem.add("Cargo Expansion available only on highest tech");
+                }
+            } catch (ClassNotFoundException e) {
+                // TODO Auto-generated catch block
+            	LOGGER.log(Level.SEVERE, npe.getMessage(), npe);
+            } catch (SQLException e) {
+                // TODO Auto-generated catch block
+            	LOGGER.log(Level.SEVERE, npe.getMessage(), npe);
+            }
+            
+            
+        } else {
+            shipItem.add(lowTechmsg);
+            weaponItem.add(lowTechmsg);
+            shieldItem.add(lowTechmsg);
+            gadgetItem.add(lowTechmsg);
+        }
+        
+        shipListView.setItems(shipItem);
+        weaponListView.setItems(weaponItem);
+        shieldListView.setItems(shieldItem);
+        gadgetListView.setItems(gadgetItem);
     }
  
-    
+    /**
+     * initialize the game screen view
+     */
     @Override
-    public void initialize(URL url, ResourceBundle rb) {
-    	try {
-			db = new SqliteApi();
-			sy = new ShipYard();
-			player = db.getPlayer();
-	        ship = db.getShip();
-	        uni = db.getUniverse();
-	        maxFuel = ship.getBase().getFuel();
-	        hull = maxPull = ship.getBase().getHullStrength();
-	        solarList = uni.getUniverse();
-	        //System.out.println("shipyard exists: " + sy.isYardExist());
-	        
-	        shipTab.setId("shipTab");
-	        weaponTab.setId("weaponTab");
-	        shieldTab.setId("shieldTab");
-	        gadgetTab.setId("gadgetTab");
-	        
-	        showShipNames(sy);
-	        
-		} catch (ClassNotFoundException e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
-		} catch (SQLException e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
-		}
+    public void initialize(final URL url, final ResourceBundle rb) {
+    	//SIXFINAL = 6;
+    	
+        try {
+            db = new SqliteApi();
+            shipYard = new ShipYard();
+            player = db.getPlayer();
+            ship = db.getShip();
+            uni = db.getUniverse();
+            base = ship.getBase();
+            maxFuel = base.getFuel();
+            hull = maxPull = base.getHullStrength();
+            solarList = uni.getUniverse();
+            
+            shipTab.setId("shipTab");
+            weaponTab.setId("weaponTab");
+            shieldTab.setId("shieldTab");
+            gadgetTab.setId("gadgetTab");
+            
+            showShipNames(shipYard);
+            
+        } catch (ClassNotFoundException e) {
+            // TODO Auto-generated catch block
+        	LOGGER.log(Level.SEVERE, npe.getMessage(), npe);
+        } catch (SQLException e) {
+            // TODO Auto-generated catch block
+        	LOGGER.log(Level.SEVERE, npe.getMessage(), npe);
+        }
 
-        GraphicsContext gc = canvas.getGraphicsContext2D();
+        graphicsContext = canvas.getGraphicsContext2D();
         // draw map
-        for (SolarSystem ss : solarList) {
-            int x = ss.getX();
-            int y = ss.getY();
-            gc.fillOval(x - 1, y - 1, 2, 2);
-            if (x == player.getXpos() && y == player.getYpos()) {
-            	solarSystem = ss;
-            	
+        for (final SolarSystem ss : solarList) {
+            final int systemX = ss.getX();
+            final int systemY = ss.getY();
+            graphicsContext.fillOval(systemX - 1, systemY - 1, 2, 2);
+            if (systemX == player.getXpos() && systemY == player.getYpos()) {
+                solarSystem = ss;
+                
             }
         }
         
-        Capital curr = solarSystem.getPlanet();
-        
-        int range = ship.getBase().getFuel();
+        final int range = base.getFuel();
         currX = solarSystem.getX();
         currY = solarSystem.getY();
         drawLongRange(currX , currY, range, gc);
-        GraphicsContext gc2 = canvas2.getGraphicsContext2D();
-        reachablePlanets = drawShortRange(currX, currY, range, gc2);
+        final GraphicsContext graphicsContext2 = canvas2.getGraphicsContext2D();
+        reachablePlanets = drawShortRange(currX, currY, range, graphicsContext2);
         
         loadCurrentInfo();
         clearTargetListView();
@@ -1057,25 +1237,27 @@ public class GameScreenController implements Initializable, ControlledScreen {
         toBuyMap = trade.getPricesToBuy();
         converter = new IntegerStringConverter();
     
-         waterPrice2.setText("Can't Buy");
-         fursPrice2.setText("Can't Buy");
-         foodPrice2.setText("Can't Buy");
-         orePrice2.setText("Can't Buy");
-         gamesPrice2.setText("Can't Buy");
-         firearmsPrice2.setText("Can't Buy");
-         medicinesPrice2.setText("Can't Buy");
-         machinesPrice2.setText("Can't Buy");
-         narcoticsPrice2.setText("Can't Buy");
-         waterPrice.setText("Can't Sell");
-        
-         fursPrice.setText("Can't Sell");        
-         foodPrice.setText("Can't Sell");        
-         orePrice.setText("Can't Sell");        
-         gamesPrice.setText("Can't Sell");        
-         firearmsPrice.setText("Can't Sell");        
-         medicinesPrice.setText("Can't Sell");        
-         machinesPrice.setText("Can't Sell");        
-         narcoticsPrice.setText("Can't Sell");
+         cantbuy = "Can't Buy";
+         waterPrice2.setText(cantbuy);
+         fursPrice2.setText(cantbuy);
+         foodPrice2.setText(cantbuy);
+         orePrice2.setText(cantbuy);
+         gamesPrice2.setText(cantbuy);
+         firearmsPrice2.setText(cantbuy);
+         medicinesPrice2.setText(cantbuy);
+         machinesPrice2.setText(cantbuy);
+         narcoticsPrice2.setText(cantbuy);
+
+         cantsell = "Can't Sell";
+         waterPrice.setText(cantsell);
+         fursPrice.setText(cantsell);        
+         foodPrice.setText(cantsell);        
+         orePrice.setText(cantsell);        
+         gamesPrice.setText(cantsell);        
+         firearmsPrice.setText(cantsell);        
+         medicinesPrice.setText(cantsell);        
+         machinesPrice.setText(cantsell);        
+         narcoticsPrice.setText(cantsell);
          mp = new MarketPlace();
          mess(toBuyList, toBuyMap, toSellList, toSellMap, mp);
          
@@ -1086,8 +1268,8 @@ public class GameScreenController implements Initializable, ControlledScreen {
     }
     
     private int countNumOfGood(List<Good> cargo, String name) {
-        int count = 0;
-        for (Good g : cargo) {
+        count = 0;
+        for (final Good g : cargo) {
             //System.out.println(g.getName());
             if (name.equals(g.getName())) {
                 count++;
@@ -1096,186 +1278,193 @@ public class GameScreenController implements Initializable, ControlledScreen {
         //System.out.println("countnum: " + count);
         return count;
     }
+
     
-    public void mess(List<String> toBuyList, Map<String, Integer> toBuyMap, List<String> toSellList, Map<String, Integer> toSellMap, MarketPlace mp) {
-        int maxAmount1;
-        int maxAmount2;
-        maxAmount1 = db.getShip().getCargoSpace() - mp.getCargo().size();
-        for (String s : toBuyList) {
-            if (s.equals("Water")) {
+    private void mess(final List<String> toBuyList, final Map<String, Integer> toBuyMap,
+            final List<String> toSellList, final Map<String, Integer> toSellMap, final MarketPlace mp) {
+        ship = db.getShip();
+        shipCargoSpace = ship.getCargoSpace();
+        cargoList = mp.getCargo();
+        final int maxAmount1 = shipCargoSpace - cargoList.size();
+        
+        for (int j = 0 ; j < toBuyList.size(); j++) {
+            itemName = toBuyList.get(j);
+            water = "Water";
+            if (water.equals(itemName)) {
                 waterPrice2.setText(Integer.toString(toBuyMap.get("Water")));
                 maxAmount2 = mp.getPlayerMoney() / toBuyMap.get("Water");
-                int maxBuy = Math.min(maxAmount1,maxAmount2);
-                ObservableList<String> buyChoice = FXCollections.observableArrayList();
-                for (int i = maxBuy; i >= 0;i--) {
-                    buyChoice.add("" + i);
+                maxBuy = Math.min(maxAmount1,maxAmount2);
+                buyChoice = FXCollections.observableArrayList();
+                for (int i = maxBuy; i >= 0; i--) {
+                    buyChoice.add(Integer.toString(i));
                 }
                 waterChoose2.setItems(buyChoice);
-            } else if (s.equals("Furs")) {
+            } else if (itemName.equals("Furs")) {
                 fursPrice2.setText(Integer.toString(toBuyMap.get("Furs")));
                 maxAmount2 = mp.getPlayerMoney() / toBuyMap.get("Furs");
-                int maxBuy = Math.min(maxAmount1,maxAmount2);
-                ObservableList<String> buyChoice = FXCollections.observableArrayList ();
-                for (int i = maxBuy; i >= 0;i--) {
-                    buyChoice.add("" + i);
+                maxBuy = Math.min(maxAmount1,maxAmount2);
+                buyChoice = FXCollections.observableArrayList();
+                for (int i = maxBuy; i >= 0; i--) {
+                    buyChoice.add(Integer.toString(i));
                 }
                 fursChoose2.setItems(buyChoice);
-            } else if (s.equals("Food")) {
+            } else if (itemName.equals("Food")) {
                 foodPrice2.setText(Integer.toString(toBuyMap.get("Food")));
                 maxAmount2 = mp.getPlayerMoney() / toBuyMap.get("Food");  
-                int maxBuy = Math.min(maxAmount1,maxAmount2);
-                ObservableList<String> buyChoice = FXCollections.observableArrayList ();
-                for (int i = maxBuy; i >= 0;i--) {
-                    buyChoice.add("" + i);
+                maxBuy = Math.min(maxAmount1,maxAmount2);
+                buyChoice = FXCollections.observableArrayList();
+                for (int i = maxBuy; i >= 0; i--) {
+                    buyChoice.add(Integer.toString(i));
                 }
                 foodChoose2.setItems(buyChoice);
-            } else if (s.equals("Ore")) {
+            } else if (itemName.equals("Ore")) {
                 orePrice2.setText(Integer.toString(toBuyMap.get("Ore")));
                 maxAmount2 = mp.getPlayerMoney() / toBuyMap.get("Ore"); 
-                int maxBuy = Math.min(maxAmount1,maxAmount2);
-                ObservableList<String> buyChoice = FXCollections.observableArrayList ();
-                for (int i = maxBuy; i >= 0;i--) {
-                    buyChoice.add("" + i);
-                }
+                maxBuy = Math.min(maxAmount1,maxAmount2);
+                buyChoice = FXCollections.observableArrayList();
+                for (int i = maxBuy; i >= 0; i--) { 
+                    buyChoice.add(Integer.toString(i));
+                } 
                 oreChoose2.setItems(buyChoice);
-            } else if (s.equals("Games")) {
+            } else if (itemName.equals("Games")) {
                 gamesPrice2.setText(Integer.toString(toBuyMap.get("Games")));
                 maxAmount2 = mp.getPlayerMoney() / toBuyMap.get("Games");
-                int maxBuy = Math.min(maxAmount1,maxAmount2);
-                ObservableList<String> buyChoice = FXCollections.observableArrayList ();
-                for (int i = maxBuy; i >= 0;i--) {
-                    buyChoice.add("" + i);
+                maxBuy = Math.min(maxAmount1,maxAmount2);
+                buyChoice = FXCollections.observableArrayList();
+                for (int i = maxBuy; i >= 0; i--) {
+                    buyChoice.add(Integer.toString(i));
                 }
                 gamesChoose2.setItems(buyChoice);
-            } else if (s.equals("Firearms")) {
+            } else if (itemName.equals("Firearms")) {
                 firearmsPrice2.setText(Integer.toString(toBuyMap.get("Firearms")));
                 maxAmount2 = mp.getPlayerMoney() / toBuyMap.get("Firearms");
-                int maxBuy = Math.min(maxAmount1,maxAmount2);
-                ObservableList<String> buyChoice = FXCollections.observableArrayList ();
-                for (int i = maxBuy; i >= 0;i--) {
-                    buyChoice.add("" + i);
+                maxBuy = Math.min(maxAmount1,maxAmount2);
+                buyChoice = FXCollections.observableArrayList();
+                for (int i = maxBuy; i >= 0; i--) {
+                    buyChoice.add(Integer.toString(i));
                 }
                 firearmsChoose2.setItems(buyChoice);
-            } else if (s.equals("Medicines")) {
+            } else if (itemName.equals("Medicines")) {
                 medicinesPrice2.setText(Integer.toString(toBuyMap.get("Medicines")));
                 maxAmount2 = mp.getPlayerMoney() / toBuyMap.get("Medicines");
-                int maxBuy = Math.min(maxAmount1,maxAmount2);
-                ObservableList<String> buyChoice = FXCollections.observableArrayList ();
-                for (int i = maxBuy; i >= 0;i--) {
+                maxBuy = Math.min(maxAmount1,maxAmount2);
+                buyChoice = FXCollections.observableArrayList();
+                for (int i = maxBuy; i >= 0; i--) {
                     buyChoice.add(Integer.toString(i));
                 }
                 medicinesChoose2.setItems(buyChoice);
-            } else if (s.equals("Narcotics")) {
+            } else if (itemName.equals("Narcotics")) {
                 narcoticsPrice2.setText(Integer.toString(toBuyMap.get("Narcotics")));
                 maxAmount2 = mp.getPlayerMoney() / toBuyMap.get("Narcotics");
-                int maxBuy = Math.min(maxAmount1,maxAmount2);
-                ObservableList<String> buyChoice = FXCollections.observableArrayList ();
-                for (int i = maxBuy; i >= 0;i--) {
-                	buyChoice.add(Integer.toString(i));
+                maxBuy = Math.min(maxAmount1,maxAmount2);
+                buyChoice = FXCollections.observableArrayList();
+                for (int i = maxBuy; i >= 0; i--) {
+                    buyChoice.add(Integer.toString(i));
                 }
                 narcoticsChoose2.setItems(buyChoice);
-            } else if (s.equals("Machines")) {
+            } else if (itemName.equals("Machines")) {
                 machinesPrice2.setText(Integer.toString(toBuyMap.get("water")));
                 maxAmount2 = mp.getPlayerMoney() / toBuyMap.get("Machines");
-                int maxBuy = Math.min(maxAmount1,maxAmount2);
-                ObservableList<String> buyChoice = FXCollections.observableArrayList ();
-                for (int i = maxBuy; i >= 0;i--) {
-                	buyChoice.add(Integer.toString(i));
+                maxBuy = Math.min(maxAmount1,maxAmount2);
+                buyChoice = FXCollections.observableArrayList();
+                for (int i = maxBuy; i >= 0; i--) {
+                    buyChoice.add(Integer.toString(i));
                 }
                 machinesChoose2.setItems(buyChoice);
             } 
         }
         int maxSell;
-        for (String s : toSellList) {
-            if (s.equals("Water")) {
+        for (int k = 0; k < toSellList.size(); k++) {
+            itemName2 = toSellList.get(k);
+            if (itemName2.equals("Water")) {
                 waterSellPrice = toSellMap.get("Water");
                 waterPrice.setText(Integer.toString(waterSellPrice));
                 maxSell = countNumOfGood(mp.getCargo(), "Water");
                 //System.out.println("maxsell: " + maxSell);
-                ObservableList<String> choices =FXCollections.observableArrayList ();
+                choices = FXCollections.observableArrayList();
                 for (int i = maxSell; i >= 0; i--) {
                     choices.add(Integer.toString(i));
                 }
                 waterChoose.setItems(choices);
                 waterChoose.show();
                 
-            } else if (s.equals("Furs")) {
+            } else if (itemName2.equals("Furs")) {
                 fursSellPrice = toSellMap.get("Furs");
                 fursPrice.setText(Integer.toString(fursSellPrice));
                 maxSell = countNumOfGood(mp.getCargo(), "Furs");
-                ObservableList<String> choices =FXCollections.observableArrayList ();
+                choices = FXCollections.observableArrayList();
                 for (int i = maxSell; i >= 0; i--) {
-                	choices.add(Integer.toString(i));
+                    choices.add(Integer.toString(i));
                 }
                 fursChoose.setItems(choices);
                 fursChoose.show();
-            } else if (s.equals("Food")) {
+            } else if (itemName2.equals("Food")) {
                 foodSellPrice = toSellMap.get("Food");
                 foodPrice.setText(Integer.toString(foodSellPrice));
                 maxSell = countNumOfGood(mp.getCargo(), "Food");
-                ObservableList<String> choices =FXCollections.observableArrayList ();
+                choices = FXCollections.observableArrayList();
                 for (int i = maxSell; i >= 0; i--) {
-                	choices.add(Integer.toString(i));
+                    choices.add(Integer.toString(i));
                 }
                 foodChoose.setItems(choices);
                 foodChoose.show();
-            } else if (s.equals("Ore")) {
+            } else if (itemName2.equals("Ore")) {
                 oreSellPrice = toSellMap.get("Ore");
                 orePrice.setText(Integer.toString(oreSellPrice));
                 maxSell = countNumOfGood(mp.getCargo(), "Ore");
-                ObservableList<String> choices =FXCollections.observableArrayList ();
+                choices = FXCollections.observableArrayList();
                 for (int i = maxSell; i >= 0; i--) {
-                	choices.add(Integer.toString(i));
+                    choices.add(Integer.toString(i));
                 }
                 oreChoose.setItems(choices);
                 oreChoose.show();
-            } else if (s.equals("Games")) {
+            } else if (itemName2.equals("Games")) {
                 gamesSellPrice = toSellMap.get("Games");
                 gamesPrice.setText(Integer.toString(gamesSellPrice));
                 maxSell = countNumOfGood(mp.getCargo(), "Games");
-                ObservableList<String> choices =FXCollections.observableArrayList ();
+                choices = FXCollections.observableArrayList();
                 for (int i = maxSell; i >= 0; i--) {
-                	choices.add(Integer.toString(i));
+                    choices.add(Integer.toString(i));
                 }
                 gamesChoose.setItems(choices);
                 gamesChoose.show();
-            } else if (s.equals("Firearms")) {
+            } else if (itemName2.equals("Firearms")) {
                 firearmsSellPrice = toSellMap.get("Firearms");
                 firearmsPrice.setText(Integer.toString(firearmsSellPrice));
                 maxSell = countNumOfGood(mp.getCargo(), "Firearms");
-                ObservableList<String> choices =FXCollections.observableArrayList ();
+                choices = FXCollections.observableArrayList();
                 for (int i = maxSell; i >= 0; i--) {
-                	choices.add(Integer.toString(i));
+                    choices.add(Integer.toString(i));
                 }
                 firearmsChoose.setItems(choices);
                 firearmsChoose.show();
-            } else if (s.equals("Medicines")) {
+            } else if (itemName2.equals("Medicines")) {
                 medicinesSellPrice = toSellMap.get("Medicines");
                 medicinesPrice.setText(Integer.toString(medicinesSellPrice));
                 maxSell = countNumOfGood(mp.getCargo(), "Medicines");
-                ObservableList<String> choices =FXCollections.observableArrayList ();
+                choices = FXCollections.observableArrayList();
                 for (int i = maxSell; i >= 0; i--) {
-                	choices.add(Integer.toString(i));
+                    choices.add(Integer.toString(i));
                 }
                 medicinesChoose.setItems(choices);
                 medicinesChoose.show();
-            } else if (s.equals("Narcotics")) {
+            } else if (itemName2.equals("Narcotics")) {
                 narcoticsSellPrice = toSellMap.get("Narcotics");
                 narcoticsPrice.setText(Integer.toString(narcoticsSellPrice));
                 maxSell = countNumOfGood(mp.getCargo(), "Narcotics");
-                ObservableList<String> choices =FXCollections.observableArrayList ();
+                choices = FXCollections.observableArrayList();
                 for (int i = maxSell; i >= 0; i--) {
-                	choices.add(Integer.toString(i));
+                    choices.add(Integer.toString(i));
                 }
                 narcoticsChoose.setItems(choices);
                 narcoticsChoose.show();
-            } else if (s.equals("Machines")) {
+            } else if (itemName2.equals("Machines")) {
                 machinesSellPrice = toSellMap.get("Machines");
                 machinesPrice.setText(Integer.toString(machinesSellPrice));
                 maxSell = countNumOfGood(mp.getCargo(), "Machines");
-                ObservableList<String> choices =FXCollections.observableArrayList ();
+                choices = FXCollections.observableArrayList();
                 for (int i = maxSell; i >= 0; i--) {
-                	choices.add(Integer.toString(i));
+                    choices.add(Integer.toString(i));
                 }
                 machinesChoose.setItems(choices);
                 machinesChoose.show();
