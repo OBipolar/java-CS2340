@@ -3,12 +3,9 @@
     <editor-bookmarks xmlns="http://www.netbeans.org/ns/editor-bookmarks/2" lastBookmarkId="0"/>
     <open-files xmlns="http://www.netbeans.org/ns/projectui-open-files/2">
         <group>
-            <file>file:/Users/jinyushi/Documents/GT%20courses/Fall%202014/CS%202340/java-CS2340/M7/M7/src/spaceTrader/APIs/ShipYard.java</file>
-            <file>file:/Users/jinyushi/Documents/GT%20courses/Fall%202014/CS%202340/java-CS2340/M7/M7/test/JUnitTest.java</file>
-            <file>file:/Users/jinyushi/Documents/GT%20courses/Fall%202014/CS%202340/java-CS2340/M7/M7/src/spaceTrader/Goods/Good.java</file>
-            <file>file:/Users/jinyushi/Documents/GT%20courses/Fall%202014/CS%202340/java-CS2340/M7/M7/test/MarketPlaceJunit.java</file>
-            <file>file:/Users/jinyushi/Documents/GT%20courses/Fall%202014/CS%202340/java-CS2340/M7/M7/src/spaceTrader/APIs/Encounter.java</file>
-            <file>file:/Users/jinyushi/Documents/GT%20courses/Fall%202014/CS%202340/java-CS2340/M7/M7/src/spaceTrader/View/Main.java</file>
+            <file>file:/Users/jinyushi/Documents/GT%20courses/Fall%202014/CS%202340/java-CS2340/M7/test/JUnitTest.java</file>
+            <file>file:/Users/jinyushi/Documents/GT%20courses/Fall%202014/CS%202340/java-CS2340/M7/test/ShipYardTest.java</file>
+            <file>file:/Users/jinyushi/Documents/GT%20courses/Fall%202014/CS%202340/java-CS2340/M7/test/MarketPlaceJunit.java</file>
         </group>
     </open-files>
 </project-private>
